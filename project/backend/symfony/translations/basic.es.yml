@@ -1,0 +1,50 @@
+basicos:
+  si: 'Si'
+  no: 'No'
+
+archivo:
+  success: 'Creado correctamente'
+  error:
+    tipo: 'La extensión del archivo %s no está permitida'
+    tamano: 'El archivo %s excede el tamaño máximo permitido'
+    partial: 'El archivo %s fue sólo parcialmente subido'
+    vacio: 'El archivo %s es necesario'
+    tmp:
+      dir: 'Error en la subida del archivo %s. Falta la carpeta temporal'
+    cannot:
+      write: 'No se puede escribir el archivo en disco'
+    extension: 'Una extensión de PHP detuvo la carga del archivo %s'
+    generico: 'Error en la subida del archivo %s'
+  descarga:
+    error:
+      parametros: 'Los parámetros proporcionados son incorrectos'
+      noExiste: 'El archivo que intenta descargar no existe'
+
+buscador:
+  sinfiltros: 'Debe especificar algún parámetro de búsqueda'
+
+success: 'La consulta fue realizada correctamente.'
+empty: 'Sin Resultados'
+created:
+  success: 'Creado correctamente'
+  error: 'La creación no fue correcta'
+
+updated:
+  success: 'Actualizado correctamente'
+  error: 'La actualización no fue correcta'
+
+meses:
+  enero: 'Enero'
+  febrero: 'Febrero'
+  marzo: 'Marzo'
+  abril: 'Abril'
+  mayo: 'Mayo'
+  junio: 'Junio'
+  julio: 'Julio'
+  agosto: 'Agosto'
+  septiembre: 'Septiembre'
+  octubre: 'Octubre'
+  noviembre: 'Noviembre'
+  diciembre: 'Diciembre'
+
+error: 'Hubo un error.'

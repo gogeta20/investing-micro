@@ -1,0 +1,3 @@
+main:
+    resource: '../src/Main/Application/Routing/routing.xml'
+    type: xml

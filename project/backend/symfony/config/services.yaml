@@ -1,0 +1,45 @@
+parameters:
+    upload_dir: '%env(UPLOAD_DIR)%'
+    openai.api_key: '%env(OPENAI_API_KEY)%'
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            $projectDir: '%kernel.project_dir%'
+            $projectDirDBFake: '%kernel.project_dir%/src/Shared/Infrastructure/articles.json'
+
+
+    Symfony\Contracts\HttpClient\HttpClientInterface: '@http_client'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Main\Infrastructure\Controller\:
+        resource: '../src/Main/Infrastructure/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Shared\Domain\Bus\Event\EventBus: '@App\Shared\Infrastructure\Bus\Event\InMemorySymfonyEventBus'
+    App\Shared\Domain\Bus\Query\QueryBus: '@App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus'
+    App\Shared\Domain\Bus\Command\CommandBus: '@App\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus'
+
+    _instanceof:
+        App\Shared\Domain\Bus\Event\DomainEventSubscriber:
+            tags: [ 'internal.domain_event_subscriber' ]
+
+    # CQRS
+        App\Shared\Domain\Bus\Command\CommandHandler:
+            tags: [ 'internal.command_handler' ]
+
+        App\Shared\Domain\Bus\Query\QueryHandler:
+            tags: [ 'internal.query_handler' ]
+
+    App\Shared\Infrastructure\Bus\Command\InMemorySymfonyCommandBus:
+        arguments: [ !tagged internal.command_handler ]
+
+    App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
+        arguments: [ !tagged internal.query_handler ]

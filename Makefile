@@ -29,6 +29,9 @@ clean-volumes:
 build:
 	docker compose build
 
+# make composer-require pkg=guzzlehttp/guzzle
+composer-require:
+	composer require $(pkg)
 #--------------------- FRONT --------------------######################################
 front-in:
 	docker exec -it front_micro sh

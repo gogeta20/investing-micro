@@ -112,7 +112,7 @@
 
 	<route
 		id="pokemon"
-		path="/api/pokemon"
+		path="/"
 		methods="GET"
 		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">
 	</route>

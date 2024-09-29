@@ -14,7 +14,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./devops/volumes/jenkins:/var/jenkins_home
 
-  vue_frontend:
+  front_micro:
     build:
 #      context: ./project/front/vue
       context: .
@@ -23,7 +23,7 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - ./project/front/vue:/app
+      - ./project/front:/app
 
 
   symfony_backend:
@@ -33,7 +33,7 @@ services:
       dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
     container_name: symfony_backend
     ports:
-      - "8001:80"
+      - "9000:9000"
     volumes:
       - ./project/backend/symfony:/var/www/html
 
@@ -100,10 +100,14 @@ services:
       context: .
       dockerfile: devops/dockerfiles/proxy/Nginx.Dockerfile
     container_name: nginx_proxy
+#    volumes:
+#      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+    volumes:
+      - ./conf/nginx:/src
     ports:
       - "80:80"
     depends_on:
       - symfony_backend
       - django_backend
       - springboot_backend
-      - vue_frontend
+      - front_micro

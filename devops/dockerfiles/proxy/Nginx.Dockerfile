@@ -1,6 +1,21 @@
 # Nginx.Dockerfile
 
-FROM nginx:alpine
+FROM nginx:latest
+
+#FROM nginx:1.15.0
+
+
+COPY ../../../conf/nginx/symfony.conf /etc/nginx/conf.d/
+COPY ../../../conf/nginx/vue.conf /etc/nginx/conf.d/
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+EXPOSE 443
+
+ENTRYPOINT ["/usr/sbin/nginx"]
+CMD ["-g", "daemon off;"]
+
 
 # Copiar el archivo de configuración de Nginx al contenedor
 #COPY ./conf/nginx/nginx.conf /etc/nginx/nginx.conf

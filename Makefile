@@ -1,6 +1,8 @@
 
 # Variable para el directorio del proyecto
 SPRINGBOOT_DIR=project/backend/springboot
+SB=symfony_backend
+NG=nginx_proxy
 
 
 build-d:
@@ -35,3 +37,12 @@ front-in:
 
 front-logs:
 	docker logs front_micro
+#--------------------- BACK --------------------######################################
+back-symfony-in:
+	docker exec -it $(SB) /bin/bash
+
+back-symfony-logs:
+	docker logs $(SB)
+#---------------------  --------------------######################################
+proxy-nginx-logs:
+	docker logs $(NG)

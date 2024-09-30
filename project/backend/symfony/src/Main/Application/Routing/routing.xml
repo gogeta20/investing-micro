@@ -5,115 +5,115 @@
 
 	<route
 		id="check"
-		path="/check/{email}"
+		path="/check"
 		methods="GET"
 		controller="App\Main\Infrastructure\Controller\Health\CheckController">
 	</route>
 
-	<route
-		id="login"
-		path="/api/login"
-		methods="POST"
-		controller="App\Main\Infrastructure\Controller\User\Login\LoginController">
-	</route>
+<!--	<route-->
+<!--		id="login"-->
+<!--		path="/api/login"-->
+<!--		methods="POST"-->
+<!--		controller="App\Main\Infrastructure\Controller\User\Login\LoginController">-->
+<!--	</route>-->
 
-	<route
-		id="register_user"
-		path="/api/register"
-		methods="POST"
-		controller="App\Main\Infrastructure\Controller\User\Register\RegisterController">
-	</route>
+<!--	<route-->
+<!--		id="register_user"-->
+<!--		path="/api/register"-->
+<!--		methods="POST"-->
+<!--		controller="App\Main\Infrastructure\Controller\User\Register\RegisterController">-->
+<!--	</route>-->
 
-	<route
-		id="get_user"
-		path="/api/user"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\User\Get\GetUserByIdController">
-	</route>
+<!--	<route-->
+<!--		id="get_user"-->
+<!--		path="/api/user"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\User\Get\GetUserByIdController">-->
+<!--	</route>-->
 
-	<route
-		id="edit_user"
-		path="/api/user"
-		methods="PUT"
-		controller="App\Main\Infrastructure\Controller\User\Edit\EditUserController">
-	</route>
+<!--	<route-->
+<!--		id="edit_user"-->
+<!--		path="/api/user"-->
+<!--		methods="PUT"-->
+<!--		controller="App\Main\Infrastructure\Controller\User\Edit\EditUserController">-->
+<!--	</route>-->
 
-	<route
-		id="new_article"
-		path="/api/content"
-		methods="POST"
-		controller="App\Main\Infrastructure\Controller\Article\Post\Create\PostArticleController">
-	</route>
+<!--	<route-->
+<!--		id="new_article"-->
+<!--		path="/api/content"-->
+<!--		methods="POST"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Post\Create\PostArticleController">-->
+<!--	</route>-->
 
-	<route
-		id="get_all_articles_user"
-		path="/api/content"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllArticlesController">
-	</route>
+<!--	<route-->
+<!--		id="get_all_articles_user"-->
+<!--		path="/api/content"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllArticlesController">-->
+<!--	</route>-->
 
-	<route
-		id="get_all_articles"
-		path="/api/content/{all}"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllArticlesController">
-	</route>
-
-
-	<route
-		id="edit_article"
-		path="/api/content/{id}"
-		methods="POST"
-		controller="App\Main\Infrastructure\Controller\Article\Update\UpdateArticleController">
-	</route>
-
-	<route
-		id="delete_article"
-		path="/api/content/{id}"
-		methods="DELETE"
-		controller="App\Main\Infrastructure\Controller\Article\Delete\DeleteArticleController">
-	</route>
-
-	<route
-		id="get_id_article"
-		path="/api/content/{id}"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\Article\Get\GetArticleByIdController">
-	</route>
-
-	<route
-		id="post_rating"
-		path="/api/content/{id}/rate"
-		methods="POST"
-		controller="App\Main\Infrastructure\Controller\Article\Post\Rating\PostRatingController">
-	</route>
-
-	<route
-		id="post_favorite"
-		path="/api/content/{id}/favorite"
-		methods="POST"
-		controller="App\Main\Infrastructure\Controller\Article\Post\Favorite\PostFavoriteController">
-	</route>
-
-	<route
-		id="all_favorite"
-		path="/api/favorites"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllFavoritesController">
-	</route>
-
-	<route
-		id="all_favorite"
-		path="/api/favorites"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllFavoritesController">
-	</route>
+<!--	<route-->
+<!--		id="get_all_articles"-->
+<!--		path="/api/content/{all}"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllArticlesController">-->
+<!--	</route>-->
 
 
-	<route
-		id="pokemon"
-		path="/"
-		methods="GET"
-		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">
-	</route>
+<!--	<route-->
+<!--		id="edit_article"-->
+<!--		path="/api/content/{id}"-->
+<!--		methods="POST"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Update\UpdateArticleController">-->
+<!--	</route>-->
+
+<!--	<route-->
+<!--		id="delete_article"-->
+<!--		path="/api/content/{id}"-->
+<!--		methods="DELETE"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Delete\DeleteArticleController">-->
+<!--	</route>-->
+
+<!--	<route-->
+<!--		id="get_id_article"-->
+<!--		path="/api/content/{id}"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Get\GetArticleByIdController">-->
+<!--	</route>-->
+
+<!--	<route-->
+<!--		id="post_rating"-->
+<!--		path="/api/content/{id}/rate"-->
+<!--		methods="POST"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Post\Rating\PostRatingController">-->
+<!--	</route>-->
+
+<!--	<route-->
+<!--		id="post_favorite"-->
+<!--		path="/api/content/{id}/favorite"-->
+<!--		methods="POST"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Post\Favorite\PostFavoriteController">-->
+<!--	</route>-->
+
+<!--	<route-->
+<!--		id="all_favorite"-->
+<!--		path="/api/favorites"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllFavoritesController">-->
+<!--	</route>-->
+
+<!--	<route-->
+<!--		id="all_favorite"-->
+<!--		path="/api/favorites"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\Article\Get\GetAllFavoritesController">-->
+<!--	</route>-->
+
+
+<!--	<route-->
+<!--		id="poke"-->
+<!--		path="api/pokemon"-->
+<!--		methods="GET"-->
+<!--		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">-->
+<!--	</route>-->
 </routes>

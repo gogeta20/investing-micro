@@ -20,7 +20,6 @@ readonly class GenerateDetailedReport
     {
         try {
             $user = $this->service->getPokemonDetails('picachu');
-            dump($user);
             return ['article' => $user];
         } catch (\Exception $e) {
             throw new StoreException('Error al crear el artículo: ' . $e->getMessage());

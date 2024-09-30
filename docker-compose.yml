@@ -39,6 +39,8 @@ services:
       - "9000:9000"
     volumes:
       - ./project/backend/symfony:/var/www/html
+    command: >
+        sh -c "composer install && php-fpm"
     networks:
       - app_network
 
@@ -63,6 +65,8 @@ services:
       - "8080:8080"
     volumes:
       - ./project/backend/springboot:/app
+    networks:
+      - app_network
 
   rabbitmq:
     build:
@@ -72,6 +76,8 @@ services:
     ports:
       - "15672:15672"  # Puerto para el panel de administración
       - "5672:5672"     # Puerto para las conexiones de los clientes
+    networks:
+      - app_network
 
   mysql_db:
     build:
@@ -87,6 +93,8 @@ services:
       - "3306:3306"
     volumes:
       - ./devops/volumes/mysql:/var/lib/mysql
+    networks:
+      - app_network
 
   postgres_db:
     build:
@@ -101,6 +109,8 @@ services:
       - "5432:5432"
     volumes:
       - ./devops/volumes/postgres:/var/lib/postgresql/data
+    networks:
+      - app_network
 
   nginx_proxy:
     build:
@@ -120,3 +130,7 @@ services:
       - front_micro
     networks:
       - app_network
+
+networks:
+    app_network:
+        driver: bridge

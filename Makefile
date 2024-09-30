@@ -33,7 +33,7 @@ build:
 
 # make composer-require pkg=guzzlehttp/guzzle
 composer-require:
-	composer require $(pkg)
+	docker exec -it $(SB) bash -c "composer require $(pkg)"
 #--------------------- FRONT --------------------######################################
 front-in:
 	docker exec -it front_micro sh

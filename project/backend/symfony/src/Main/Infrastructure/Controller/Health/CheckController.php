@@ -15,13 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CheckController extends ApiController
 {
-    public function __invoke(Request $request, string $email): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
-//        $data = json_decode($request->getContent(), true);
-//        $email = $data['email'] ?? null;
         /** @var BaseResponse $response */
         $response = $this->ask(
-            new CheckQuery($email)
+            new CheckQuery()
         );
 
         return (new StandardApiResponse(

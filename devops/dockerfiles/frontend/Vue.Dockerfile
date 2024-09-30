@@ -8,13 +8,13 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copiar los archivos de configuración de npm desde la carpeta de Vue
-COPY project/front/vue/package*.json ./
+COPY project/front/package*.json ./
 
 # Instalar las dependencias
 RUN npm install -g vite && npm install
 
 # Copiar todo el código fuente del frontend al contenedor
-COPY project/front/vue/ .
+COPY project/front/ .
 
 # Exponer el puerto para el servidor de desarrollo de Vue
 EXPOSE 5173

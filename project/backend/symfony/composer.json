@@ -11,6 +11,7 @@
 		"doctrine/doctrine-bundle": "^2.11",
 		"doctrine/doctrine-migrations-bundle": "^3.3",
 		"doctrine/orm": "^3.0",
+		"dompdf/dompdf": "^3.0",
 		"guzzlehttp/guzzle": "^7.9",
 		"lambdish/phunctional": "^2.1",
 		"lexik/jwt-authentication-bundle": "^3.1",

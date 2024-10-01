@@ -10,6 +10,14 @@
 		controller="App\Main\Infrastructure\Controller\Health\CheckController">
 	</route>
 
+	<route
+		id="poke"
+		path="/pokemon"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">
+	</route>
+
+
 <!--	<route-->
 <!--		id="login"-->
 <!--		path="/api/login"-->

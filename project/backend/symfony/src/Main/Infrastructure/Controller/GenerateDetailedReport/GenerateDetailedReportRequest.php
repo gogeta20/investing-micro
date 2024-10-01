@@ -12,11 +12,11 @@ class GenerateDetailedReportRequest extends StandardRequest
     protected function constraints(): Assert\Collection
     {
         return new Assert\Collection([
-            'fields' => [
-                'id' => [
-                    new Assert\NotBlank(),
-                ],
-            ],
+//            'fields' => [
+//                'id' => [
+//                    new Assert\NotBlank(),
+//                ],
+//            ],
         ]);
     }
 }

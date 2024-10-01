@@ -24,9 +24,10 @@ class GenerateDetailedReportController extends ApiController
         if (null !== $errors) {
             return JsonApiResponse::error(errors: $errors);
         }
-
+        $id = 1;
         try {
-            $this->dispatch(GenerateDetailedReportCommand::create(['id' => $request->data()['id']]));
+//            $this->dispatch(GenerateDetailedReportCommand::create(['id' => $request->data()['id']]));
+            $this->dispatch(GenerateDetailedReportCommand::create(['id' => $id]));
 
         } catch (Exception $exception) {
             throw new StoreException('Error al crear el Reporte: ' . $exception->getMessage());

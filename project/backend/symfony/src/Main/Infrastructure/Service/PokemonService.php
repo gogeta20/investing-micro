@@ -7,13 +7,11 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class PokemonService implements IPokemonService {
     private Client $client;
-    private DetailedReportService $reportService;
 
     public function __construct() {
         $this->client = new Client([
             'base_uri' => 'https://pokeapi.co/api/v2/'
         ]);
-        $this->reportService = new DetailedReportService();
     }
 
     /**
@@ -22,10 +20,7 @@ class PokemonService implements IPokemonService {
     public function getPokemonDetails(int $id): array
     {
         $response = $this->client->get("pokemon/{$id}");
-//        $pokemonData = json_decode($response->getBody()->getContents(), true);
-//        $this->reportService->generateReport($pokemonData);
-
-        return ['test'=>'wip'];
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**

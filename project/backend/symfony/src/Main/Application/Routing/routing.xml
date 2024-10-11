@@ -17,7 +17,6 @@
 		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">
 	</route>
 
-
 <!--	<route-->
 <!--		id="login"-->
 <!--		path="/api/login"-->

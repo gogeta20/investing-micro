@@ -96,21 +96,21 @@ services:
     networks:
       - app_network
 
-  postgres_db:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/db/PostgreSQL.Dockerfile
-    container_name: postgres_db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: my_database
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./devops/volumes/postgres:/var/lib/postgresql/data
-    networks:
-      - app_network
+#  postgres_db:
+#    build:
+#      context: .
+#      dockerfile: devops/dockerfiles/db/PostgreSQL.Dockerfile
+#    container_name: postgres_db
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: my_database
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - ./devops/volumes/postgres:/var/lib/postgresql/data
+#    networks:
+#      - app_network
 
   nginx_proxy:
     build:

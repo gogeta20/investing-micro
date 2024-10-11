@@ -7,7 +7,11 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
-    curl
+    curl \
+    librabbitmq-dev \
+    libssl-dev \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp
 
 RUN docker-php-ext-install pdo pdo_mysql zip
 

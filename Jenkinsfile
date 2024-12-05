@@ -22,36 +22,36 @@ pipeline {
             }
         }
 
-        stage('Build Django Backend') {
-            agent {
-                docker {
-                    image env.DJANGO_DOCKER_IMAGE
-                    reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                    cd project/backend/django
-                    pip install -r requirements.txt
-                '''
-            }
-        }
+//         stage('Build Django Backend') {
+//             agent {
+//                 docker {
+//                     image env.DJANGO_DOCKER_IMAGE
+//                     reuseNode true
+//                 }
+//             }
+//             steps {
+//                 sh '''
+//                     cd project/backend/django
+//                     pip install -r requirements.txt
+//                 '''
+//             }
+//         }
 
 
-        stage('Build Spring Boot Backend') {
-            agent {
-                docker {
-                    image env.SPRINGBOOT_DOCKER_IMAGE
-                    reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                    cd project/backend/springboot
-                    ./mvnw clean package
-                '''
-            }
-        }
+//         stage('Build Spring Boot Backend') {
+//             agent {
+//                 docker {
+//                     image env.SPRINGBOOT_DOCKER_IMAGE
+//                     reuseNode true
+//                 }
+//             }
+//             steps {
+//                 sh '''
+//                     cd project/backend/springboot
+//                     ./mvnw clean package
+//                 '''
+//             }
+//         }
 
         stage('Build Vue Frontend') {
                 agent {
@@ -62,7 +62,7 @@ pipeline {
                 }
                 steps {
                     sh '''
-                        cd project/front/vue
+                        cd project/front
                         npm install
                         npm run build
                     '''

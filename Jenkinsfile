@@ -72,9 +72,9 @@ pipeline {
 
     }
     post {
-        always {
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-        }
+//         always {
+//             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+//         }
         success {
             echo 'Build and tests completed successfully!'
         }

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "===================================================="
+echo "🚨 Recuerda: Debes crear un Pull Request para esta rama."
+echo "    - Base: develop"
+echo "    - Rama actual: $(git rev-parse --abbrev-ref HEAD)"
+echo ""
+echo "🔗 Usa GitHub CLI para crear el PR:"
+echo "    gh pr create --base develop --head $(git rev-parse --abbrev-ref HEAD)"
+echo ""
+echo "🌐 O accede a:https://github.com/gogeta20/micro/tree/develop"
+echo "===================================================="

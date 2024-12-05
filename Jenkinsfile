@@ -1,36 +1,75 @@
 pipeline {
     agent any
+    environment {
+        VUE_DOCKER_IMAGE = 'node:18'
+        SYMFONY_DOCKER_IMAGE = 'composer:2.6'
+        DJANGO_DOCKER_IMAGE = 'python:3.10'
+        SPRINGBOOT_DOCKER_IMAGE = 'maven:3.8.7-eclipse-temurin-17'
+    }
     stages {
-        stage('Setup Backend Symfony') {
-            steps {
-                dir('project/backend/symfony') {
-                    sh 'composer install'
-                    sh 'php bin/console cache:clear --env=test'
+        stage('Build Symfony Backend') {
+            agent {
+                docker {
+                    image env.SYMFONY_DOCKER_IMAGE
+                    reuseNode true
                 }
             }
-        }
-        stage('Setup Backend Django') {
             steps {
-                dir('project/backend/django') {
-                    sh 'pip install -r requirements.txt'
-                }
+                sh '''
+                    cd project/backend/symfony
+                    composer install
+                '''
             }
         }
-        stage('Build Spring Boot') {
-            steps {
-                dir('project/backend/springboot') {
-                    sh './mvnw clean package'
+
+        stage('Build Django Backend') {
+            agent {
+                docker {
+                    image env.DJANGO_DOCKER_IMAGE
+                    reuseNode true
                 }
             }
-        }
-        stage('Setup Frontend') {
             steps {
-                dir('project/front') {
-                    sh 'pnpm install'
-                    sh 'pnpm build'
-                }
+                sh '''
+                    cd project/backend/django
+                    pip install -r requirements.txt
+                '''
             }
         }
+
+
+        stage('Build Spring Boot Backend') {
+            agent {
+                docker {
+                    image env.SPRINGBOOT_DOCKER_IMAGE
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    cd project/backend/springboot
+                    ./mvnw clean package
+                '''
+            }
+        }
+
+        stage('Build Vue Frontend') {
+                agent {
+                    docker {
+                        image env.VUE_DOCKER_IMAGE
+                        reuseNode true
+                    }
+                }
+                steps {
+                    sh '''
+                        cd project/front/vue
+                        npm install
+                        npm run build
+                    '''
+                }
+            }
+
+
     }
     post {
         always {

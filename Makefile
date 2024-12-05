@@ -3,6 +3,8 @@
 SPRINGBOOT_DIR=project/backend/springboot
 SB=symfony_backend
 NG=nginx_proxy
+VF=front_micro
+J=jenkins_micro
 
 
 build-d:
@@ -43,7 +45,7 @@ setup-git-hooks:
 	chmod +x .githooks/pre-push
 	@echo "✅ Hooks compartidos configurados correctamente."
 
-#--------------------- FRONT - vuefront --------------------######################################
+#--------------------- FRONT vue - front_micro --------------------######################################
 in-front:
 	docker exec -it $(VF) sh
 # make composer-require pkg=guzzlehttp/guzzle
@@ -51,7 +53,7 @@ in-front:
 logs-front:
 	docker logs $(VF)
 
-#--------------------- BACK --------------------######################################
+#--------------------- BACK - symfony_backend --------------------######################################
 in-back-symfony:
 	docker exec -it $(SB) /bin/bash
 
@@ -60,7 +62,8 @@ logs-back-symfony:
 
 composer-require:
 	docker exec -it $(SB) bash -c "composer require $(pkg)"
-#---------------------  --------------------######################################
+
+#--------------------- PROXY nginx - nginx_proxy --------------------######################################
 proxy-nginx-logs:
 	docker logs $(NG)
 
@@ -72,4 +75,8 @@ verify-nginx-conf:
 
 reload-nginx:
 	docker exec $(NG) nginx -s reload
+
+#--------------------- JENKINS - jenkins_micro --------------------######################################
+pass-init-jenkins:
+	docker exec -it $(J) cat /var/jenkins_home/secrets/initialAdminPassword
 

@@ -6,9 +6,13 @@
 
 # Dependencias de Node.js (Vue.js)
 **/node_modules/
+**/.pnpm-store/
+**/.vite/
+**/pnpm-lock.yaml
 
 # Dependencias de PHP (Symfony)
 **/vendor/
+**/var/
 
 # Archivos de entorno Python (Django)
 __pycache__/
@@ -50,11 +54,9 @@ Desktop.ini
 .mvn/
 **/pom.xml.versionsBackup
 **/pom.xml.releaseBackup
-**/target/
 
 # Archivos de configuración de Gradle (Java)
 .gradle/
-**/build/
 
 # Archivos temporales del sistema
 *.swp

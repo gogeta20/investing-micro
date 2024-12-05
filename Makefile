@@ -34,6 +34,13 @@ build:
 # make composer-require pkg=guzzlehttp/guzzle
 composer-require:
 	docker exec -it $(SB) bash -c "composer require $(pkg)"
+
+setup-git-hooks:
+	@echo "🔧 Configurando hooks compartidos en .githooks..."
+	git config core.hooksPath .githooks
+	chmod +x .githooks/pre-push
+	@echo "✅ Hooks compartidos configurados correctamente."
+
 #--------------------- FRONT --------------------######################################
 front-in:
 	docker exec -it front_micro sh

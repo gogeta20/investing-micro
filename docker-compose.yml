@@ -18,12 +18,12 @@ services:
 
   front_micro:
     build:
-#      context: ./project/front/vue
       context: .
       dockerfile: devops/dockerfiles/frontend/Vue.Dockerfile
     container_name: front_micro
     ports:
       - "5173:5173"
+    entrypoint: ["/app/entrypoint.sh"]
     volumes:
       - ./project/front:/app
     networks:
@@ -31,7 +31,6 @@ services:
 
   symfony_backend:
     build:
-#      context: ./project/backend/symfony
       context: .
       dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
     container_name: symfony_backend
@@ -46,7 +45,6 @@ services:
 
   django_backend:
     build:
-#      context: ./project/backend/django
       context: .
       dockerfile: devops/dockerfiles/backend/Django.Dockerfile
     container_name: django_backend
@@ -57,7 +55,6 @@ services:
 
   springboot_backend:
     build:
-#      context: ./project/backend/springboot
       context: .
       dockerfile: devops/dockerfiles/backend/SpringBoot.Dockerfile
     container_name: springboot_backend

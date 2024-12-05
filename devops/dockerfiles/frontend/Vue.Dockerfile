@@ -13,6 +13,8 @@ COPY project/front/package*.json ./
 # Instalar las dependencias
 RUN npm install -g vite && npm install
 
+RUN rm -rf node_modules
+
 # Copiar todo el código fuente del frontend al contenedor
 COPY project/front/ .
 

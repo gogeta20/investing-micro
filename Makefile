@@ -3,6 +3,7 @@
 SPRINGBOOT_DIR=project/backend/springboot
 SB=symfony_backend
 NG=nginx_proxy
+VF=front_micro
 
 
 build-d:
@@ -31,21 +32,41 @@ clean-volumes:
 build:
 	docker compose build
 
+build--no-cache:
+	docker compose build --no-cache
+
+view-network:
+	docker network inspect app_network
+
+
+#--------------------- FRONT - vuefront --------------------######################################
+in-front:
+	docker exec -it $(VF) sh
+
+logs-front:
+	docker logs $(VF)
+
+#--------------------- BACK --------------------######################################
+in-back-symfony:
+	docker exec -it $(SB) /bin/bash
+
+logs-back-symfony:
+	docker logs $(SB)
+
 # make composer-require pp=guzzlehttp/guzzle
 composer-require:
 	docker exec -it $(SB) bash -c "composer require $(pp)"
-#--------------------- FRONT --------------------######################################
-front-in:
-	docker exec -it front_micro sh
 
-front-logs:
-	docker logs front_micro
-#--------------------- BACK --------------------######################################
-back-symfony-in:
-	docker exec -it $(SB) /bin/bash
-
-back-symfony-logs:
-	docker logs $(SB)
-#---------------------  --------------------######################################
-proxy-nginx-logs:
+#--------------------- nginx --------------------######################################
+logs-proxy-nginx:
 	docker logs $(NG)
+
+in-nginx:
+	docker exec -it $(NG) /bin/bash
+
+verify-nginx-conf:
+	docker exec $(NG) nginx -t
+
+reload-nginx:
+	docker exec $(NG) nginx -s reload
+

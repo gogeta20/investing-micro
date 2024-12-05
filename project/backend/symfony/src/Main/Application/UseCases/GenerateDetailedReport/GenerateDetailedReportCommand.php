@@ -8,47 +8,17 @@ use App\Shared\Domain\Bus\Command\Command;
 
 readonly class GenerateDetailedReportCommand implements Command
 {
-    public function __construct(
-        private string $email,
-        private string $title,
-        private string $body,
-        private ?string $mediaUrl = null,
-        private ?string $mediaType = null
-    ) {}
+    public function __construct(private int $id) {}
 
     public static function create(array $data): self
     {
         return new self(
-            $data['email'],
-            $data['title'],
-            $data['body'],
-            $data['mediaUrl'] ?? null,
-            $data['mediaType'] ?? null
+            $data['id'],
         );
     }
 
-    public function email(): string
+    public function getId(): int
     {
-        return $this->email;
-    }
-
-    public function title(): string
-    {
-        return $this->title;
-    }
-
-    public function body(): string
-    {
-        return $this->body;
-    }
-
-    public function mediaUrl(): ?string
-    {
-        return $this->mediaUrl;
-    }
-
-    public function mediaType(): ?string
-    {
-        return $this->mediaType;
+        return $this->id;
     }
 }

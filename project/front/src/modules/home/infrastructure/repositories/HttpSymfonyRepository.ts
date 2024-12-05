@@ -13,7 +13,7 @@ class HttpSymfonyRepository implements SymfonyRepository {
 
   async Api() {
     try {
-      const response = await HttpClient.get('/api/check');
+      const response = await HttpClient.get('/check');
       console.log(response)
       return response.data;
     } catch (error) {

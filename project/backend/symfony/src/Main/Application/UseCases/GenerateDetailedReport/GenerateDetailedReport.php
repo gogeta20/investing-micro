@@ -19,7 +19,7 @@ readonly class GenerateDetailedReport
     public function __invoke(GenerateDetailedReportCommand $command): array
     {
         try {
-            $user = $this->service->getPokemonDetails('picachu');
+            $user = $this->service->getPokemonDetails($command->getId());
             return ['article' => $user];
         } catch (\Exception $e) {
             throw new StoreException('Error al crear el artículo: ' . $e->getMessage());

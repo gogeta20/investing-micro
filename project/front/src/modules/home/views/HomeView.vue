@@ -39,7 +39,7 @@ const generateDetailedReport = async () => {
   try {
 
 
-      fetch('http://symfony.localhost/api/check', {
+      fetch('http://symfony.localhost/check', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json'

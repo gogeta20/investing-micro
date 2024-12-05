@@ -31,9 +31,11 @@ clean-volumes:
 build:
 	docker compose build
 
-# make composer-require pkg=guzzlehttp/guzzle
-composer-require:
-	docker exec -it $(SB) bash -c "composer require $(pkg)"
+build--no-cache:
+	docker compose build --no-cache
+
+view-network:
+	docker network inspect app_network
 
 setup-git-hooks:
 	@echo "🔧 Configurando hooks compartidos en .githooks..."
@@ -41,18 +43,33 @@ setup-git-hooks:
 	chmod +x .githooks/pre-push
 	@echo "✅ Hooks compartidos configurados correctamente."
 
-#--------------------- FRONT --------------------######################################
-front-in:
-	docker exec -it front_micro sh
+#--------------------- FRONT - vuefront --------------------######################################
+in-front:
+	docker exec -it $(VF) sh
+# make composer-require pkg=guzzlehttp/guzzle
 
-front-logs:
-	docker logs front_micro
+logs-front:
+	docker logs $(VF)
+
 #--------------------- BACK --------------------######################################
-back-symfony-in:
+in-back-symfony:
 	docker exec -it $(SB) /bin/bash
 
-back-symfony-logs:
+logs-back-symfony:
 	docker logs $(SB)
+
+composer-require:
+	docker exec -it $(SB) bash -c "composer require $(pkg)"
 #---------------------  --------------------######################################
 proxy-nginx-logs:
 	docker logs $(NG)
+
+in-nginx:
+	docker exec -it $(NG) /bin/bash
+
+verify-nginx-conf:
+	docker exec $(NG) nginx -t
+
+reload-nginx:
+	docker exec $(NG) nginx -s reload
+

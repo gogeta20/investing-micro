@@ -1,7 +1,18 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 dependencies {
-    // Dependencias específicas de "core"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+// Deshabilitar la creación de bootJar para este módulo
+bootJar {
+    enabled = false
+}
+
+// Asegurar que el jar normal se cree
+jar {
+    enabled = true
 }

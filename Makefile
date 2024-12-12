@@ -1,11 +1,12 @@
 
 # Variable para el directorio del proyecto
+COMPOSE=docker compose
 SPRINGBOOT_DIR=project/backend/springboot
 SB=symfony_backend
 NG=nginx_proxy
 VF=front_micro
 J=jenkins_micro
-
+SB=springboot_backend
 
 build-d:
 	docker compose up --build -d
@@ -29,6 +30,45 @@ init-volumes:
 
 clean-volumes:
 	docker volume rm $$(docker volume ls -q)
+
+delete-images: #Eliminar Imágenes "Dangling" (Sin Nombre ni Etiqueta)
+	docker image prune -f
+
+delete-images-off: #Eliminar Contenedores Parados
+	docker container prune -f
+
+delete-volumes:
+	docker volume prune -f
+
+delete-networks:
+	docker network prune -f
+
+delete-no-use:
+	docker system prune -f
+
+delete-system-all:
+	docker system prune -a --volumes -f
+
+clean-docker:
+	@echo "Eliminando contenedores parados..."
+	docker container prune -f
+	@echo "Eliminando imágenes dangling..."
+	docker image prune -f
+	@echo "Eliminando volúmenes no utilizados..."
+	docker volume prune -f
+	@echo "Eliminando redes no utilizadas..."
+	docker network prune -f
+
+clean-micro:
+	@echo "Eliminando contenedores del proyecto micro..."
+	docker ps -a --filter "name=micro" -q | xargs -r docker rm -f
+	@echo "Eliminando imágenes del proyecto micro..."
+	docker images --filter=reference="micro*" -q | xargs -r docker rmi -f
+	@echo "Eliminando volúmenes del proyecto micro..."
+	docker volume ls --filter "name=micro" -q | xargs -r docker volume rm
+	@echo "Eliminando redes del proyecto micro..."
+	docker network ls --filter "name=app_network" -q | xargs -r docker network rm
+
 
 build:
 	docker compose build
@@ -80,3 +120,22 @@ reload-nginx:
 pass-init-jenkins:
 	docker exec -it $(J) cat /var/jenkins_home/secrets/initialAdminPassword
 
+#--------------------- BACK - springboot_backend --------------------######################################
+
+springboot-down:
+	$(COMPOSE) stop  $(SB) && $(COMPOSE) rm -f  $(SB)
+
+springboot-build:
+	$(COMPOSE) build  $(SB) --no-cache
+
+springboot-up:
+	$(COMPOSE) up -d  $(SB)
+
+springboot-restart:
+	$(COMPOSE) stop  $(SB) && $(COMPOSE) rm -f  $(SB) && $(COMPOSE) up -d  $(SB)
+
+logs-springboot:
+	docker logs  $(SB)
+
+in-sprintboot:
+	docker exec -it $(SB) /bin/bash

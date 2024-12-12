@@ -63,7 +63,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./project/backend/springboot:/app
+      - ./project/backend/springboot:/app/code
+#      - ./project/backend/springboot:/app
     networks:
       - app_network
 

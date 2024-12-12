@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
+    implementation project(':src:shared')
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 // Deshabilitar la creación de bootJar para este módulo

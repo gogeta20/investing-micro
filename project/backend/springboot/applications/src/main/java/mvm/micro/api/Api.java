@@ -7,7 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {
     "mvm.micro.api",
-    "mvm.micro.core.infrastructure.controller"
+    "mvm.micro.core",
+    "mvm.micro.shared"
 })
 public class Api {
     public static void main(String[] args) {

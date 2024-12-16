@@ -7,6 +7,9 @@ NG=nginx_proxy
 VF=front_micro
 J=jenkins_micro
 SB=springboot_backend
+MYSQL=mysql_db
+
+include devops/mk/*.mk
 
 build-d:
 	docker compose up --build -d
@@ -120,7 +123,7 @@ reload-nginx:
 pass-init-jenkins:
 	docker exec -it $(J) cat /var/jenkins_home/secrets/initialAdminPassword
 
-#--------------------- BACK - springboot_backend --------------------######################################
+#--------------------- BACK - springboot_backendspringboot_backend --------------------######################################
 
 springboot-down:
 	$(COMPOSE) stop  $(SB) && $(COMPOSE) rm -f  $(SB)
@@ -139,3 +142,41 @@ logs-springboot:
 
 in-sprintboot:
 	docker exec -it $(SB) /bin/bash
+
+#--------------------- DBase - mysql_db_micro mysql --------------------######################################
+db-down:
+	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
+
+db-build:
+	$(COMPOSE) build $(MYSQL) --no-cache
+
+db-restart:
+	$(COMPOSE) restart  $(MYSQL)
+
+db-up:
+	$(COMPOSE) up -d  $(MYSQL)
+
+in-db:
+	docker exec -it  $(MYSQL) /bin/bash
+
+in-db-mysql:
+	docker exec -it $(MYSQL) mysql -u user -ppassword
+
+in-db-mysql-root:
+	docker exec -it $(MYSQL) mysql -u root -prootpassword
+
+db-update:
+	@echo "Updating database..."
+	@for file in $$(ls conf/mysql/db/files/sql/migrations/*.sql | sort); do \
+		echo "Executing $$file..."; \
+		docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/migrations/'$$(basename $$file); \
+	done
+
+db-reset:
+	@echo "Resetting database..."
+	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/00_reset.sql'
+
+db-init: db-reset db-update
+
+
+

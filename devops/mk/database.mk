@@ -1,4 +1,29 @@
-# Para ejecutar una migración específica
+#--------------------- DBase - mysql_db_micro mysql --------------------######################################
+db-down:
+	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
+
+db-build:
+	$(COMPOSE) build $(MYSQL) --no-cache
+
+db-restart:
+	$(COMPOSE) restart  $(MYSQL)
+
+db-up:
+	$(COMPOSE) up -d  $(MYSQL)
+
+db-update:
+	@echo "Updating database..."
+	@for file in $$(ls conf/mysql/db/files/sql/migrations/*.sql | sort); do \
+		echo "Executing $$file..."; \
+		docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/migrations/'$$(basename $$file); \
+	done
+
+db-reset:
+	@echo "Resetting database..."
+	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/00_reset.sql'
+
+db-init: db-reset db-update
+
 db-migrate:
 	@if [ -z "$(v)" ]; then \
 		echo "Usage: make db-migrate v=<version>"; \

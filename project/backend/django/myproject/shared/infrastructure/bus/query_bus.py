@@ -8,8 +8,8 @@ class QueryBus:
     def register(self, query_class, handler):
         self._handlers[query_class] = handler
 
-    def ask(self, query):
+    def ask(self, query: Query):
         handler = self._handlers.get(type(query))
         if not handler:
-            raise Exception(f"No handler for {type(query)}")
+            raise Exception(f"Ask No handler for {type(query)}")
         return handler.handle(query)

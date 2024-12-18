@@ -1,14 +1,23 @@
 
-# Variable para el directorio del proyecto
-SPRINGBOOT_DIR=project/backend/springboot
-SB=symfony_backend
-NG=nginx_proxy
+COMPOSE=docker compose
 VF=front_micro
+S=symfony_backend
+SB=springboot_backend
+DB=django_backend
+MYSQL=mysql_db
+NG=nginx_proxy
 J=jenkins_micro
 
+include devops/mk/*.mk
+
+build:
+	docker compose build
 
 build-d:
 	docker compose up --build -d
+
+build--no-cache:
+	docker compose build --no-cache
 
 up:
 	docker compose up -d
@@ -18,34 +27,8 @@ down:
 
 restart: down up
 
-ps:
-	docker compose ps
-
-logs:
-	docker compose logs $(c)
-
-init-volumes:
-	mkdir -p devops/volumes/mysql devops/volumes/postgres devops/volumes/jenkins
-
-clean-volumes:
-	docker volume rm $$(docker volume ls -q)
-
-build:
-	docker compose build
-
-build--no-cache:
-	docker compose build --no-cache
-
-view-network:
-	docker network inspect app_network
-
-setup-git-hooks:
-	@echo "🔧 Configurando hooks compartidos en .githooks..."
-	git config core.hooksPath .githooks
-	chmod +x .githooks/pre-push
-	@echo "✅ Hooks compartidos configurados correctamente."
-
 #--------------------- FRONT vue - front_micro --------------------######################################
+
 in-front:
 	docker exec -it $(VF) sh
 # make composer-require pkg=guzzlehttp/guzzle
@@ -54,29 +37,59 @@ logs-front:
 	docker logs $(VF)
 
 #--------------------- BACK - symfony_backend --------------------######################################
+
 in-back-symfony:
-	docker exec -it $(SB) /bin/bash
+	docker exec -it $(S) /bin/bash
 
 logs-back-symfony:
-	docker logs $(SB)
+	docker logs $(S)
 
 composer-require:
-	docker exec -it $(SB) bash -c "composer require $(pkg)"
+	docker exec -it $(S) bash -c "composer require $(pkg)"
+
+#--------------------- BACK - django_backend python --------------------######################################
+
+in-back-django:
+	docker exec -it $(DB) /bin/bash
+
+logs-back-django:
+	docker logs $(DB)
+
+py-require:
+	docker exec -it $(DB) bash -c ""
+
+#--------------------- BACK - springboot_backend java --------------------######################################
+
+in-back-sprintboot:
+	docker exec -it $(SB) /bin/bash
+
+logs-springboot:
+	docker logs  $(SB)
 
 #--------------------- PROXY nginx - nginx_proxy --------------------######################################
-proxy-nginx-logs:
-	docker logs $(NG)
 
 in-nginx:
 	docker exec -it $(NG) /bin/bash
 
-verify-nginx-conf:
-	docker exec $(NG) nginx -t
-
-reload-nginx:
-	docker exec $(NG) nginx -s reload
+proxy-nginx-logs:
+	docker logs $(NG)
 
 #--------------------- JENKINS - jenkins_micro --------------------######################################
+
 pass-init-jenkins:
 	docker exec -it $(J) cat /var/jenkins_home/secrets/initialAdminPassword
+
+#--------------------- DBase - mysql_db_micro mysql --------------------######################################
+
+in-db:
+	docker exec -it  $(MYSQL) /bin/bash
+
+in-db-mysql:
+	docker exec -it $(MYSQL) mysql -u user -ppassword
+
+in-db-mysql-root:
+	docker exec -it $(MYSQL) mysql -u root -prootpassword
+
+
+
 

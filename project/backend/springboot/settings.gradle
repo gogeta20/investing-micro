@@ -1,0 +1,5 @@
+rootProject.name = 'spring-boot-ddd-cqrs'
+
+include 'applications'
+include 'src:core'
+include 'src:shared'

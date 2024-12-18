@@ -1,0 +1,39 @@
+# Archivos de bases de datos locales
+db.sqlite3
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Configuración del entorno virtual
+venv/
+.env
+.env.*.local
+
+# Configuración local o sensible
+*.secret
+*.local
+
+# Archivos de logs
+*.log
+logs/
+debug.log
+
+# Archivos estáticos generados
+staticfiles/
+static/
+media/
+
+# Migraciones innecesarias
+*/migrations/__pycache__/
+
+# IDEs/editores
+.vscode/
+.idea/
+*.iml
+
+# Otros archivos
+.DS_Store
+Thumbs.db

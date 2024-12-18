@@ -1,22 +1,21 @@
-# Django.Dockerfile
-
-# Usar la imagen oficial de Python
 FROM python:3.10
 
-# Establecer el directorio de trabajo
+RUN apt-get update && apt-get install -y \
+    portaudio19-dev \
+    python3-pyaudio \
+    libasound2 \
+    libasound2-plugins \
+    alsa-utils \
+    libsndfile1 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /etc/alsa
+RUN echo "pcm.!default {type hw card 0}" > /etc/asound.conf
+RUN echo "ctl.!default {type hw card 0}" >> /etc/asound.conf
+
 WORKDIR /app
-
-# Copiar los archivos de requisitos de Python desde la ubicación correcta
 COPY project/backend/django/requirements.txt .
-
-# Instalar las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copiar el código fuente al contenedor
 COPY project/backend/django/ .
-
-# Exponer el puerto para el servidor de desarrollo de Django
 EXPOSE 8000
-
-# Comando para ejecutar el servidor de desarrollo de Django
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

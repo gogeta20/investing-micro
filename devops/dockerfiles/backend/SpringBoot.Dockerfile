@@ -1,34 +1,14 @@
-# SpringBoot.Dockerfile
+FROM gradle:8.4-jdk17 AS build
 
-# Usar la imagen oficial de Maven con Eclipse Temurin JDK 17 para la compilación de la aplicación
-FROM maven:3.8.7-eclipse-temurin-17 AS build
-
-# Establecer el directorio de trabajo
 WORKDIR /app
-
-# Copiar el archivo de configuración de Maven desde el contexto de construcción
-COPY project/backend/springboot/pom.xml .
-
-# Descargar las dependencias de Maven
-RUN mvn dependency:go-offline -B
-
-# Copiar todo el código fuente de la aplicación al contenedor
+COPY project/backend/springboot/build.gradle .
+COPY project/backend/springboot/settings.gradle .
+RUN gradle dependencies --no-daemon || true
 COPY project/backend/springboot/ .
+RUN gradle clean build -x test --no-daemon
 
-# Compilar la aplicación y crear el archivo JAR
-RUN mvn package -DskipTests
-
-# Usar la imagen oficial de OpenJDK para ejecutar la aplicación
-FROM eclipse-temurin:17-jdk-jammy
-
-# Establecer el directorio de trabajo
+FROM openjdk:17-slim
 WORKDIR /app
-
-# Copiar el archivo JAR desde la imagen de compilación
-COPY --from=build /app/target/*.jar app.jar
-
-# Exponer el puerto para la aplicación Spring Boot
+COPY --from=build /app/applications/build/libs/*.jar app.jar
 EXPOSE 8080
-
-# Comando para ejecutar la aplicación Spring Boot
 CMD ["java", "-jar", "app.jar"]

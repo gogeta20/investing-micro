@@ -25,3 +25,6 @@ django-up:
 
 django-restart:
 	$(COMPOSE) stop  $(DB) && $(COMPOSE) rm -f  $(DB) && $(COMPOSE) up -d  $(DB)
+
+django-install-requirements:
+	docker exec -it $(DB) pip install -r requirements.txt

@@ -7,15 +7,18 @@ RUN apt-get update && apt-get install -y \
     libasound2-plugins \
     alsa-utils \
     libsndfile1 \
+    python3-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /etc/alsa
-RUN echo "pcm.!default {type hw card 0}" > /etc/asound.conf
-RUN echo "ctl.!default {type hw card 0}" >> /etc/asound.conf
 
 WORKDIR /app
 COPY project/backend/django/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY project/backend/django/ .
+
+RUN mkdir -p /root/.kaggle
+COPY conf/django/kaggle/kaggle.json /root/.kaggle/kaggle.json
+RUN chmod 600 /root/.kaggle/kaggle.json
+
 EXPOSE 8000
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

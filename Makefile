@@ -5,6 +5,7 @@ S=symfony_backend
 SB=springboot_backend
 DB=django_backend
 MYSQL=mysql_db
+M=mongo_db
 NG=nginx_proxy
 J=jenkins_micro
 
@@ -24,6 +25,9 @@ up:
 
 down:
 	docker compose down
+
+down-volume:
+	docker compose down -v
 
 restart: down up
 
@@ -90,6 +94,16 @@ in-db-mysql:
 in-db-mysql-root:
 	docker exec -it $(MYSQL) mysql -u root -prootpassword
 
+#--------------------- DBase - mongo_db - mongo --------------------######################################
+
+in-mongo:
+	docker exec -it $(M) /bin/bash
+
+in-db-mongo:
+	docker exec -it $(M) mongosh -u root -p password
+
+logs-mongo:
+	docker logs $(M)
 
 
 

@@ -1,185 +1,200 @@
 version: '3.9'
 
 services:
-  jenkins:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/ci/Jenkins.Dockerfile
-    container_name: jenkins_micro
-    user: root
-    ports:
-      - "8081:8080"
-      - "50000:50000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./devops/volumes/jenkins:/var/jenkins_home
-    environment:
-      - "DOCKER_HOST=unix:///var/run/docker.sock"
-    networks:
-      - app_network
+    jenkins:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/ci/Jenkins.Dockerfile
+        container_name: jenkins_micro
+        user: root
+        ports:
+            - "8081:8080"
+            - "50000:50000"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./devops/volumes/jenkins:/var/jenkins_home
+        environment:
+            - "DOCKER_HOST=unix:///var/run/docker.sock"
+        networks:
+            - app_network
 
-  front_micro:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/frontend/Vue.Dockerfile
-    container_name: front_micro
-    ports:
-      - "5173:5173"
-    entrypoint: ["/app/entrypoint.sh"]
-    volumes:
-      - ./project/front:/app
-    networks:
-      - app_network
+    front_micro:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/frontend/Vue.Dockerfile
+        container_name: front_micro
+        ports:
+            - "5173:5173"
+        entrypoint: [ "/app/entrypoint.sh" ]
+        volumes:
+            - ./project/front:/app
+        networks:
+            - app_network
 
-  symfony_backend:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
-    container_name: symfony_backend
-    ports:
-      - "9000:9000"
-    volumes:
-      - ./project/backend/symfony:/var/www/html
-    command: >
-        sh -c "composer install && php-fpm"
-    networks:
-      - app_network
+    symfony_backend:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
+        container_name: symfony_backend
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./project/backend/symfony:/var/www/html
+        command: >
+            sh -c "composer install && php-fpm"
+        networks:
+            - app_network
 
-  django_backend:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/backend/Django.Dockerfile
-    container_name: django_backend
-    ports:
-      - "8000:8000"
-    volumes:
-        - ./project/backend/django:/app
-    networks:
-      - app_network
+    django_backend:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/backend/Django.Dockerfile
+        container_name: django_backend
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./project/backend/django:/app
+        networks:
+            - app_network
 
-  springboot_backend:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/backend/SpringBoot.Dockerfile
-    container_name: springboot_backend
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./project/backend/springboot:/app/code
-#      - ./project/backend/springboot:/app
-    networks:
-      - app_network
+    springboot_backend:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/backend/SpringBoot.Dockerfile
+        container_name: springboot_backend
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./project/backend/springboot:/app/code
+        #      - ./project/backend/springboot:/app
+        networks:
+            - app_network
 
-  rabbitmq:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/broker/RabbitMQ.Dockerfile
-    container_name: rabbitmq
-    ports:
-      - "15672:15672"  # Puerto para el panel de administración
-      - "5672:5672"     # Puerto para las conexiones de los clientes
-    networks:
-      - app_network
+    rabbitmq:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/broker/RabbitMQ.Dockerfile
+        container_name: rabbitmq
+        ports:
+            - "15672:15672"  # Puerto para el panel de administración
+            - "5672:5672"     # Puerto para las conexiones de los clientes
+        networks:
+            - app_network
 
-  mysql_db:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/db/MySQL.Dockerfile
-    container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: pokemondb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./devops/volumes/mysql:/var/lib/mysql
-      - ./conf/mysql/db/files:/var/www/html
-    networks:
-      - app_network
+    mysql_db:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/db/MySQL.Dockerfile
+        container_name: mysql_db
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: pokemondb
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./devops/volumes/mysql:/var/lib/mysql
+            - ./conf/mysql/db/files:/var/www/html
+        networks:
+            - app_network
 
-  postgres_db:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/db/PostgreSQL.Dockerfile
-    container_name: postgres_db
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: my_database
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./devops/volumes/postgres:/var/lib/postgresql/data
-    networks:
-      - app_network
+    mongo_db:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/db/Mongo.Dockerfile
+        container_name: mongo_db
+        ports:
+            - "27017:27017"
+        volumes:
+            - ./devops/volumes/mongo:/data/db
+        networks:
+            - app_network
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: password
 
-  nginx_proxy:
-    build:
-      context: .
-      dockerfile: devops/dockerfiles/proxy/Nginx.Dockerfile
-    container_name: nginx_proxy
-#    volumes:
-#      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
-    volumes:
-      - ./conf/nginx:/src
-    ports:
-      - "80:80"
-    depends_on:
-      - symfony_backend
-      - django_backend
-      - springboot_backend
-      - front_micro
-    networks:
-      - app_network
+    postgres_db:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/db/PostgreSQL.Dockerfile
+        container_name: postgres_db
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: my_database
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./devops/volumes/postgres:/var/lib/postgresql/data
+        networks:
+            - app_network
 
-  mailhog:
-    image: mailhog/mailhog
-    container_name: mailhog_micro
-    ports:
-        - "8025:8025"  # Interfaz web
-        - "1025:1025"  # Puerto SMTP
-    networks:
-        - app_network
+    nginx_proxy:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/proxy/Nginx.Dockerfile
+        container_name: nginx_proxy
+        #    volumes:
+        #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+        volumes:
+            - ./conf/nginx:/src
+        ports:
+            - "80:80"
+        depends_on:
+            - symfony_backend
+            - django_backend
+            - springboot_backend
+            - front_micro
+        networks:
+            - app_network
 
-  nocodb:
-    image: nocodb/nocodb:latest
-    container_name: nocodb_micro
-    ports:
-        - "8082:8080"
-    environment:
-        - NC_DB_TYPE=mysql  # Cambiado a mysql
-        - NC_DB_HOST=mysql_db_micro  # Nombre del contenedor de MySQL
-        - NC_DB_PORT=3306  # Puerto de MySQL
-        - NC_DB_USER=user
-        - NC_DB_PASSWORD=password
-        - NC_DB_NAME=my_database
-        - NC_AUTH_JWT_SECRET=gbcv123M
-    depends_on:
-        - mysql_db
-    restart: always
-    volumes:
-        - ./devops/volumes/nocodb:/usr/app/data
-    networks:
-        - app_network
+    mailhog:
+        image: mailhog/mailhog
+        container_name: mailhog_micro
+        ports:
+            - "8025:8025"  # Interfaz web
+            - "1025:1025"  # Puerto SMTP
+        networks:
+            - app_network
 
-  chartdb:
-    image: ghcr.io/chartdb/chartdb:latest
-    container_name: chartdb
-    environment:
-        - DB_TYPE=mysql
-        - DB_HOST=mysql_db
-        - DB_PORT=3306
-        - DB_USER=user
-        - DB_PASSWORD=password
-        - DB_NAME=my_database
-    ports:
-        - "8083:80"
-    depends_on:
-        - mysql_db
-    networks:
-        - app_network
+    nocodb:
+        image: nocodb/nocodb:latest
+        container_name: nocodb_micro
+        ports:
+            - "8082:8080"
+        environment:
+            - NC_DB_TYPE=mysql  # Cambiado a mysql
+            - NC_DB_HOST=mysql_db_micro  # Nombre del contenedor de MySQL
+            - NC_DB_PORT=3306  # Puerto de MySQL
+            - NC_DB_USER=user
+            - NC_DB_PASSWORD=password
+            - NC_DB_NAME=my_database
+            - NC_AUTH_JWT_SECRET=gbcv123M
+        depends_on:
+            - mysql_db
+        restart: always
+        volumes:
+            - ./devops/volumes/nocodb:/usr/app/data
+        networks:
+            - app_network
+
+    chartdb:
+        image: ghcr.io/chartdb/chartdb:latest
+        container_name: chartdb
+        environment:
+            - DB_TYPE=mysql
+            - DB_HOST=mysql_db
+            - DB_PORT=3306
+            - DB_USER=user
+            - DB_PASSWORD=password
+            - DB_NAME=my_database
+        ports:
+            - "8083:80"
+        depends_on:
+            - mysql_db
+        networks:
+            - app_network
 
 networks:
     app_network:

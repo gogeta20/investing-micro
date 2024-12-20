@@ -82,3 +82,6 @@ mongo-reset:
 mongo-init-db:
 	docker exec -i $(M) mongosh -u root -p password < /docker-entrypoint-initdb.d/mongo-init.js
 
+mongo-seed: # make mongo-seed s=1
+	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use intents_db"  < /var/www/html/scripts/seeds/S$(s).js'
+

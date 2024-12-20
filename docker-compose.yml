@@ -108,6 +108,7 @@ services:
             - "27017:27017"
         volumes:
             - ./devops/volumes/mongo:/data/db
+            - ./conf/mongodb/db/files:/var/www/html
         networks:
             - app_network
         environment:

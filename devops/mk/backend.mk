@@ -31,3 +31,4 @@ django-install-requirements:
 
 django-pip: # make django-pip f=kaggle
 	docker exec -it $(DB) pip install $(f)
+

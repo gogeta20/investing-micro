@@ -82,6 +82,13 @@ DATABASES = {
     }
 }
 
+MONGO_DB_SETTINGS = {
+    'HOST': 'mongo_db',
+    'PORT': 27017,
+    'DB_NAME': 'intents_db',
+    'USERNAME': 'root',
+    'PASSWORD': 'password',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

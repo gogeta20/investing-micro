@@ -1,10 +1,11 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
+from myproject.shared.infrastructure.repository.mongo_service import MongoService
 
 from myproject.core.application.UseCase.Voice.VoiceQuery import VoiceQuery
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
 from myproject.shared.domain.response import BaseResponse
-import kagglehub
+# import kagglehub
 import pandas as pd
 
 class VoiceQueryHandler(QueryHandler):
@@ -12,13 +13,13 @@ class VoiceQueryHandler(QueryHandler):
         self.vectorizer = CountVectorizer()
         self.classifier = MultinomialNB()
         # try:
-        path = kagglehub.dataset_download("trainingdatapro/llm-dataset")
-        df = pd.read_csv(f"{path}/LLM__data.csv")
+        mongo_service = MongoService()
+        intents_collection = mongo_service.get_collection('intents')
+        data = list(intents_collection.find({}, {'_id': 0, 'frase': 1,'intencion': 1}))
+        mongo_service.close_connection()
 
-        spanish_data = df[df['from_language'] == 'es']
-        spanish_data = spanish_data.dropna(subset=['text'])
-        self.train_data = spanish_data['text'].astype(str).tolist()
-        self.train_labels = ["get_pokemon_info"] * len(self.train_data)
+        self.train_data = [item['frase'] for item in data]
+        self.train_labels = [item['intencion'] for item in data]
 
         X = self.vectorizer.fit_transform(self.train_data)
         self.classifier.fit(X, self.train_labels)
@@ -42,15 +43,14 @@ class VoiceQueryHandler(QueryHandler):
         }
 
     def generate_sql(self, intent, pokemon_name):
-        if intent == "get_pokemon_info":
+        if intent == "info":
             return f"""
             SELECT p.*, s.*
             FROM pokemon p
             JOIN pokemon_stats s ON p.id = s.pokemon_id
             WHERE p.name = '{pokemon_name}'
             """
-        elif intent == "compare_pokemon":
-
+        elif intent == "compare":
             return f"""
             SELECT p.name, s.*
             FROM pokemon p
@@ -80,16 +80,17 @@ class VoiceQueryHandler(QueryHandler):
 
 
     def extract_pokemon_name(self, text):
-        pokemon_list = ["pikachu", "charizard", "bulbasaur"]  # Lista de todos los pokemon
+        pokemon_list = ["pikachu", "charizard", "bulbasaur"]
+        found_pokemon = []
+
         for pokemon in pokemon_list:
             if pokemon in text.lower():
-                return pokemon
+                found_pokemon.append(pokemon)
 
-        keywords = ["de", "sobre", "a", "del pokemon"]
-        for keyword in keywords:
-            if keyword in text:
-                parts = text.split(keyword)
-                if len(parts) > 1:
-                    return parts[1].strip()
+        if len(found_pokemon) == 2:
+            return f"{found_pokemon[0]},{found_pokemon[1]}"
+
+        elif len(found_pokemon) == 1:
+            return found_pokemon[0]
 
         return "unknown"

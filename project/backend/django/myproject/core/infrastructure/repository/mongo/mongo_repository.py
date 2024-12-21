@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from django.conf import settings
 
-class MongoService:
+class MongoRepository:
     def __init__(self):
         self.client = MongoClient(
             host=settings.MONGO_DB_SETTINGS['HOST'],

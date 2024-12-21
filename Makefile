@@ -35,7 +35,6 @@ restart: down up
 
 in-front:
 	docker exec -it $(VF) sh
-# make composer-require pkg=guzzlehttp/guzzle
 
 logs-front:
 	docker logs $(VF)
@@ -104,6 +103,3 @@ in-db-mongo:
 
 logs-mongo:
 	docker logs $(M)
-
-
-

@@ -12,3 +12,7 @@ pandas
 
 pymongo>=4.5.0
 dnspython>=2.3.0
+
+mysqlclient
+pymysql
+cryptography

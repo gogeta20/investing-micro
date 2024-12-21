@@ -32,3 +32,10 @@ django-install-requirements:
 django-pip: # make django-pip f=kaggle
 	docker exec -it $(DB) pip install $(f)
 
+django-migrations:
+	docker exec -it $(DB) python manage.py makemigrations
+
+django-migrate:
+	docker exec -it $(DB) python manage.py migrate
+
+django-init-migrations: django-migrations django-migrate

@@ -1,22 +1,22 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
-from myproject.shared.infrastructure.repository.mongo_service import MongoService
+from myproject.core.infrastructure.repository.mongo.mongo_repository import MongoRepository
+from myproject.core.Domain.Model.Pokemon import Pokemon
 
 from myproject.core.application.UseCase.Voice.VoiceQuery import VoiceQuery
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
 from myproject.shared.domain.response import BaseResponse
 # import kagglehub
-import pandas as pd
 
 class VoiceQueryHandler(QueryHandler):
     def __init__(self):
         self.vectorizer = CountVectorizer()
         self.classifier = MultinomialNB()
         # try:
-        mongo_service = MongoService()
-        intents_collection = mongo_service.get_collection('intents')
+        mongo_repo = MongoRepository()
+        intents_collection = mongo_repo.get_collection('intents')
         data = list(intents_collection.find({}, {'_id': 0, 'frase': 1,'intencion': 1}))
-        mongo_service.close_connection()
+        mongo_repo.close_connection()
 
         self.train_data = [item['frase'] for item in data]
         self.train_labels = [item['intencion'] for item in data]
@@ -80,7 +80,8 @@ class VoiceQueryHandler(QueryHandler):
 
 
     def extract_pokemon_name(self, text):
-        pokemon_list = ["pikachu", "charizard", "bulbasaur"]
+
+        pokemon_list = [pokemon.nombre.lower() for pokemon in Pokemon.objects.all()]
         found_pokemon = []
 
         for pokemon in pokemon_list:

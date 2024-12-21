@@ -9,3 +9,6 @@ numpy==1.24.3
 kaggle==1.5.16
 kagglehub
 pandas
+
+pymongo>=4.5.0
+dnspython>=2.3.0

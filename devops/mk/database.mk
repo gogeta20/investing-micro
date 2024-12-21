@@ -61,3 +61,27 @@ db-rollback:
 
 #db-update: #make db-update f=mySql
 #	docker exec $(MYSQL) sh -c 'mysql -u user -ppassword -e "SOURCE /var/www/html/sql/$(f).sql"'
+
+#--------------------- DBase - mongo_db - mongo --------------------######################################
+
+mongo-down:
+	$(COMPOSE) stop  $(M) && $(COMPOSE) rm -f  $(M)
+
+mongo-build:
+	$(COMPOSE) build $(M) --no-cache
+
+mongo-restart:
+	$(COMPOSE) restart  $(M)
+
+mongo-up:
+	$(COMPOSE) up -d  $(M)
+
+mongo-reset:
+	docker rm -v $(M)
+
+mongo-init-db:
+	docker exec -i $(M) mongosh -u root -p password < /docker-entrypoint-initdb.d/mongo-init.js
+
+mongo-seed: # make mongo-seed s=1
+	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use intents_db"  < /var/www/html/scripts/seeds/S$(s).js'
+

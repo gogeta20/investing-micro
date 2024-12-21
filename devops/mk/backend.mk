@@ -28,3 +28,7 @@ django-restart:
 
 django-install-requirements:
 	docker exec -it $(DB) pip install -r requirements.txt
+
+django-pip: # make django-pip f=kaggle
+	docker exec -it $(DB) pip install $(f)
+

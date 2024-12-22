@@ -84,3 +84,6 @@ mongo-init-db:
 
 mongo-seed: # make mongo-seed s=1
 	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use intents_db"  < /var/www/html/scripts/seeds/S$(s).js'
+
+mongo-export:
+	docker exec -it $(M) mongoexport --host localhost --port 27017 --username root --password password --authenticationDatabase admin --db intents_db --collection intents --out=/var/www/html/intents.json --jsonArray

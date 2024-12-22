@@ -7,37 +7,51 @@ from myproject.core.application.UseCase.Voice.VoiceQuery import VoiceQuery
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
 from myproject.shared.domain.response import BaseResponse
 # import kagglehub
+import json
+
+import os
+from django.conf import settings
+from joblib import dump, load
 
 class VoiceQueryHandler(QueryHandler):
     def __init__(self):
         self.vectorizer = CountVectorizer()
         self.classifier = MultinomialNB()
-        # try:
-        mongo_repo = MongoRepository()
-        intents_collection = mongo_repo.get_collection('intents')
-        data = list(intents_collection.find({}, {'_id': 0, 'frase': 1,'intencion': 1}))
-        mongo_repo.close_connection()
+        # mongo_repo = MongoRepository()
+        # intents_collection = mongo_repo.get_collection('intents')
+        # data = list(intents_collection.find({}, {'_id': 0, 'frase': 1,'intencion': 1}))
+        # mongo_repo.close_connection()
+        model_path = os.path.join(settings.BASE_DIR, 'data','model', 'model.joblib')
 
-        self.train_data = [item['frase'] for item in data]
-        self.train_labels = [item['intencion'] for item in data]
+        if os.path.exists(model_path):
+            self.vectorizer, self.classifier = load(model_path)
+        else:
+            self.vectorizer = CountVectorizer()
+            self.classifier = MultinomialNB()
 
-        X = self.vectorizer.fit_transform(self.train_data)
-        self.classifier.fit(X, self.train_labels)
+            file_path = os.path.join(settings.BASE_DIR, 'data','mongodb', 'intents.json')
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+
+            self.train_data = [item['frase'] for item in data]
+            self.train_labels = [item['intencion'] for item in data]
+
+            X = self.vectorizer.fit_transform(self.train_data)
+            self.classifier.fit(X, self.train_labels)
+
+            dump((self.vectorizer, self.classifier), model_path)
 
     def process_text(self, text):
         text = text.lower()
         X = self.vectorizer.transform([text])
         predicted_intent = self.classifier.predict(X)[0]
         pokemon_name = self.extract_pokemon_name(text)
-        matched_pattern = None
         confidence = max(self.classifier.predict_proba(X)[0])
-
         sql_query = self.generate_sql(predicted_intent, pokemon_name)
 
         return {
             "intent": predicted_intent,
             "pokemon": pokemon_name or "unknown",
-            "command_pattern": matched_pattern or "none",
             "confidence": confidence,
             "sql_query": sql_query
         }
@@ -72,7 +86,6 @@ class VoiceQueryHandler(QueryHandler):
                 "pokemon": ml_result["pokemon"],
                 "confidence": ml_result["confidence"],
                 "sql": ml_result["sql_query"]
-                # "kaggle" : path
             },
             message='success request',
             status=200

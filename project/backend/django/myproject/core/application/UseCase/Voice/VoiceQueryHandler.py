@@ -1,24 +1,11 @@
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
-
+import os
+from django.conf import settings
 from myproject.core.application.UseCase.Voice.Voice import Voice
-from myproject.core.infrastructure.repository.mongo.mongo_repository import MongoRepository
-from myproject.core.Domain.Model.Pokemon import Pokemon
-
 from myproject.core.application.UseCase.Voice.VoiceQuery import VoiceQuery
 from myproject.core.infrastructure.repository.mysql.mysql_repository import PokemonRepository
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
 from myproject.shared.domain.response import BaseResponse
-# import kagglehub
-import json
-
-import os
-from django.conf import settings
-from joblib import dump, load
-
-from myproject.shared.domain.services.IVoiceMLService import IVoiceMLService
 from myproject.shared.infrastructure.services.voice.VoiceMLService import VoiceMLService
-
 
 class VoiceQueryHandler(QueryHandler):
     def __init__(self, use_case):

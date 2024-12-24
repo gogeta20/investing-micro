@@ -54,6 +54,7 @@ services:
             - "8000:8000"
         volumes:
             - ./project/backend/django:/app
+            - ./conf/django/data:/app/data
         networks:
             - app_network
 

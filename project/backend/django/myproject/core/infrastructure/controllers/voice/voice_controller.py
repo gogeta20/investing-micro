@@ -1,8 +1,7 @@
 from django.http import JsonResponse
 
 from myproject.core.application.UseCase.Voice.VoiceQuery import VoiceQuery
-from myproject.core.application.UseCase.Voice.VoiceQueryHandler import VoiceQueryHandler
-from myproject.core.infrastructure.handlers import get_handler
+from myproject.shared.application.handlers.handlers import get_handler
 from myproject.shared.infrastructure.bus.query_bus import QueryBus
 from myproject.shared.infrastructure.controller.api_controller import ApiController
 

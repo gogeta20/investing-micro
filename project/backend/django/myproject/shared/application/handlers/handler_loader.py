@@ -14,5 +14,5 @@ def load_handlers():
                 for attr in dir(module):
                     cls = getattr(module, attr)
                     if isinstance(cls, type) and issubclass(cls, QueryHandler) and cls is not QueryHandler:
-                        handlers[cls.__name__] = cls.create()  # Usar el constructor estático
+                        handlers[cls.__name__] = cls.create()
     return handlers

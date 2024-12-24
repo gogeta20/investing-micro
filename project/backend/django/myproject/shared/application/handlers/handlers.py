@@ -1,4 +1,4 @@
-from myproject.core.infrastructure.handler_loader import load_handlers
+from myproject.shared.application.handlers.handler_loader import load_handlers
 import os
 from django.conf import settings
 

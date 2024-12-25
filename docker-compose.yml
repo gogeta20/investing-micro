@@ -12,7 +12,7 @@ services:
             - "50000:50000"
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-            - ./devops/volumes/jenkins:/var/jenkins_home
+            - ./devops/volumes/jenkins:/var/jenkins_home:z
         environment:
             - "DOCKER_HOST=unix:///var/run/docker.sock"
         networks:
@@ -53,8 +53,8 @@ services:
         ports:
             - "8000:8000"
         volumes:
-            - ./project/backend/django:/app
-            - ./conf/django/data:/app/data
+            - ./project/backend/django:/app:z
+            - ./conf/django/data:/app/data:z
         networks:
             - app_network
 
@@ -95,7 +95,7 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ./devops/volumes/mysql:/var/lib/mysql
+            - ./devops/volumes/mysql:/var/lib/mysql:z
             - ./conf/mysql/db/files:/var/www/html
         networks:
             - app_network
@@ -108,7 +108,7 @@ services:
         ports:
             - "27017:27017"
         volumes:
-            - ./devops/volumes/mongo:/data/db
+            - ./devops/volumes/mongo:/data/db:z
             - ./conf/mongodb/db/files:/var/www/html
         networks:
             - app_network
@@ -128,7 +128,7 @@ services:
         ports:
             - "5432:5432"
         volumes:
-            - ./devops/volumes/postgres:/var/lib/postgresql/data
+            - ./devops/volumes/postgres:/var/lib/postgresql/data:z
         networks:
             - app_network
 
@@ -177,7 +177,7 @@ services:
             - mysql_db
         restart: always
         volumes:
-            - ./devops/volumes/nocodb:/usr/app/data
+            - ./devops/volumes/nocodb:/usr/app/data:z
         networks:
             - app_network
 

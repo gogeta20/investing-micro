@@ -39,3 +39,8 @@ django-migrate:
 	docker exec -it $(DB) python manage.py migrate
 
 django-init-migrations: django-migrations django-migrate
+
+#docker exec -u $(id -u):$(id -g) -it $(DB) python manage.py makemigrations
+#docker exec -u $(id -u):$(id -g) -it $(DB) python manage.py migrate
+
+#docker exec -it $(DB) chown -R $(id -u):$(id -g) /path/to/migrations

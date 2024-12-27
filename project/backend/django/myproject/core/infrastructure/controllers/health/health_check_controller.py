@@ -3,7 +3,7 @@ from pprint import pprint
 
 from django.http import JsonResponse
 
-from myproject.core.application.UseCase.HealthCheck.health_check_query_handler import HealthCheckQueryHandler
+from myproject.core.application.UseCase.HealthCheck.HealthCheckQueryHandler import HealthCheckQueryHandler
 from myproject.core.application.UseCase.HealthCheck.health_check_query import HealthCheckQuery
 from myproject.shared.infrastructure.controller.api_controller import ApiController
 from myproject.shared.infrastructure.bus.query_bus import QueryBus

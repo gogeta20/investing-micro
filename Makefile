@@ -7,6 +7,7 @@ DB=django_backend
 MYSQL=mysql_db
 M=mongo_db
 NG=nginx_proxy
+MQ=rabbitmq
 J=jenkins_micro
 
 include devops/mk/*.mk
@@ -71,6 +72,10 @@ logs-springboot:
 in-nginx:
 	docker exec -it $(NG) /bin/bash
 
+
+backend-on-rabbit:
+	docker exec -it $(SB) bash -c "php bin/console messenger:consume events -vvv"
+
 proxy-nginx-logs:
 	docker logs $(NG)
 
@@ -100,3 +105,13 @@ in-db-mongo:
 
 logs-mongo:
 	docker logs $(M)
+
+#--------------------- rabbitmq --------------------######################################
+rabbit-enable-rabbitmq-management:
+	docker exec -it $(MQ) rabbitmq-plugins enable rabbitmq_management
+
+rabbit-disable-rabbitmq-management:
+	docker exec -it $(MQ) rabbitmq-plugins disable rabbitmq_management
+
+
+

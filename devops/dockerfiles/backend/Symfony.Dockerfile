@@ -7,8 +7,11 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
-    libssl-dev \
     curl \
+    librabbitmq-dev \
+    libssl-dev \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb
 

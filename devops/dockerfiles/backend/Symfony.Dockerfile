@@ -7,7 +7,10 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     git \
-    curl
+    libssl-dev \
+    curl \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb
 
 RUN docker-php-ext-install pdo pdo_mysql zip
 

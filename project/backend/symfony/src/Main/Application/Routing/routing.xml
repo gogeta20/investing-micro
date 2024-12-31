@@ -17,6 +17,12 @@
 		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">
 	</route>
 
+	<route
+		id="pokemon_check"
+		path="/pokemon/check"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\Pokemon\Get\GetPokemonByIdController">
+	</route>
 
 <!--	<route-->
 <!--		id="login"-->

@@ -47,9 +47,6 @@ in-back-symfony:
 logs-back-symfony:
 	docker logs $(S)
 
-composer-require:
-	docker exec -it $(S) bash -c "composer require $(pkg)"
-
 #--------------------- BACK - django_backend python --------------------######################################
 
 in-back-django:

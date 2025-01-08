@@ -1,33 +1,12 @@
-#--------------------- BACK - symfony_backend --------------------######################################
-
-composer-require:
-	docker exec -it $(S) bash -c "composer require $(pkg)"
-
-symfony-down:
-	$(COMPOSE) stop  $(S) && $(COMPOSE) rm -f  $(S)
-
-symfony-build:
-	$(COMPOSE) build  $(S) --no-cache
-
-symfony-up:
-	$(COMPOSE) up -d  $(S)
-
-
-#--------------------- BACK - springboot_backend java --------------------######################################
-
-springboot-down:
-	$(COMPOSE) stop  $(SB) && $(COMPOSE) rm -f  $(SB)
-
-springboot-build:
-	$(COMPOSE) build  $(SB) --no-cache
-
-springboot-up:
-	$(COMPOSE) up -d  $(SB)
-
-springboot-restart:
-	$(COMPOSE) stop  $(SB) && $(COMPOSE) rm -f  $(SB) && $(COMPOSE) up -d  $(SB)
-
 #--------------------- BACK - django_backend python --------------------######################################
+in-back-django:
+	docker exec -it $(DB) /bin/bash
+
+logs-back-django:
+	docker logs $(DB)
+
+py-require:
+	docker exec -it $(DB) bash -c ""
 
 django-down:
 	$(COMPOSE) stop  $(DB) && $(COMPOSE) rm -f  $(DB)

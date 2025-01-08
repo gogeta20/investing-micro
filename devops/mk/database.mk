@@ -1,4 +1,14 @@
 #--------------------- DBase - mysql_db_micro mysql --------------------######################################
+
+in-db:
+	docker exec -it  $(MYSQL) /bin/bash
+
+in-db-mysql:
+	docker exec -it $(MYSQL) mysql -u user -ppassword
+
+in-db-mysql-root:
+	docker exec -it $(MYSQL) mysql -u root -prootpassword
+
 mysql-down:
 	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
 
@@ -63,6 +73,15 @@ mysql-rollback:
 #	docker exec $(MYSQL) sh -c 'mysql -u user -ppassword -e "SOURCE /var/www/html/sql/$(f).sql"'
 
 #--------------------- DBase - mongo_db - mongo --------------------######################################
+
+in-mongo:
+	docker exec -it $(M) /bin/bash
+
+in-db-mongo:
+	docker exec -it $(M) mongosh -u root -p password
+
+logs-mongo:
+	docker logs $(M)
 
 mongo-down:
 	$(COMPOSE) stop  $(M) && $(COMPOSE) rm -f  $(M)

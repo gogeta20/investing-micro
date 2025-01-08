@@ -15,47 +15,27 @@ abstract class BaseRepository implements IRepository
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-//        protected LogInterface                  $logger,
     )
-    {
-    }
+    {}
 
     public function repository(string $entityClass): EntityRepository
     {
-//        $this->logger->startQuery();
         return $this->entityManager->getRepository($entityClass);
-    }
-
-    private function prepareEntity($entity)
-    {
-        $now = new \DateTime();
-        $nowString = $now->format('Y-m-d H:i:s');
-        if (property_exists($entity, 'created') && is_null($entity->getCreated())) {
-            $entity->setCreated($nowString);
-        }
-        if (property_exists($entity, 'modified')) {
-            $entity->setModified($nowString);
-        }
-
-        return $entity;
     }
 
     public function persist($entity): void
     {
-//        $this->logger->startQuery();
-        $entity = $this->prepareEntity($entity);
         $this->entityManager->persist($entity);
+        $this->entityManager->flush();
     }
 
     public function flush(): void
     {
-//        $this->logger->startQuery();
         $this->entityManager->flush();
     }
 
     public function persistAndFlush($entity): void
     {
-//        $this->logger->startQuery();
         $entity = $this->prepareEntity($entity);
         $this->entityManager->persist($entity);
         $this->entityManager->flush($entity);
@@ -63,13 +43,11 @@ abstract class BaseRepository implements IRepository
 
     public function remove($entity): void
     {
-//        $this->logger->startQuery();
         $this->entityManager->remove($entity);
     }
 
     public function removeAndFlush($entity): void
     {
-//        $this->logger->startQuery();
         $this->entityManager->remove($entity);
         $this->entityManager->flush($entity);
     }

@@ -24,6 +24,13 @@
 		controller="App\Main\Infrastructure\Controller\Pokemon\Get\GetPokemonByIdController">
 	</route>
 
+	<route
+		id="pokemon_create"
+		path="/pokemon"
+		methods="POST"
+		controller="App\Main\Infrastructure\Controller\Pokemon\Post\CreatePokemonController">
+	</route>
+
 <!--	<route-->
 <!--		id="login"-->
 <!--		path="/api/login"-->

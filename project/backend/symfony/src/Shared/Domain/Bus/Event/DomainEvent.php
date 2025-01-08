@@ -44,4 +44,10 @@ abstract class DomainEvent
     {
         return $this->occurredOn;
     }
+
+    public function toJson(): string
+    {
+        return json_encode($this->toPrimitives(), JSON_THROW_ON_ERROR);
+    }
+
 }

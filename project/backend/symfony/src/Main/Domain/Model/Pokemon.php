@@ -2,51 +2,62 @@
 namespace App\Main\Domain\Model;
 
 use App\Main\Domain\Model\Events\PokemonCreateDomainEvent;
-use App\Main\Domain\Model\Mysql\EstadisticasBase;
 use App\Shared\Domain\Aggregate\AggregateRoot;
 use Ramsey\Uuid\Uuid;
 
 class Pokemon extends AggregateRoot
 {
-    private int $numero_pokedex;
+    private ?int $numero_pokedex;
     private string $nombre;
     private float $peso;
     private float $altura;
-    private EstadisticasBase $estadisticasBase;
+    private ?EstadisticasBase $estadisticasBase;
 
-//    public function __construct(string $numero_pokedex, string $nombre, float $peso, float $altura, EstadisticasBase $estadisticasBase)
-    public function __construct(string $numero_pokedex, string $nombre, float $peso, float $altura)
+    public function __construct(?int $numero_pokedex, string $nombre, float $peso, float $altura)
     {
         $this->numero_pokedex = $numero_pokedex;
         $this->nombre = $nombre;
         $this->peso = $peso;
         $this->altura = $altura;
-//        $this->estadisticasBase = $estadisticasBase;
     }
 
     public static function create(
-        int $numero_pokedex,
+        ?int $numero_pokedex,
         string $nombre,
         float $peso,
         float $altura,
-//        EstadisticasBase $estadisticasBase
     ): Pokemon
     {
-//        $pokemon = new self($numero_pokedex, $nombre, $peso, $altura, $estadisticasBase);
         $pokemon = new self($numero_pokedex, $nombre, $peso, $altura);
-        $pokemon->record(new PokemonCreateDomainEvent(
-            Uuid::uuid4(),
-            [
-                $numero_pokedex,
-                $nombre,
-                $peso,
-                $altura
-            ],
-            'PokemonCreateDomainEvent'
-        ));
+
+
         return $pokemon;
     }
 
+    public function updateEstadisticasBase(
+        int $ps,
+        int $ataque,
+        int $defensa,
+        int $velocidad
+    ): void {
+        $this->estadisticasBase->update($ps, $ataque, $defensa, $velocidad);
+        $this->record(new PokemonCreateDomainEvent(
+            Uuid::uuid4(),
+            [
+                'numero_pokedex' => $this->numero_pokedex,
+                'nombre' => $this->nombre,
+                'peso' => $this->peso,
+                'altura' => $this->altura,
+                'estadisticas' => [
+                    'ps' => $ps,
+                    'ataque' => $ataque,
+                    'defensa' => $defensa,
+                    'velocidad' => $velocidad,
+                ]
+            ],
+            'PokemonStatsUpdated'
+        ));
+    }
     public function getNumeroPokedex(): int
     {
         return $this->numero_pokedex;
@@ -67,9 +78,31 @@ class Pokemon extends AggregateRoot
         return $this->altura;
     }
 
-//    public function getEstadisticasBase(): EstadisticasBase
-//    {
-//        return $this->estadisticasBase;
-//    }
+    public function getEstadisticasBase(): EstadisticasBase
+    {
+        return $this->estadisticasBase;
+    }
+
+    public function setEstadisticasBase(EstadisticasBase $estadisticasBase): void
+    {
+        $this->record(new PokemonCreateDomainEvent(
+            Uuid::uuid4(),
+            [
+                $this->numero_pokedex,
+                $this->nombre,
+                $this->peso,
+                $this->altura,
+                'estadisticas' => [
+                    'ps' => $estadisticasBase->getPs(),
+                    'ataque' => $estadisticasBase->getAtaque(),
+                    'defensa' => $estadisticasBase->getDefensa(),
+                    'velocidad' => $estadisticasBase->getVelocidad(),
+                ]
+            ],
+            'PokemonCreate'
+        ));
+        $this->estadisticasBase = $estadisticasBase;
+    }
+
 }
 

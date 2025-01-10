@@ -29,6 +29,11 @@ abstract class BaseRepository implements IRepository
         $this->entityManager->flush();
     }
 
+    public function persistOneEntity($entity): void
+    {
+        $this->entityManager->persist($entity);
+    }
+
     public function flush(): void
     {
         $this->entityManager->flush();

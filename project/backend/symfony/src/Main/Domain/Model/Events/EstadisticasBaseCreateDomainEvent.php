@@ -8,8 +8,8 @@ use App\Shared\Domain\Bus\Event\DomainEvent;
 final class EstadisticasBaseCreateDomainEvent extends DomainEvent
 {
     public function __construct(
-        string                  $id,
-        private readonly int    $numero_pokedex,
+        string                 $id,
+        private readonly ?int  $numero_pokedex,
         private readonly float $ps,
         private readonly float $ataque,
         private readonly float $velocidad,

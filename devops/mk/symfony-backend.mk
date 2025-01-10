@@ -23,3 +23,6 @@ symfony-on-rabbit:
 
 symfony-rabbit-launch-events:
 	docker exec -it $(S) php bin/console messenger:consume other_queue --time-limit=60 --memory-limit=128M
+
+symfony-on-rabbit:
+	docker exec -it $(S) bash -c "php bin/console messenger:consume events -vvv"

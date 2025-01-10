@@ -10,7 +10,7 @@ interface IRepository
     public function repository(string $entityClass);
 
     public function persist($entity): void;
-
+    public function persistOneEntity($entity): void;
     public function remove($entity): void;
 
 }

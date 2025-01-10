@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Main\Domain\Model\Mysql;
+namespace App\Main\Domain\Model;
 
 use App\Main\Domain\Model\Events\EstadisticasBaseCreateDomainEvent;
 use App\Shared\Domain\Aggregate\AggregateRoot;
@@ -12,14 +12,16 @@ class EstadisticasBase extends AggregateRoot
     private float $ps;
     private float $ataque;
     private float $defensa;
+    private float $especial;
     private float $velocidad;
 
-    public function __construct(int $numero_pokedex, float $ps, float $ataque, float $defensa, float $velocidad)
+    public function __construct(int $numero_pokedex, float $ps, float $ataque, float $defensa, float $especial,float $velocidad)
     {
         $this->numero_pokedex = $numero_pokedex;
         $this->ps = $ps;
         $this->ataque = $ataque;
         $this->defensa = $defensa;
+        $this->especial = $especial;
         $this->velocidad = $velocidad;
     }
 
@@ -28,11 +30,13 @@ class EstadisticasBase extends AggregateRoot
         float $ps,
         float $ataque,
         float $defensa,
+        float $especial,
         float $velocidad
-    ): void
+    ): EstadisticasBase
     {
-        $pokemon = new self($numero_pokedex, $ps, $ataque, $defensa, $velocidad);
-        $pokemon->record(new EstadisticasBaseCreateDomainEvent(Uuid::uuid4(),$numero_pokedex, $ps, $ataque, $defensa, $velocidad));
+        $eb = new self($numero_pokedex, $ps, $ataque, $defensa,$especial, $velocidad);
+        $eb->record(new EstadisticasBaseCreateDomainEvent(Uuid::uuid4(),$numero_pokedex, $ps, $ataque, $defensa, $especial,$velocidad));
+        return $eb;
     }
 
     public function getNumeroPokedex(): int
@@ -51,9 +55,23 @@ class EstadisticasBase extends AggregateRoot
     {
         return $this->defensa;
     }
+    public function getEspecial(): float
+    {
+        return $this->especial;
+    }
+
     public function getVelocidad(): float
     {
         return $this->velocidad;
+    }
+
+    public function update(float $ps, float $ataque, float $defensa, float $especial, float $velocidad): void
+    {
+        $this->ps = $ps;
+        $this->ataque = $ataque;
+        $this->defensa = $defensa;
+        $this->especial = $especial;
+        $this->velocidad = $velocidad;
     }
 
 }

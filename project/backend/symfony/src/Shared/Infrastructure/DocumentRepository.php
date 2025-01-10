@@ -27,6 +27,11 @@ abstract class DocumentRepository implements IRepository
         $this->documentManager->persist($entity);
     }
 
+    public function persistOneEntity($entity): void
+    {
+        $this->documentManager->persist($entity);
+    }
+
     /**
      * @throws \Throwable
      * @throws MongoDBException

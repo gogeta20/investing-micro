@@ -3,7 +3,7 @@
 				  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-	<entity name="App\Main\Domain\Model\Mysql\EstadisticasBase" table="estadisticas_base">
+	<entity name="App\Main\Domain\Model\EstadisticasBase" table="estadisticas_base">
 		<id name="numero_pokedex" column="numero_pokedex" type="integer">
 			<generator strategy="NONE"/>
 		</id>
@@ -11,6 +11,7 @@
 		<field name="ps" type="float" column="ps" nullable="false"/>
 		<field name="ataque" type="float" column="ataque" nullable="false"/>
 		<field name="defensa" type="float" column="defensa" nullable="false"/>
+		<field name="especial" type="float" column="especial" nullable="false"/>
 		<field name="velocidad" type="float" column="velocidad" nullable="false"/>
 	</entity>
 

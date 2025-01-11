@@ -10,10 +10,10 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-abstract class BaseDoctrine implements BaseRepositoryInterface
+abstract readonly class BaseDoctrine implements BaseRepositoryInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
+        private EntityManagerInterface $entityManager,
 //        protected LogInterface $logger,
     ) {
     }

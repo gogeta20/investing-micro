@@ -9,3 +9,7 @@ class HealthCheckQueryHandler(QueryHandler):
             message="Health check successful",
             status=200
         ).to_dict()
+
+    @classmethod
+    def create(cls):
+        pass

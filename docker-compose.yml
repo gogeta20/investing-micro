@@ -1,6 +1,23 @@
 version: '3.9'
 
 services:
+    rust_consumer:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/broker/Consumer.Dockerfile
+        container_name: rust_consumer
+        environment:
+          AMQP_ADDR: "amqp://admin:your_password@rabbitmq:5672/%2f"
+          OPENSSL_DIR: "/usr"
+        volumes:
+            - ./project/consumer:/app/src
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+        networks:
+            - app_network
+        restart: always
+
     jenkins:
         build:
             context: .
@@ -40,10 +57,13 @@ services:
             - "9000:9000"
         volumes:
             - ./project/backend/symfony:/var/www/html
+            - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
         command: >
             sh -c "composer install && php-fpm"
         networks:
             - app_network
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
     django_backend:
         build:
@@ -79,6 +99,14 @@ services:
         ports:
             - "15672:15672"  # Puerto para el panel de administración
             - "5672:5672"     # Puerto para las conexiones de los clientes
+        environment:
+            RABBITMQ_DEFAULT_USER: admin
+            RABBITMQ_DEFAULT_PASS: your_password
+        healthcheck:
+            test: ["CMD", "rabbitmqctl", "status"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
         networks:
             - app_network
 

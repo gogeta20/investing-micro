@@ -1,4 +1,14 @@
 #--------------------- DBase - mysql_db_micro mysql --------------------######################################
+
+in-db:
+	docker exec -it  $(MYSQL) /bin/bash
+
+in-db-mysql:
+	docker exec -it $(MYSQL) mysql -u user -ppassword
+
+in-db-mysql-root:
+	docker exec -it $(MYSQL) mysql -u root -prootpassword
+
 mysql-down:
 	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
 
@@ -64,6 +74,15 @@ mysql-rollback:
 
 #--------------------- DBase - mongo_db - mongo --------------------######################################
 
+in-mongo:
+	docker exec -it $(M) /bin/bash
+
+in-db-mongo:
+	docker exec -it $(M) mongosh -u root -p password
+
+logs-mongo:
+	docker logs $(M)
+
 mongo-down:
 	$(COMPOSE) stop  $(M) && $(COMPOSE) rm -f  $(M)
 
@@ -84,6 +103,9 @@ mongo-init-db:
 
 mongo-seed: # make mongo-seed s=1
 	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use intents_db"  < /var/www/html/scripts/seeds/S$(s).js'
+
+mongo-seed-basic: # make mongo-seed s=1
+	docker exec $(M) sh -c 'mongosh -u root -p password  < /var/www/html/scripts/seeds/S$(s).js'
 
 mongo-export:
 	docker exec -it $(M) mongoexport --host localhost --port 27017 --username root --password password --authenticationDatabase admin --db intents_db --collection intents --out=/var/www/html/intents.json --jsonArray

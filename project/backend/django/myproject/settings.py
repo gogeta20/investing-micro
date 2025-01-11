@@ -81,7 +81,7 @@ DATABASES = {
         'USER': 'user',
         'PASSWORD': 'password',
         'HOST': 'mysql_db',  # Nombre del contenedor
-        'PORT': '3306',
+        'PORT': 3306,
     },
     'secondary': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -92,7 +92,7 @@ DATABASES = {
 MONGO_DB_SETTINGS = {
     'HOST': 'mongo_db',
     'PORT': 27017,
-    'DB_NAME': 'intents_db',
+    'DB_NAME': 'pokemondb',
     'USERNAME': 'root',
     'PASSWORD': 'password',
 }

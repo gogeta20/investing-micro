@@ -1,43 +1,50 @@
 <?php
 namespace App\Main\Infrastructure\Service;
 
-use Dompdf\Dompdf;
-use App\Main\Domain\Repository\Interfaces\IDetailedReportService;
+use App\Main\Domain\Event\PokemonDetailsRetrievedEvent;
+use App\Shared\Domain\ValueObject\UuidValueObject;
+use TCPDF;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class DetailedReportService implements IDetailedReportService
+#[AsMessageHandler]
+class DetailedReportService
 {
-    public function generateReport(array $pokemonData): string
+    public function __invoke(PokemonDetailsRetrievedEvent $event): void
     {
-        $dompdf = new Dompdf();
-        // Construir el contenido del HTML basado en los datos del Pokémon
-        $html = $this->renderPokemonData($pokemonData);
-        // Aquí puedes agregar más información según sea necesario
-
-        // Cargar el HTML en Dompdf
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        // Guardar o devolver el PDF generado
-        $output = $dompdf->output();
-        file_put_contents('reporte_pokemon.pdf', $output);
-
-        return 'reporte_pokemon.pdf';  // Devolvemos el nombre del archivo generado
+        $this->generateReport($event->getPokemonData());
     }
 
-    function renderPokemonData(array $pokemonData): string {
-        $html = '';
+    public function generateReport(array $pokemonData): string
+    {
+        $tcpdf = new TCPDF();
 
+        $timestamp = date('YmdHis');
+        $filePath = __DIR__ . '/reporte_pokemon_' . $timestamp . '.pdf';
+
+        $tcpdf->AddPage();
+        $tcpdf->SetFont('helvetica', '', 12);
+        $tcpdf->Write(0, 'Reporte de Pokemon', '', 0, 'L', true, 0, false, false, 0);
+
+        $this->renderPokemonDataInChunks($pokemonData, $tcpdf);
+
+        $tcpdf->Output($filePath, 'F');
+
+        return $filePath;
+    }
+
+    private function renderPokemonDataInChunks(array $pokemonData, TCPDF $tcpdf): void
+    {
         foreach ($pokemonData as $key => $value) {
-            // Si el valor es un array, hacemos una llamada recursiva
             if (is_array($value)) {
-                $html .= "<p><strong>$key</strong>:</p>";
-                $html .= $this->renderPokemonData($value);  // Recursión para manejar arrays anidados
+                $tcpdf->Write(0, "$key:", '', 0, 'L', true, 0, false, false, 0);
+                $this->renderPokemonDataInChunks($value, $tcpdf);
             } else {
-                $html .= "<p>$key: $value</p>";  // Si no es un array, simplemente mostramos la clave y el valor
+                $tcpdf->Write(0, "$key: $value", '', 0, 'L', true, 0, false, false, 0);
+            }
+
+            if (memory_get_usage() > 100 * 1024 * 1024) {
+                $tcpdf->AddPage();
             }
         }
-
-        return $html;
     }
 }

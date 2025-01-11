@@ -43,3 +43,12 @@ services:
 
     App\Shared\Infrastructure\Bus\Query\InMemorySymfonyQueryBus:
         arguments: [ !tagged internal.query_handler ]
+
+    # Events
+#    App\Shared\Infrastructure\Bus\Event\InMemorySymfonyEventBus:
+#        arguments: [ !tagged internal.domain_event_subscriber ]
+#        lazy: true
+
+    messenger.transport.symfony_serializer:
+        class: Symfony\Component\Messenger\Transport\Serialization\Serializer
+        arguments: [ '@serializer' ]

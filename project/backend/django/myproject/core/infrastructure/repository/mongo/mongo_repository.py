@@ -14,5 +14,13 @@ class MongoRepository:
     def get_collection(self, collection_name):
         return self.db[collection_name]
 
+    def insert_pokemon(self, pokemon):
+        collection = self.db["pokemon"]
+        collection.insert_one(pokemon)
+
+    def insert_data(self, collection_name, data):
+        collection = self.db[collection_name]
+        collection.insert_one(data)
+
     def close_connection(self):
         self.client.close()

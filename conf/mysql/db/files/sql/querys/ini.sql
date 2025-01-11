@@ -152,14 +152,36 @@ join forma_aprendizaje fa 				on pmf.id_forma_aprendizaje = fa.id_forma_aprendiz
 join MO mo on fa.id_forma_aprendizaje = mo.id_forma_aprendizaje ;
 -- WHERE m.id_tipo = (select t2.id_tipo from tipo t2);
 
+-- tabla materializada
+CREATE TABLE materialized_pokemon AS
+SELECT 
+    p.numero_pokedex,
+    p.nombre,
+    p.peso,
+    p.altura,
+    e.ataque,
+    e.defensa,
+    e.velocidad
+FROM pokemon p
+LEFT JOIN estadisticas_base e ON p.numero_pokedex = e.numero_pokedex;
+
+SELECT * from materialized_pokemon;
 
 
+-- vista
+CREATE OR REPLACE VIEW pokemon_base_view AS
+SELECT 
+    p.numero_pokedex,
+    p.nombre,
+    p.peso,
+    p.altura,
+    e.ataque,
+    e.defensa,
+    e.velocidad
+FROM pokemon p
+LEFT JOIN estadisticas_base e ON p.numero_pokedex = e.numero_pokedex;
 
-
-
-
-
-
+SELECT * from pokemon_base_view;
 
 
 

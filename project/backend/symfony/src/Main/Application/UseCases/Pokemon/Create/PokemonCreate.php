@@ -23,7 +23,7 @@ readonly class PokemonCreate
     public function __invoke(PokemonCreateCommand $command): void
     {
         try {
-            $pokemon = Pokemon::create(190,'mauriciovargas', 20, 80);
+            $pokemon = Pokemon::create(224,'mauriciovargas', 20, 80);
             $estadisticasBase = EstadisticasBase::create($pokemon->getNumeroPokedex(),20,20,20,20, 21);
             $pokemon->setEstadisticasBase($estadisticasBase);
             $this->IPokemon->save($pokemon);

@@ -8,12 +8,12 @@ use lapin::{
 use futures_util::StreamExt;
 use uuid::Uuid;
 
-pub struct RabbitConsumer {
+pub struct RabbitConsumerOriginal {
     channel: Channel,
     queue_name: String,
 }
 
-impl RabbitConsumer {
+impl RabbitConsumerOriginal {
     pub async fn new(amqp_addr: &str, queue_name: &str) -> Result<Self, lapin::Error>
     {
         let conn = Connection::connect(amqp_addr, ConnectionProperties::default()).await?;

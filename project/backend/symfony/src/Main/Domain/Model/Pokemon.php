@@ -88,10 +88,10 @@ class Pokemon extends AggregateRoot
         $this->record(new PokemonCreateDomainEvent(
             Uuid::uuid4(),
             [
-                $this->numero_pokedex,
-                $this->nombre,
-                $this->peso,
-                $this->altura,
+                "numero_pokedex" => $this->numero_pokedex,
+                "nombre" => $this->nombre,
+                "peso" => $this->peso,
+                "altura" => $this->altura,
                 'estadisticas' => [
                     'ps' => $estadisticasBase->getPs(),
                     'ataque' => $estadisticasBase->getAtaque(),

@@ -1,20 +1,8 @@
 mod config;
 mod rabbit;
-
-use rabbit::RabbitConsumer;
-
+mod consumer;
+use crate::consumer::application::use_case::listining_rabbit;
 #[tokio::main]
 async fn main() {
-    let rabbit_amqp = config::get_amqp_addr();
-
-    match RabbitConsumer::new(&rabbit_amqp, "messages").await {
-        Ok(rabbit) => {
-            if let Err(e) = rabbit.start_consuming().await {
-                println!("Error durante el consumo: {:?}", e);
-            }
-        }
-        Err(e) => {
-            println!("Error al conectar a RabbitMQ: {:?}", e);
-        }
-    }
+    listining_rabbit::start().await.expect("Error al escuchar rabbit");
 }

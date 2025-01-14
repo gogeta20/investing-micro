@@ -1,8 +1,9 @@
 use dotenv::dotenv;
 use std::env;
 use async_trait::async_trait;
-use mongodb::{bson::{doc, Document}, options::ClientOptions, Client, Database};
+use mongodb::{options::ClientOptions, Client, Database};
 use crate::consumer::domain::interface::message_repository::MessageRepository;
+use crate::consumer::domain::models::{Data, DataCollection};
 
 pub struct MongoMessageRepository {
     db: Database,
@@ -12,8 +13,10 @@ impl MongoMessageRepository {
     pub async fn new() -> Self {
         dotenv().ok();
 
-        let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
-        let db_name = env::var("MONGO_DB_NAME").expect("MONGO_DB_NAME no está configurada");
+        // let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
+        let connection_string = String::from("mongodb://root:password@mongo_db:27017");
+        // let db_name = env::var("MONGO_DB_NAME").expect("MONGO_DB_NAME no está configurada");
+        let db_name = String::from("pokemondb");
 
         let client_options = ClientOptions::parse(&connection_string)
             .await
@@ -26,16 +29,13 @@ impl MongoMessageRepository {
 
 #[async_trait]
 impl MessageRepository for MongoMessageRepository {
-    async fn save(&self) -> Result<(), String> {
-        let collection: mongodb::Collection<Document> = self.db.collection("pokemon_base_view");
+    async fn save(&self, data: Data) -> Result<(), String> {
+        let collection: mongodb::Collection<DataCollection> = self.db.collection("pokemon_base_view");
 
-        let new_doc = doc! {
-            "example_key": "example_value"
-        };
+        let data_collection: DataCollection = data.into();
 
-        // Insertar el documento en la colección
         collection
-            .insert_one(new_doc)
+            .insert_one(data_collection)
             .await
             .map_err(|e| format!("Error al guardar el mensaje: {}", e))?;
         Ok(())

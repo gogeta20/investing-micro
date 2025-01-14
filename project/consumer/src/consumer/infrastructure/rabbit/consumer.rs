@@ -9,18 +9,12 @@ use futures_util::StreamExt;
 use uuid::Uuid;
 use crate::config;
 use serde_json::from_str;
-use crate::consumer::domain::models::{Data, RabbitMessage};
+use crate::consumer::domain::models::{RabbitMessage};
 
 pub struct RabbitConsumer {
     channel: Channel,
     queue_name: String,
 }
-
-// #[derive(Deserialize, Debug)]
-// pub struct RabbitMessage {
-//     pub data: String,
-//     pub eventId: String,
-// }
 
 impl RabbitConsumer {
     pub async fn new(queue_name: &str) -> Result<Self, lapin::Error>
@@ -77,8 +71,7 @@ impl RabbitConsumer {
             .map_err(|e| format!("Error al deserializar el mensaje: {:?}", e))?;
 
         println!("Mensaje recibido message: {}", message);
-        println!("Mensaje recibido data: {}", parsed_message.eventId);
-        println!("Mensaje recibido nombre: {}", parsed_message.data.nombre);
+        println!("Mensaje recibido data eventId: {}", parsed_message.eventId);
 
         Ok(parsed_message)
     }

@@ -1,5 +1,6 @@
 use std::error::Error;
-use crate::consumer::domain::models::RabbitMessage;
+use crate::consumer::application::use_case::sync_db::new_item::NewItem;
+use crate::consumer::domain::models::{RabbitMessage};
 use crate::consumer::infrastructure::rabbit::RabbitConsumer;
 
 pub async fn start() -> Result<(), Box<dyn Error>> {
@@ -25,9 +26,13 @@ pub async fn start() -> Result<(), Box<dyn Error>> {
 async fn launch_case_use(event: Result<RabbitMessage, Box<dyn Error>>) {
     match event {
         Ok(rabbit_message) => {
-            println!("Evento recibido correctamente: {:?}", rabbit_message);
-            println!("Event ID: {}", rabbit_message.eventId);
-            println!("Nombre: {}", rabbit_message.data.nombre);
+            if rabbit_message.eventId == "PokemonCreate" {
+                let data = rabbit_message.data;
+                let new_item = NewItem::new().await;
+                new_item.add(data).await;
+            } else {
+                println!("Evento recibido pero no es 'newItem': {:?}", rabbit_message.eventId);
+            }
         }
         Err(err) => {
             eprintln!("Error al procesar el evento: {:?}", err);

@@ -1,19 +1,17 @@
-# Vue.Dockerfile
-
 # Usar la imagen oficial de Node.js
-#FROM node:16-alpine
 FROM node:18-alpine
+
+# Instalar pnpm y vite globalmente
+RUN npm install -g pnpm vite
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar los archivos de configuración de npm desde la carpeta de Vue
-COPY project/front/package*.json ./
+# Copiar los archivos de configuración de pnpm desde la carpeta del proyecto
+COPY project/front/package.json project/front/pnpm-lock.yaml ./
 
 # Instalar las dependencias
-RUN npm install -g vite && npm install
-
-RUN rm -rf node_modules
+RUN pnpm install
 
 # Copiar todo el código fuente del frontend al contenedor
 COPY project/front/ .
@@ -22,4 +20,4 @@ COPY project/front/ .
 EXPOSE 5173
 
 # Comando para ejecutar el servidor de desarrollo
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]

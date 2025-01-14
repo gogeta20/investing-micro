@@ -1,115 +1,74 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+const launchTest = (backend: string) => {
+  console.log(`Lanzando prueba para ${backend}`);
+};
+const isDark = ref(false);
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value;
+  document.body.classList.toggle('dark', isDark.value);
+};
+</script>
 <template>
-  <div>
-    <h1>Funcionalidades del Backend</h1>
+  <div class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-blue-500 text-white py-4 shadow-md">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">codigomau</h1>
+        <nav class="flex gap-4">
+          <router-link to="/about" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-lg text-white">
+            About
+          </router-link>
+        </nav>
+      </div>
+    </header>
 
-    <!-- Funcionalidad Symfony -->
-    <div class="functionality">
-      <h2>Generar Reporte Detallado (Symfony)</h2>
-      <p>Genera un reporte detallado con datos agregados de múltiples fuentes, utilizando procesamiento concurrente.</p>
-      <button @click="generateDetailedReport">Generar Reporte</button>
-    </div>
+    <!-- Body -->
+    <main class="container mx-auto px-4 flex-grow">
+      <section class="text-center mt-8">
+        <h2 class="text-2xl font-semibold">Bienvenido a codigomau</h2>
+        <p class="mt-4">
+          Esta página es una prueba diseñada para medir el rendimiento de diferentes frameworks y tecnologías, como
+          Symfony, Django, Spring Boot, RabbitMQ, Rust, MongoDB, MySQL, Nginx, Jenkins, entre otros.
+        </p>
+        <p class="mt-4 ">
+          Nos basamos en CQRS y DDD, utilizando dos bases de datos, una para lectura y otra para escritura. Nuestro
+          objetivo principal es probar la consistencia y eficiencia de esta arquitectura.
+        </p>
+        <p class="mt-4 ">
+          Además, Rust actualmente está diseñado para consumir eventos y sincronizar las bases de datos, mientras que
+          los tres backends principales (Symfony, Django, y Spring Boot) manejan diferentes tareas del sistema.
+        </p>
+        <div class="mt-8">
+          <button @click="launchTest('Symfony')"
+            class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white mx-2">
+            Probar Symfony
+          </button>
+          <button @click="launchTest('Django')"
+            class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white mx-2">
+            Probar Django
+          </button>
+          <button @click="launchTest('Spring Boot')"
+            class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg text-white mx-2">
+            Probar Spring Boot
+          </button>
+        </div>
+      </section>
+    </main>
 
-    <!-- Funcionalidad Spring Boot -->
-    <div class="functionality">
-      <h2>Procesar Archivo de Datos Masivo (Spring Boot)</h2>
-      <p>Sube y procesa un archivo CSV de gran tamaño, aplicando validaciones y almacenando los datos.</p>
-      <button @click="processLargeFile">Procesar Archivo</button>
-    </div>
-
-    <!-- Funcionalidad Django -->
-    <div class="functionality">
-      <h2>Análisis de Sentimiento en Redes Sociales (Django)</h2>
-      <p>Analiza el sentimiento de texto o comentarios de redes sociales utilizando un modelo de aprendizaje automático.
-      </p>
-      <textarea v-model="socialText" placeholder="Introduce el texto para analizar"></textarea>
-      <button @click="analyzeSentiment">Analizar Sentimiento</button>
-    </div>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 text-center">
+      <div class="flex justify-between items-center container mx-auto">
+        <p>&copy; 2025 Codigomau - Todos los derechos reservados.</p>
+        <button @click="toggleTheme">
+          {{ isDark ? '🌞' : '🌚' }}
+        </button>
+      </div>
+    </footer>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-// import apiClient from '@/api'; // Suponiendo que este es tu cliente HTTP configurado
-import FetchHomeData from '@/modules/home/application/useCases/FetchHomeData';
-import Symfony from '@/modules/home/application/useCases/Symfony';
-const socialText = ref('');
-
-// Funcionalidad Symfony
-const generateDetailedReport = async () => {
-  try {
-
-
-      fetch('http://symfony.localhost/check', {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json(); // Si esperas un JSON en la respuesta
-          })
-          .then(data => {
-              console.log('Success:', data);
-          })
-          .catch((error) => {
-              console.error('Error:', error);
-          });
-
-
-    // const response = await apiClient.post('/symfony/report');
-    const response = await Symfony.execute();
-    console.log('Reporte generado:', response);
-  } catch (error) {
-    console.error('Error generando reporte:', error);
-  }
-};
-
-// Funcionalidad Spring Boot
-const processLargeFile = async () => {
-  try {
-    // const response = await apiClient.post('/springboot/process-file');
-    // console.log('Archivo procesado:', response.data);
-  } catch (error) {
-    console.error('Error procesando archivo:', error);
-  }
-};
-
-// Funcionalidad Django
-const analyzeSentiment = async () => {
-  try {
-    // const response = await apiClient.post('/django/analyze-sentiment', { text: socialText.value });
-    // console.log('Análisis de sentimiento:', response.data);
-  } catch (error) {
-    console.error('Error analizando sentimiento:', error);
-  }
-};
-
-
-// import { ref, onMounted } from 'vue';
-// import { useHome } from '@/modules/home/composables/useHome';
-// import FetchHomeData from '@/modules/home/application/useCases/FetchHomeData';
-
-// const { message } = useHome();
-
-// onMounted(async () => {
-//   try {
-//     const data = await FetchHomeData.execute();
-//     console.log('Fetched home data:', data);
-//     // message.value = data.title; // Asumiendo que "title" es una propiedad de HomeEntity
-//   } catch (error) {
-//     console.error('Failed to fetch home data:', error);
-//   }
-// });
-
-
-
-</script>
-
 <style scoped>
-.functionality {
-  margin-bottom: 20px;
-}
+/* Puedes agregar estilos adicionales si es necesario */
 </style>

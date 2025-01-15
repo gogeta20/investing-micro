@@ -2,38 +2,25 @@
 import { ref } from 'vue';
 import { CreateItem } from '@/modules/home/application/useCase/CreateItem';
 import RepositorySymfony from '@/modules/home/infrastructure/repositories/RepositorySymfony';
-import type { ResponseData } from '@/modules/home/domain/models/ResponseData';
-import Toast from '@/components/ToastView.vue';
+
+const isDark = ref(false);
 
 const launchTest = (backend: string) => {
   console.log(`Lanzando prueba para ${backend}`);
 };
-const isDark = ref(false);
 
 const toggleTheme = () => {
   isDark.value = !isDark.value;
   document.body.classList.toggle('dark', isDark.value);
 };
 
-
 const generateDetailedReport = async () => {
   try {
     const useCase = new CreateItem(new RepositorySymfony());
-    const response = await useCase.execute();
-    // toastResolve(response);
+    await useCase.execute();
   } catch (error) {
     console.error('Error al crear item:', error);
   }
-};
-
-const showToast = ref(false);
-const toastMessage = ref('');
-const toastType = ref('info'); // Puede ser "success", "error", "warning", "info"
-
-const toastResolve = (response: ResponseData) => {
-  toastMessage.value = response.message;
-  toastType.value = response.status === 200 ? 'success' : 'error';
-  showToast.value = true;
 };
 
 </script>
@@ -92,7 +79,6 @@ const toastResolve = (response: ResponseData) => {
         </button>
       </div>
     </footer>
-    <Toast v-if="showToast" :message="toastMessage" :type="toastType" />
   </div>
 </template>
 

@@ -1,10 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import homeRoutes from '@/modules/home/infrastructure/routes';
+import homeRoutes from '@/modules/home/application/routes';
 
-// Combinar las rutas de los distintos contextos
 const routes = [
-  ...homeRoutes,     // Rutas del contexto "home"
-  // ...noticesRoutes,  // Rutas del contexto "notices"
+  ...homeRoutes,
 ];
 
 // Crear el router usando el historial web

@@ -15,12 +15,3 @@ export class SymfonyService {
 
 export default SymfonyService;
 
-// export class SymfonyService {
-//   constructor(private httpSymfonyRepository: typeof HttpSymfonyRepository) { }
-
-//   async getSymfonyData(): Promise<SymfonyEntity> {
-//     return await this.httpSymfonyRepository.fetchSymfonyData();
-//   }
-// }
-
-// export default new SymfonyService(HttpSymfonyRepository);

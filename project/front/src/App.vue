@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import ToastView from '@/components/ToastView.vue';
 </script>
 
 <template>
   <header>
     <router-view />
   </header>
+  <ToastView />
 </template>
 
 <style lang="scss">

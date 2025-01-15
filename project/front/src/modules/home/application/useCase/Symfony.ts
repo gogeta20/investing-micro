@@ -7,8 +7,6 @@ export class Symfony {
   constructor(symfonyService: SymfonyService) {
     this.symfonyService = symfonyService;
   }
-
-  // async execute(): Promise<HomeEntity> {
   async execute() {
     try {
       const data = await this.symfonyService.getData();

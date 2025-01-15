@@ -3,7 +3,6 @@ import { UtilHelper } from "@/core/utilities/UtilHelper";
 import Mock from './mock.json';
 import type { SymfonyRepository } from '@/modules/home/domain/repositories/SymfonyRepository';
 
-// Implementación del repositorio para el dominio "Symfony" usando Axios
 class HttpSymfonyRepository implements SymfonyRepository {
 
   async InMemory(): Promise<any> {

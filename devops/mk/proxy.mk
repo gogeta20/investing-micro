@@ -1,9 +1,21 @@
 #--------------------- PROXY nginx - nginx_proxy --------------------######################################
 
+nginx-down:
+	$(COMPOSE) stop $(NG) && $(COMPOSE) rm -f $(NG)
+
+nginx-build:
+	$(COMPOSE) build $(NG) --no-cache
+
+nginx-up:
+	$(COMPOSE) up -d $(NG)
+
+nginx-restart:
+	$(COMPOSE) restart $(NG)
+
 in-nginx:
 	docker exec -it $(NG) /bin/bash
 
-proxy-nginx-logs:
+logs-nginx:
 	docker logs $(NG)
 
 verify-nginx-conf:

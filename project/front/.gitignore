@@ -20,7 +20,7 @@ coverage/
 /cypress/fixtures/
 
 # Archivos de entorno
-.env
+# .env
 *.local
 
 # Archivos de configuración de TypeScript
@@ -47,11 +47,11 @@ coverage/
 .prettiercache
 
 # Archivos generados por el frontend
-package-lock.json
+# package-lock.json
 
 # Otros directorios y archivos específicos de tu proyecto
-public/
-.env
+# public/
+# .env
 coverage/
 dist/
 node_modules/

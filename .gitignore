@@ -7,6 +7,7 @@
 # Dependencias de Node.js (Vue.js)
 **/node_modules/
 **/.pnpm-store/
+**/.vite/
 **/pnpm-lock.yaml
 
 # Dependencias de PHP (Symfony)

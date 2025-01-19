@@ -1,4 +1,4 @@
 #!/bin/sh
 npm install -g pnpm vite
-pnpm install
+pnpm add -D ts-node
 pnpm run dev

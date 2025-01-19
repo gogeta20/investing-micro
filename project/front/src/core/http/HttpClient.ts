@@ -15,7 +15,6 @@ class HttpClient {
     // Configurar interceptores de solicitud
     this.instanceSymfony.interceptors.request.use(
       (config: any) => {
-        console.log(`Request: ${config.method?.toUpperCase()} ${config.url}`);
         return config;
       },
       (error) => {

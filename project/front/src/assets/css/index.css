@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* position dots up a bit */
+body {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+.bg-main{
+  background-color: var(--purple-secondary);
+}
+.bg-blue{
+  background-color: var(--blue-secondary);
+}
+.bg-green{
+  background-color: var(--green-secondary);
+}
+.kode-style{
+    font-family: 'Kode Mono', monospace;
+    font-weight: 400;
+    font-style: bold;
+  }
+
+.flickity-page-dots {
+  bottom: -22px;
+}
+/* dots are lines */
+.flickity-page-dots .dot {
+  height: 4px;
+  width: 40px;
+  margin: 0;
+  border-radius: 0;
+}
+.carousel-cell {
+  width: 50%; /* half-width */
+  height: 150px;
+  margin-right: 10px;
+}
+.carousel-image {
+  display: block;
+  height: 300px;
+  /* set min-width, allow images to set cell width */
+  min-width: 150px;
+  max-width: 100%;
+  margin-right: 10px;
+  /* vertically center */
+  top: 50%;
+  transform: translateY(-50%);
+}
+.flickity-flickity-slider .img {
+  margin: 50px;
+}

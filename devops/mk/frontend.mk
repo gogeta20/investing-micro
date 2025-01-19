@@ -9,6 +9,9 @@ frontend-build:
 frontend-up:
 	$(COMPOSE) up -d $(VF)
 
+frontend-restart:
+	$(COMPOSE) restart $(VF)
+
 in-front:
 	docker exec -it $(VF) sh
 

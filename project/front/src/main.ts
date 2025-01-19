@@ -1,17 +1,16 @@
-// import './assets/main.css'
-import '@/core/assets/tailwind.css';
-// import './tailwind.css';
+import "@/assets/css/index.css";
+import "@/assets/scss/main.scss";
+import "flickity/css/flickity.css";
 
-import { createApp } from 'vue'
+import { createApp } from "vue";
 import { createPinia } from 'pinia'
-
-// import App from './App.vue'
-import App from '@/App.vue'
+import Particles from "particles.vue3";
+import App from "@/App.vue";
 import router from '@/core/router'
 
 const app = createApp(App)
-
-app.use(createPinia())
 app.use(router)
+app.use(createPinia())
+app.use(Particles)
+app.mount("#app")
 
-app.mount('#app')

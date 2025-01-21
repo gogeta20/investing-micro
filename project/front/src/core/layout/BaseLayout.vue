@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <script setup lang="ts">
 import { ref } from "vue";
 import ParticlesView from "@/components/ParticlesView.vue";
@@ -34,7 +36,7 @@ const closeSideBar = () => {
 <style lang="scss" scoped>
 .page-fade-enter-active,
 .page-fade-leave-active {
-  transition: opacity .8s ease, filter .8s ease;
+  transition: opacity 0.8s ease, filter 0.8s ease;
 }
 
 .page-fade-enter-from,

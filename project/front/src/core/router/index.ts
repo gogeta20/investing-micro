@@ -4,6 +4,7 @@ import HomeView from "@/pages/HomeView.vue";
 import Projects from '@/pages/Projects.vue';
 import Whoami from '@/pages/Whoami.vue';
 import Skills from '@/pages/Skills.vue';
+import Symfony from '@/pages/test/Symfony.vue';
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
       {
         path: "/skills",
         component: Skills,
+        children: [],
+      },
+      {
+        path: "/symfony-cqrs",
+        component: Symfony,
         children: [],
       },
     ],

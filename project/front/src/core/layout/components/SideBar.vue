@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <script setup lang="ts">
 import { reactive } from "vue";
 import TreeSidebar from "@/core/layout/components/TreeSideBar.vue";
@@ -22,24 +24,7 @@ const myRoutes = reactive([
     path: "/projects",
     icon: "plus",
     isVisible: true,
-    children: [
-      // {
-      //   id: "3",
-      //   title: "symfony cqrs",
-      //   path: "/symfony-cqrs",
-      //   icon: "plus",
-      //   isVisible: true,
-      //   children: [],
-      // },
-      // {
-      //   id: "4",
-      //   title: "django db-trans",
-      //   path: "django-db-trans",
-      //   icon: "plus",
-      //   isVisible: true,
-      //   children: [],
-      // },
-    ],
+    children: [],
   },
   {
     id: "3",
@@ -56,6 +41,31 @@ const myRoutes = reactive([
     icon: "plus",
     isVisible: true,
     children: [],
+  },
+  {
+    id: "4",
+    title: "test",
+    path: "/test",
+    icon: "plus",
+    isVisible: true,
+    children: [
+      {
+        id: "4.1",
+        title: "symfony cqrs",
+        path: "/symfony-cqrs",
+        icon: "plus",
+        isVisible: true,
+        children: [],
+      },
+      {
+        id: "4.2",
+        title: "django db-trans",
+        path: "django-db-trans",
+        icon: "plus",
+        isVisible: true,
+        children: [],
+      },
+    ],
   },
 ]);
 </script>
@@ -189,8 +199,6 @@ const myRoutes = reactive([
 //   height: 0;
 //   overflow: hidden;
 // }
-
-
 
 // svg.fa-chevron-down {
 //   top: 12px;

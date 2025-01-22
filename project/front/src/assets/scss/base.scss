@@ -1,0 +1,25 @@
+.page-container {
+  padding-top: 10vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  /* Título arriba, contenido ocupa el resto */
+  min-height: 100vh;
+  /* Asegura que el contenedor ocupe toda la altura de la pantalla */
+  gap: 1rem;
+  /* Espaciado entre filas */
+}
+
+.page-title {
+  place-self: center;
+  /* Centra el título horizontal y verticalmente en su fila */
+}
+
+.content {
+  min-height: 80vh;
+  /* Altura mínima del contenido */
+  padding: 0 3rem;
+  overflow-y: auto;
+  /* Si el contenido es extenso, agrega scroll interno */
+}
+
+

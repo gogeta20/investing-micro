@@ -10,8 +10,19 @@ final class PokemonRepository extends BaseRepository implements IPokemon
 {
     public function save(Pokemon $pokemon): void
     {
-        $estadisticasBase = $pokemon->getEstadisticasBase();
         $this->persist($pokemon);
-        $this->persist($estadisticasBase);
+        $this->persistEstadisticasBase($pokemon);
+    }
+
+    /**
+     * @param Pokemon $pokemon
+     * @return void
+     */
+    private function persistEstadisticasBase(Pokemon $pokemon): void
+    {
+        if ($pokemon->getEstadisticasBase() !== null) {
+            $estadisticasBase = $pokemon->getEstadisticasBase();
+            $this->persist($estadisticasBase);
+        }
     }
 }

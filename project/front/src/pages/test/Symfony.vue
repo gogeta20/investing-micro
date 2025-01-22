@@ -1,29 +1,29 @@
-<!-- @format -->
-
 <script setup lang="ts">
-import { ref } from "vue";
 import TitleView from "@/components/TitleView.vue";
 import { CreateItem } from "@/modules/home/application/useCase/CreateItem";
-import RepositorySymfony from "@/modules/home/infrastructure/repositories/RepositorySymfony";
-import PokemonForm from "@/pages/test/PokemonForm.vue";
+import { GetItem } from "@/modules/home/application/useCase/GetItem";
 import { pokemon } from "@/modules/home/domain/models/Pokemon";
+import RepositorySymfony from "@/modules/home/infrastructure/repositories/RepositorySymfony";
+import RepositorySymfonyGet from "@/modules/home/infrastructure/repositories/RepositorySymfonyGet";
+import PokemonForm from "@/pages/test/PokemonForm.vue";
+import { ref } from "vue";
 
 const requestStatus = ref(""); // Estado de la petición (success, error, loading)
 const responseData = ref([]); // Datos sincronizados
 
-const handleFormSubmit = (formData: pokemon) => {
+const handleFormSubmit = async (formData: pokemon) => {
   try {
+    responseData.value = [];
     requestStatus.value = "loading";
     const useCase = new CreateItem(new RepositorySymfony());
-    useCase.execute(formData)
-      .then(() => {
-        responseData.value = [{ id: "ok", name: "mau", status: "success" }];
-        requestStatus.value = "success";
-      })
-      .catch((error) => {
-        requestStatus.value = "error";
-        console.error("Error al crear item:", error);
-      })
+    const response = await useCase.execute(formData);
+    if (response.status == 200) {
+      requestStatus.value = "success";
+
+      const useCaseGet = new GetItem(new RepositorySymfonyGet());
+      const responseGet = await useCaseGet.execute()
+      responseData.value = [responseGet.data]
+    }
   } catch (error) {
     requestStatus.value = "error";
     console.error("Error al crear item:", error);
@@ -36,18 +36,17 @@ const handleFormSubmit = (formData: pokemon) => {
     <TitleView title="SYMFONY CQRS" />
 
     <div class="content text-gray-300 text-xs sm:text-base pt-8 w-6/6">
-      <p>
-        Vamos a lanzar una peticion al backend symfony y testear la creacion de un item en
-        la base de datos de escritura
-      </p>
-      <p>
-        Esto lanzara un evento RabbitMQ, nuestro backend Rust estara pendiente para
-        consumirlos y lo sincronizara con la base de datos de lectura MongoDB
+      <p class="p-4">
+        Vamos a lanzar una petición al backend Symfony y probar la creación de un ítem en la base de datos de escritura
+        MySQL. <br>
+        Esto lanzará un evento RabbitMQ, y nuestro backend Rust estará pendiente para consumirlo y sincronizarlo
+        con la base de datos de lectura MongoDB.
       </p>
       <div class="p-4 space-y-6">
 
         <div class="container-form-pokemon">
           <PokemonForm @submit="handleFormSubmit" />
+
           <div>
             <div class="bg-black text-white p-4 rounded border border-gray-100 mb-4">
               <p>
@@ -65,22 +64,75 @@ const handleFormSubmit = (formData: pokemon) => {
               </p>
             </div>
 
-            <div v-if="responseData.length"
-              class="bg-gray-800 text-blue-100 border border-gray-100 p-4 rounded text-center">
-              <h2 class="text-lg font-bold mb-4">Datos sincronizados</h2>
+            <div v-if="responseData.length" class="text-blue-100 p-4 mb-8">
+              <h2 class="text-lg font-bold mb-4 text-green-400">Datos en MongoDB</h2>
+              <h4 class="mb-1">Collection Pokemon_basic</h4>
               <table class="w-full border-collapse border border-gray-200">
-                <thead class="border border-gray-100">
+                <thead class="">
                   <tr>
-                    <th class="">ID</th>
-                    <th class="">Nombre</th>
-                    <th class="">Estado</th>
+                    <th class="">id</th>
+                    <th class="">nombre</th>
+                    <th class="">peso</th>
+                    <th class="">altura</th>
+                    <th class="">ataque</th>
+                    <th class="">defensa</th>
+                    <th class="">velocidad</th>
                   </tr>
                 </thead>
-                <tbody class="text-blue-300 border border-gray-100">
+                <tbody class="text-blue-300 text-center bg-gray-800">
                   <tr v-for="data in responseData" :key="data.id">
-                    <td class="px-4 py-2">{{ data.id }}</td>
-                    <td class="px-4 py-2">{{ data.name }}</td>
-                    <td class="px-4 py-2">{{ data.status }}</td>
+                    <td class="px-4 py-2 ">{{ data.numeroPokedex }}</td>
+                    <td class="px-4 py-2">{{ data.nombre }}</td>
+                    <td class="px-4 py-2">{{ data.peso }}</td>
+                    <td class="px-4 py-2">{{ data.altura }}</td>
+                    <td class="px-4 py-2">{{ data.ataque }}</td>
+                    <td class="px-4 py-2">{{ data.defensa }}</td>
+                    <td class="px-4 py-2">{{ data.velocidad }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div v-if="responseData.length" class="text-blue-100 p-4">
+              <h2 class="text-lg font-bold mb-4 text-blue-400">Datos en MySQL</h2>
+              <h4 class="mb-1">Tabla Pokemon</h4>
+              <table class="w-full border-collapse border border-gray-200">
+                <thead class="">
+                  <tr>
+                    <th class="">id</th>
+                    <th class="">nombre</th>
+                    <th class="">peso</th>
+                    <th class="">altura</th>
+                  </tr>
+                </thead>
+                <tbody class="text-blue-300 text-center bg-gray-800">
+                  <tr v-for="data in responseData" :key="data.id">
+                    <td class="px-4 py-2">{{ data.numeroPokedex }}</td>
+                    <td class="px-4 py-2">{{ data.nombre }}</td>
+                    <td class="px-4 py-2">{{ data.peso }}</td>
+                    <td class="px-4 py-2">{{ data.altura }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div v-if="responseData.length" class="text-blue-100 p-4">
+              <h4 class="mb-1">Tabla Estadisticas</h4>
+              <table class="w-full border-collapse border border-gray-200">
+                <thead class="">
+                  <tr>
+                    <th class="">id</th>
+                    <th class="">ataque</th>
+                    <th class="">defensa</th>
+                    <th class="">velocidad</th>
+                  </tr>
+                </thead>
+                <tbody class="text-blue-300 text-center bg-gray-800">
+                  <tr v-for="data in responseData" :key="data.id">
+                    <td class="px-4 py-2">{{ data.numeroPokedex }}</td>
+                    <td class="px-4 py-2">{{ data.ataque }}</td>
+                    <td class="px-4 py-2">{{ data.defensa }}</td>
+                    <td class="px-4 py-2">{{ data.velocidad }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -99,7 +151,7 @@ const handleFormSubmit = (formData: pokemon) => {
 <style scoped>
 .container-form-pokemon{
   display: grid;
-  grid-template-columns: minmax(300px, 2fr) minmax(200px, 1fr); /* Form más ancho que el Postman */
+  grid-template-columns: minmax(300px, .8fr) minmax(200px, 1fr); /* Form más ancho que el Postman */
   gap: 1rem; /* Espaciado entre columnas */
   /* height: 100vh;  */
 }

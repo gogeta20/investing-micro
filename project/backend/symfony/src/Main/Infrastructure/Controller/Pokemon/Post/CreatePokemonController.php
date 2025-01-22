@@ -27,13 +27,14 @@ class CreatePokemonController extends ApiController
 
         try {
              $this->dispatch(new PokemonCreateCommand(
-                 $request->data()['numeroPokedex'],
                  $request->data()['nombre'],
                  $request->data()['ataque'],
                  $request->data()['defensa'],
                  $request->data()['velocidad'],
-                 $request->data()['hp'],
                  $request->data()['especial'],
+                 $request->data()['peso'],
+                 $request->data()['altura'],
+                 $request->data()['ps'],
              ));
 
             return (new StandardApiResponse(

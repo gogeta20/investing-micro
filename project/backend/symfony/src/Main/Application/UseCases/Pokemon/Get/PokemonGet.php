@@ -21,21 +21,49 @@ final class PokemonGet extends DocumentRepository
     public function __invoke(PokemonGetQuery $query): array
     {
         $repository = $this->repository(PokemonBase::class);
-        $pokemonList = $repository->findAll();
-        $formattedResponse = array_map(function (PokemonBase $pokemon) {
+
+        $lastPokemon = $repository->findOneBy([],['numero_pokedex' => 'DESC'] );
+
+        if (!$lastPokemon) {
             return [
-                'numeroPokedex' => $pokemon->getNumeroPokedex(),
-                'nombre' => $pokemon->getNombre(),
-                'peso' => $pokemon->getPeso(),
-                'altura' => $pokemon->getAltura(),
-                'ataque' => $pokemon->getAtaque(),
+                "name" => "PokemonGet",
+                "data" => [],
             ];
-        }, $pokemonList);
+        }
 
         return [
-            "name" => "PokemonGet",
-            "data" => $formattedResponse,
+            'numeroPokedex' => $lastPokemon->getNumeroPokedex(),
+            'nombre' => $lastPokemon->getNombre(),
+            'peso' => $lastPokemon->getPeso(),
+            'altura' => $lastPokemon->getAltura(),
+            'ataque' => $lastPokemon->getAtaque(),
+            'defensa' => $lastPokemon->getDefensa(),
+            'velocidad' => $lastPokemon->getVelocidad(),
         ];
+
+//        return [
+//            "name" => "PokemonGet",
+//            "data" => $formattedResponse,
+//        ];
+
+
+//        $pokemonList = $repository->findAll();
+//        $formattedResponse = array_map(function (PokemonBase $pokemon) {
+//            return [
+//                'numeroPokedex' => $pokemon->getNumeroPokedex(),
+//                'nombre' => $pokemon->getNombre(),
+//                'peso' => $pokemon->getPeso(),
+//                'altura' => $pokemon->getAltura(),
+//                'ataque' => $pokemon->getAtaque(),
+//                'defensa' => $pokemon->getDefensa(),
+//                'velocidad' => $pokemon->getVelocidad(),
+//            ];
+//        }, $pokemonList);
+//
+//        return [
+//            "name" => "PokemonGet",
+//            "data" => $formattedResponse,
+//        ];
     }
 }
 

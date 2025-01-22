@@ -9,30 +9,28 @@ use App\Shared\Domain\Bus\Command\Command;
 readonly class PokemonCreateCommand implements Command
 {
     public function __construct(
-        private int $numeroPokedex,
         private string $nombre,
         private int $ataque,
         private int $defensa,
         private int $velocidad,
-        private int $hp,
         private int $especial,
+        private int $peso,
+        private int $altura,
+        private int $ps,
     ) {}
 
     public static function create(array $data): self
     {
         return new self(
-            $data['numeroPokedex'],
             $data['nombre'],
             $data['ataque'],
             $data['defensa'],
             $data['velocidad'],
-            $data['hp'],
-            $data['especial']
+            $data['especial'],
+            $data['peso'],
+            $data['altura'],
+            $data['ps'],
         );
-    }
-    public function numeroPokedex(): int
-    {
-        return $this->numeroPokedex;
     }
 
     public function nombre(): string
@@ -63,6 +61,18 @@ readonly class PokemonCreateCommand implements Command
     public function especial(): int
     {
         return $this->especial;
+    }
+    public function altura(): int
+    {
+        return $this->altura;
+    }
+    public function peso(): int
+    {
+        return $this->peso;
+    }
+    public function ps(): int
+    {
+        return $this->ps;
     }
 
 }

@@ -13,9 +13,6 @@ class CreatePokemonRequest extends StandardRequest
     {
         return new Assert\Collection([
             'fields' => [
-                'numeroPokedex' => [
-                    new Assert\NotBlank(),
-                ],
                 'nombre' => [
                     new Assert\NotBlank(),
                 ],
@@ -28,10 +25,16 @@ class CreatePokemonRequest extends StandardRequest
                 'velocidad' => [
                     new Assert\NotBlank(),
                 ],
-                'hp' => [
+                'especial' => [
                     new Assert\NotBlank(),
                 ],
-                'especial' => [
+                'peso' => [
+                    new Assert\NotBlank(),
+                ],
+                'altura' => [
+                    new Assert\NotBlank(),
+                ],
+                'ps' => [
                     new Assert\NotBlank(),
                 ],
             ],

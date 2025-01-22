@@ -2,9 +2,13 @@ nelmio_cors:
     defaults:
         allow_credentials: false
         allow_origin: ['http://vue.localhost']
+#        allow_origin: ['*']
         allow_headers: ['Content-Type', 'Authorization']
         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
         max_age: 3600
     paths:
-        '^/api/':  # Aplica las reglas a todas las rutas que comiencen con /api
+        '^/api/':
             allow_origin: ['http://vue.localhost']
+#    paths:
+#        '^/': # Aplica las reglas a todas las rutas
+#            allow_origin: [ '*' ] # Permitir todas las solicitudes

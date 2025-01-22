@@ -5,7 +5,7 @@
 
 	<entity name="App\Main\Domain\Model\Pokemon" table="pokemon">
 		<id name="numero_pokedex" type="integer">
-			<generator strategy="NONE"/>
+			<generator strategy="AUTO"/>
 		</id>
 
 		<field name="nombre" type="string" column="nombre" length="255" nullable="false"/>

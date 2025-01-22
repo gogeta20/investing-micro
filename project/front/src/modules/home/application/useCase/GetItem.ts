@@ -2,18 +2,18 @@ import { useMeToast } from "@/core/hooks/ToastStore";
 import { pokemon } from "@/modules/home/domain/models/Pokemon";
 import type { IRepository } from "@/modules/home/domain/repositories/IRepository";
 
-export class CreateItem {
+export class GetItem {
   private repository: IRepository;
 
   constructor(symfonyRepository: IRepository) {
     this.repository = symfonyRepository;
   }
-  async execute(formData: pokemon) {
+  async execute() {
 
     const meToast = useMeToast();
     try {
       this.repository.setEndPoint('/pokemon');
-      const data = await this.repository.send(formData);
+      const data = await this.repository.send();
       meToast.addToast({ message: 'Ítem creado con éxito', type: 'success', duration: 5000 });
       return data;
     } catch (error) {

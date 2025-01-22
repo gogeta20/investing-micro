@@ -24,14 +24,15 @@ readonly class PokemonCreate
     {
         try {
             $pokemon = Pokemon::create(
-                $command->numeroPokedex(),
+                null,
                 $command->nombre(),
-                20,
-                80
+                $command->peso(),
+                $command->altura(),
             );
+            $this->IPokemon->save($pokemon);
             $estadisticasBase = EstadisticasBase::create(
                 $pokemon->getNumeroPokedex(),
-                20,
+                $command->ps(),
                 $command->ataque(),
                 $command->defensa(),
                 $command->defensa(),

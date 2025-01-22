@@ -23,13 +23,13 @@ class PokemonBase
     private float $altura;
 
     #[ODM\Field(type: 'float')]
-    private int $ataque;
+    private float $ataque;
 
     #[ODM\Field(type: 'integer')]
-    private int $defensa;
+    private float $defensa;
 
     #[ODM\Field(type: 'integer')]
-    private int $velocidad;
+    private float $velocidad;
 
     function getNombre(): string
     {

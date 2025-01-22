@@ -11,8 +11,12 @@ body {
 .bg-blue{
   background-color: var(--blue-secondary);
 }
+.bg-purple{
+  background-color: var(--purple-three);
+}
+
 .bg-green{
-  background-color: var(--green-secondary);
+  background-color: var(--green-bg);
 }
 .kode-style{
     font-family: 'Kode Mono', monospace;

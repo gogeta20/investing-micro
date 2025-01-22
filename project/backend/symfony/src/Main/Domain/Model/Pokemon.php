@@ -11,7 +11,7 @@ class Pokemon extends AggregateRoot
     private string $nombre;
     private float $peso;
     private float $altura;
-    private ?EstadisticasBase $estadisticasBase;
+    private ?EstadisticasBase $estadisticasBase = null;
 
     public function __construct(?int $numero_pokedex, string $nombre, float $peso, float $altura)
     {
@@ -28,10 +28,7 @@ class Pokemon extends AggregateRoot
         float $altura,
     ): Pokemon
     {
-        $pokemon = new self($numero_pokedex, $nombre, $peso, $altura);
-
-
-        return $pokemon;
+        return new self($numero_pokedex, $nombre, $peso, $altura);
     }
 
     public function updateEstadisticasBase(
@@ -78,7 +75,7 @@ class Pokemon extends AggregateRoot
         return $this->altura;
     }
 
-    public function getEstadisticasBase(): EstadisticasBase
+    public function getEstadisticasBase(): ?EstadisticasBase
     {
         return $this->estadisticasBase;
     }

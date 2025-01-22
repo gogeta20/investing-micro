@@ -14,7 +14,7 @@
 		id="poke"
 		path="/pokemon"
 		methods="GET"
-		controller="App\Main\Infrastructure\Controller\GenerateDetailedReport\GenerateDetailedReportController">
+		controller="App\Main\Infrastructure\Controller\Pokemon\Get\GetPokemonByIdController">
 	</route>
 
 	<route

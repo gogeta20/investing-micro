@@ -10,6 +10,7 @@ NG=nginx_proxy
 MQ=rabbitmq
 J=jenkins_micro
 R=rust_consumer
+LOCAL=docker-compose.local.yml --profile local
 
 include devops/mk/*.mk
 
@@ -30,5 +31,14 @@ down:
 
 down-volume:
 	docker compose down -v
+
+up-local:
+	$(COMPOSE) -f $(LOCAL) up -d
+
+down-local:
+	$(COMPOSE) -f $(LOCAL) down
+
+build-local:
+	$(COMPOSE) -f $(LOCAL) build --no-cache
 
 restart: down up

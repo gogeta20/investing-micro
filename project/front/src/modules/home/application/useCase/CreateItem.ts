@@ -5,8 +5,8 @@ import type { IRepository } from "@/modules/home/domain/repositories/IRepository
 export class CreateItem {
   private repository: IRepository;
 
-  constructor(symfonyRepository: IRepository) {
-    this.repository = symfonyRepository;
+  constructor(repo: IRepository) {
+    this.repository = repo;
   }
   async execute(formData: pokemon) {
 

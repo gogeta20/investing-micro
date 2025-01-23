@@ -1,8 +1,7 @@
 import { useMeToast } from "@/core/hooks/ToastStore";
-import { pokemon } from "@/modules/home/domain/models/Pokemon";
 import type { IRepository } from "@/modules/home/domain/repositories/IRepository";
 
-export class GetItem {
+export class GetLogs {
   private repository: IRepository;
 
   constructor(repo: IRepository) {
@@ -12,7 +11,7 @@ export class GetItem {
 
     const meToast = useMeToast();
     try {
-      this.repository.setEndPoint('/pokemon');
+      this.repository.setEndPoint('/api/logs/rust_consumer/');
       const data = await this.repository.send();
       meToast.addToast({ message: 'Ítem creado con éxito', type: 'success', duration: 5000 });
       return data;

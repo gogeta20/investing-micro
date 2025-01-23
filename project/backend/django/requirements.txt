@@ -16,3 +16,6 @@ dnspython>=2.3.0
 mysqlclient
 pymysql
 cryptography
+
+docker~=7.1.0
+django-cors-headers

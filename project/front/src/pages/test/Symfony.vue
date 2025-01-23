@@ -2,7 +2,9 @@
 import TitleView from "@/components/TitleView.vue";
 import { CreateItem } from "@/modules/home/application/useCase/CreateItem";
 import { GetItem } from "@/modules/home/application/useCase/GetItem";
+import { GetLogs } from "@/modules/home/application/useCase/GetLogs";
 import { pokemon } from "@/modules/home/domain/models/Pokemon";
+import RepositoryDjangoGet from "@/modules/home/infrastructure/repositories/RepositoryDjangoGet";
 import RepositorySymfony from "@/modules/home/infrastructure/repositories/RepositorySymfony";
 import RepositorySymfonyGet from "@/modules/home/infrastructure/repositories/RepositorySymfonyGet";
 import PokemonForm from "@/pages/test/PokemonForm.vue";
@@ -10,6 +12,7 @@ import { ref } from "vue";
 
 const requestStatus = ref(""); // Estado de la petición (success, error, loading)
 const responseData = ref([]); // Datos sincronizados
+const reponseDjango = ref();
 
 const handleFormSubmit = async (formData: pokemon) => {
   try {
@@ -20,10 +23,15 @@ const handleFormSubmit = async (formData: pokemon) => {
     if (response.status == 200) {
       requestStatus.value = "success";
 
-      const useCaseGet = new GetItem(new RepositorySymfonyGet());
-      const responseGet = await useCaseGet.execute()
-      responseData.value = [responseGet.data]
+      const useCaseGetItem = new GetItem(new RepositorySymfonyGet());
+      const responseGetItem = await useCaseGetItem.execute()
+      responseData.value = [responseGetItem.data]
+
+      const useCaseLog = new GetLogs(new RepositoryDjangoGet());
+      const responseGetlog = await useCaseLog.execute()
+      reponseDjango.value = responseGetlog
     }
+
   } catch (error) {
     requestStatus.value = "error";
     console.error("Error al crear item:", error);
@@ -33,14 +41,15 @@ const handleFormSubmit = async (formData: pokemon) => {
 </script>
 <template>
   <div class="bg-green page-container">
-    <TitleView title="SYMFONY CQRS" />
+    <TitleView title="Symfony CQRS" />
 
     <div class="content text-gray-300 text-xs sm:text-base pt-8 w-6/6">
       <p class="p-4">
         Vamos a lanzar una petición al backend Symfony y probar la creación de un ítem en la base de datos de escritura
         MySQL. <br>
         Esto lanzará un evento RabbitMQ, y nuestro backend Rust estará pendiente para consumirlo y sincronizarlo
-        con la base de datos de lectura MongoDB.
+        con la base de datos de lectura MongoDB.<br>
+        Por ultimo llamaremos al backend Django para que nos traiga el log del Backend Rust.
       </p>
       <div class="p-4 space-y-6">
 
@@ -139,7 +148,12 @@ const handleFormSubmit = async (formData: pokemon) => {
             </div>
 
           </div>
-
+        </div>
+        <div v-if="responseData.length" class="bg-black text-white p-4 rounded border border-gray-100 mb-4">
+          <h2 class="text-lg font-bold mb-4 text-purple-400">Log Rust</h2>
+          <p class="text-gray-400">
+            {{ reponseDjango }}
+          </p>
         </div>
 
       </div>

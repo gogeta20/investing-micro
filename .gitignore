@@ -1,6 +1,6 @@
 # Archivos de configuración de IDE y editores
-.idea/
-.vscode/
+**/.idea/
+**/.vscode/
 *.sublime-project
 *.sublime-workspace
 

@@ -1,5 +1,5 @@
 #--------------------- BACK - django_backend python --------------------######################################
-in-back-django:
+in-django:
 	docker exec -it $(DB) /bin/bash
 
 logs-back-django:

@@ -195,7 +195,7 @@ services:
             - symfony_backend
             - django_backend
             - springboot_backend
-            - front_micro
+            # - front_micro
         networks:
             - app_network
         profiles:

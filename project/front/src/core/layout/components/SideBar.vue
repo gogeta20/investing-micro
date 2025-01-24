@@ -1,8 +1,8 @@
 <!-- @format -->
 
 <script setup lang="ts">
-import { reactive } from "vue";
 import TreeSidebar from "@/core/layout/components/TreeSideBar.vue";
+import { reactive } from "vue";
 
 defineProps({
   isOpenSideBar: {
@@ -57,14 +57,14 @@ const myRoutes = reactive([
         isVisible: true,
         children: [],
       },
-      {
-        id: "4.2",
-        title: "django db-trans",
-        path: "django-db-trans",
-        icon: "plus",
-        isVisible: true,
-        children: [],
-      },
+      // {
+      //   id: "4.2",
+      //   title: "django db-trans",
+      //   path: "django-db-trans",
+      //   icon: "plus",
+      //   isVisible: true,
+      //   children: [],
+      // },
     ],
   },
 ]);

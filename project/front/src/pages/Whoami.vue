@@ -6,7 +6,7 @@
       <div class="container m-auto p-5">
         <div class="content">
           <div class="py-3">
-            <p class="kode-style text-4xl md:text-6xl text-center text-white">WH0AMI?</p>
+            <p class="kode-style text-4xl md:text-6xl text-center text-white">Whoami?</p>
             <p class="text-gray-300 text-xs sm:text-base pt-8 w-6/6">
               Hola, soy Mauricio, un desarrollador apasionado por diseñar e implementar soluciones complejas utilizando
               tecnologías de backend como Symfony php, Django python, Rust y Spring Boot java, junto con modernas

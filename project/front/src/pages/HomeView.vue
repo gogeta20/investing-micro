@@ -16,13 +16,13 @@ import IconView from "@/components/IconView.vue";
 
       <div class="w-0 grid gap-16 grid-cols-4 text-white text-3xl">
 
-        <IconView icon="teenyicons:linkedin-outline" link="https://www.linkedin.com/in/szymonbdev/" />
+        <IconView icon="teenyicons:linkedin-outline" link="https://www.linkedin.com/in/mauricio-vargas-18336a1b8/" />
 
-        <IconView icon="akar-icons:github-outline-fill" link="https://github.com/szymboro" />
+        <IconView icon="akar-icons:github-outline-fill" link="https://github.com/gogeta20" />
 
-        <IconView icon="ci:mail" link="mailto:contact@szymonb.dev" />
+        <IconView icon="ci:mail" link="mailto:codigomau@gmail.com" />
 
-        <IconView icon="ant-design:calendar-outlined" link="https://calendly.com/szymonb/30min" />
+        <!-- <IconView icon="ant-design:calendar-outlined" link="https://calendly.com/szymonb/30min" /> -->
       </div>
     </div>
   </div>

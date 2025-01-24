@@ -19,7 +19,7 @@ onMounted(() => {
   <main class="bg-main">
     <div class="flex h-screen sticky top-0">
       <div class="container m-auto p-5">
-        <p class="kode-style pt-4 text-4xl md:text-6xl text-white text-center">WEB PR0JECTS</p>
+        <p class="kode-style pt-4 text-4xl md:text-6xl text-white text-center">Web Projects</p>
 
         <br />
         <div class="carousel" data-flickity='{ "imagesLoaded": true, "wrapAround": false,  "groupCells": 1 }'>

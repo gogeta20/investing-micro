@@ -37,7 +37,7 @@ services:
         networks:
             - app_network
         profiles:
-            - local
+            - extra
 
     front_micro:
         build:
@@ -52,7 +52,7 @@ services:
         networks:
             - app_network
         profiles:
-            - local
+            - extra
 
     symfony_backend:
         build:

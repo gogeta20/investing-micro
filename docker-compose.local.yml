@@ -194,7 +194,7 @@ services:
         depends_on:
             - symfony_backend
             - django_backend
-            - springboot_backend
+            # - springboot_backend
             # - front_micro
         networks:
             - app_network

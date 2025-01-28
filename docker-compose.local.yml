@@ -101,7 +101,7 @@ services:
         networks:
             - app_network
         profiles:
-            - local
+            - extra
 
     rabbitmq:
         build:

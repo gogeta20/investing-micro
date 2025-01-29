@@ -1,9 +1,12 @@
 FROM nginx:latest
 COPY conf/nginx/symfony.conf /etc/nginx/conf.d/
+COPY conf/nginx/vue.conf /etc/nginx/conf.d/
+COPY conf/nginx/django.conf /etc/nginx/conf.d/
+
 
 # COPY ../../../conf/nginx/symfony.conf /etc/nginx/conf.d/
-COPY ../../../conf/nginx/vue.conf /etc/nginx/conf.d/
-COPY ../../../conf/nginx/django.conf /etc/nginx/conf.d/
+# COPY ../../../conf/nginx/vue.conf /etc/nginx/conf.d/
+# COPY ../../../conf/nginx/django.conf /etc/nginx/conf.d/
 
 RUN rm /etc/nginx/conf.d/default.conf
 EXPOSE 80

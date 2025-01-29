@@ -11,9 +11,9 @@ services:
           OPENSSL_DIR: "/usr"
         volumes:
             - ./project/consumer:/app/src
-        depends_on:
-            rabbitmq:
-                condition: service_healthy
+        # depends_on:
+        #     rabbitmq:
+        #         condition: service_healthy
         networks:
             - app_network
         restart: always

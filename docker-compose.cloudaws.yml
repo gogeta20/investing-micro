@@ -1,0 +1,97 @@
+version: '3.9'
+
+services:
+    rust_consumer:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/broker/Consumer.Dockerfile
+        container_name: rust_consumer
+        environment:
+          AMQP_ADDR: "amqp://admin:your_password@rabbitmq:5672/%2f"
+          OPENSSL_DIR: "/usr"
+        volumes:
+            - ./project/consumer:/app/src
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+        networks:
+            - app_network
+        restart: always
+        profiles:
+            - local
+
+    symfony_backend:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
+        container_name: symfony_backend
+        ports:
+            - "9000:9000"
+        volumes:
+            - ./project/backend/symfony:/var/www/html
+            - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
+        command: >
+            sh -c "composer install && php-fpm"
+        networks:
+            - app_network
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        profiles:
+            - local
+
+    django_backend:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/backend/Django.Dockerfile
+        container_name: django_backend
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./project/backend/django:/app:z
+            - ./conf/django/data:/app/data:z
+        networks:
+            - app_network
+        profiles:
+            - local
+
+    mysql_db:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/db/MySQL.Dockerfile
+        container_name: mysql_db
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: pokemondb
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./devops/volumes/mysql:/var/lib/mysql:z
+            - ./conf/mysql/db/files:/var/www/html
+        networks:
+            - app_network
+        profiles:
+            - local
+
+    mongo_db:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/db/Mongo.Dockerfile
+        container_name: mongo_db
+        ports:
+            - "27017:27017"
+        volumes:
+            - ./devops/volumes/mongo:/data/db:z
+            - ./conf/mongodb/db/files:/var/www/html
+        networks:
+            - app_network
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: password
+        profiles:
+            - local
+
+networks:
+    app_network:
+        driver: bridge

@@ -1,5 +1,5 @@
 FROM nginx:latest
-# COPY conf/nginx/symfony.conf /etc/nginx/conf.d/
+COPY conf/nginx/symfony.conf /etc/nginx/conf.d/
 # COPY conf/nginx/vue.conf /etc/nginx/conf.d/
 # COPY conf/nginx/django.conf /etc/nginx/conf.d/
 
@@ -8,7 +8,7 @@ FROM nginx:latest
 # COPY ../../../conf/nginx/vue.conf /etc/nginx/conf.d/
 # COPY ../../../conf/nginx/django.conf /etc/nginx/conf.d/
 
-# RUN rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
 EXPOSE 80
 EXPOSE 443
 ENTRYPOINT ["/usr/sbin/nginx"]

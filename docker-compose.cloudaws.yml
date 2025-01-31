@@ -61,8 +61,8 @@ services:
             - "80:80"
         depends_on:
             - symfony_backend
-            - django_backend
-            - rust_consumer
+            # - django_backend
+            # - rust_consumer
         networks:
             - app_network
 networks:

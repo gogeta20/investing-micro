@@ -28,7 +28,6 @@ services:
         volumes:
             - ./project/backend/symfony:/var/www/html
             - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
-            - ./conf/symfony/php-fpm/:/usr/local/etc/php-fpm.d/
         command: >
             sh -c "composer install && php-fpm"
         networks:
@@ -49,40 +48,23 @@ services:
         networks:
             - app_network
 
-    mysql_db:
+    nginx_proxy:
         build:
             context: .
-            dockerfile: devops/dockerfiles/db/MySQL.Dockerfile
-        container_name: mysql_db
-        environment:
-            MYSQL_ROOT_PASSWORD: rootpassword
-            MYSQL_DATABASE: pokemondb
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
-        ports:
-            - "3306:3306"
+            dockerfile: devops/dockerfiles/proxy/Nginx.Dockerfile
+        container_name: nginx_proxy
+        #    volumes:
+        #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
         volumes:
-            - ./devops/volumes/mysql:/var/lib/mysql:z
-            - ./conf/mysql/db/files:/var/www/html
+            - ./conf/nginx:/src
+        ports:
+            - "80:80"
+        depends_on:
+            - symfony_backend
+            - django_backend
+            - springboot_backend
         networks:
             - app_network
-
-    mongo_db:
-        build:
-            context: .
-            dockerfile: devops/dockerfiles/db/Mongo.Dockerfile
-        container_name: mongo_db
-        ports:
-            - "27017:27017"
-        volumes:
-            - ./devops/volumes/mongo:/data/db:z
-            - ./conf/mongodb/db/files:/var/www/html
-        networks:
-            - app_network
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: password
-
 networks:
     app_network:
         driver: bridge

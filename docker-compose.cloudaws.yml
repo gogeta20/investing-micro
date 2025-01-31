@@ -62,7 +62,7 @@ services:
         depends_on:
             - symfony_backend
             - django_backend
-            - springboot_backend
+            - rust_consumer
         networks:
             - app_network
 networks:

@@ -18,7 +18,7 @@ venv/
 
 # Archivos de logs
 *.log
-logs/
+#logs/
 debug.log
 
 # Archivos estáticos generados

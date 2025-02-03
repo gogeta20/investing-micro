@@ -8,5 +8,5 @@ urlpatterns = [
     path('health/', HealthCheckController.as_view(), name='health_check'),  # Ruta específica del health check
     path('voice/process/<str:text>/', VoicePokemonController.as_view(), name='voice'),
     path('sync/database/', SyncDatabaseController.as_view(), name='syncDB'),
-    path('logs/<str:text>/', LogsController.as_view(), name='Logs'),
+    # path('logs/<str:text>/', LogsController.as_view(), name='Logs')
 ]

@@ -1,8 +1,6 @@
 from django.http import JsonResponse
 
-from myproject.core.application.UseCase.Logs.Logs import Logs
 from myproject.core.application.UseCase.Logs.LogsQuery import LogsQuery
-from myproject.core.application.UseCase.Logs.LogsQueryHandler import LogsQueryHandler
 from myproject.shared.application.handlers.handlers import get_handler
 from myproject.shared.infrastructure.bus.query_bus import QueryBus
 from myproject.shared.infrastructure.controller.api_controller import ApiController
@@ -11,8 +9,7 @@ from myproject.shared.infrastructure.controller.api_controller import ApiControl
 class LogsController(ApiController):
     def __init__(self, query_bus: QueryBus = None):
         query_bus = query_bus or QueryBus()
-        use_case = Logs()
-        query_bus.register(LogsQuery, LogsQueryHandler(use_case))
+        query_bus.register(LogsQuery, get_handler("LogsQueryHandler"))
         super().__init__(query_bus=query_bus)
 
     def get(self, request, text):

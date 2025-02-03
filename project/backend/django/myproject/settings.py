@@ -83,7 +83,8 @@ DATABASES = {
         'NAME': 'pokemondb',
         'USER': 'user',
         'PASSWORD': 'password',
-        'HOST': 'mysql_db',  # Nombre del contenedor
+        # 'HOST': 'mysql_db',  # Nombre del contenedor
+        'HOST': '34.45.214.187',  # Nombre del contenedor
         'PORT': 3306,
     },
     'secondary': {
@@ -93,7 +94,8 @@ DATABASES = {
 }
 
 MONGO_DB_SETTINGS = {
-    'HOST': 'mongo_db',
+    'HOST': '34.45.214.187',
+    # 'HOST': 'mongo_db',
     'PORT': 27017,
     'DB_NAME': 'pokemondb',
     'USERNAME': 'root',

@@ -4,6 +4,9 @@ from myproject.core.infrastructure.controllers.logs.logs_controller import LogsC
 from myproject.core.infrastructure.controllers.syncDB.SyncDatabaseController import SyncDatabaseController
 from myproject.core.infrastructure.controllers.voice.voice_controller import VoicePokemonController
 
+import sys
+print(sys.path)
+
 urlpatterns = [
     path('health/', HealthCheckController.as_view(), name='health_check'),  # Ruta específica del health check
     path('voice/process/<str:text>/', VoicePokemonController.as_view(), name='voice'),

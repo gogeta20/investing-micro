@@ -1,6 +1,6 @@
 from django.urls import path
 from myproject.core.infrastructure.controllers.health.health_check_controller import HealthCheckController
-from myproject.core.infrastructure.controllers.logs.LogsController import LogsController
+from myproject.core.infrastructure.controllers.logs.logs_controller import LogsController
 from myproject.core.infrastructure.controllers.syncDB.SyncDatabaseController import SyncDatabaseController
 from myproject.core.infrastructure.controllers.voice.voice_controller import VoicePokemonController
 

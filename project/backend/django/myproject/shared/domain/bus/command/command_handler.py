@@ -4,3 +4,7 @@ class CommandHandler(ABC):
     @abstractmethod
     def handle(self, command):
         pass
+
+    # @classmethod
+    # def create(cls):
+    #     pass

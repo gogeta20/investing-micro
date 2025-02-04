@@ -20,7 +20,8 @@ impl RabbitConsumer {
     pub async fn new(queue_name: &str) -> Result<Self, lapin::Error>
     {
         let amqp_addr = config::get_amqp_addr();
-        let conn = Connection::connect(&amqp_addr, ConnectionProperties::default()).await?;
+        // let conn = Connection::connect(&amqp_addr, ConnectionProperties::default()).await?;
+        let conn = Connection::connect("amqp://admin:your_password@34.45.214.187:5672/%2f/messages", ConnectionProperties::default()).await?;
         let channel = conn.create_channel().await?;
 
         Ok(Self {

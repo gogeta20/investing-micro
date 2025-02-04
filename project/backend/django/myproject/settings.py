@@ -46,12 +46,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -145,4 +145,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://vue.localhost",
+    "http://django-aws.duckdns.org",
+    "http://symf-aws.duckdns.org",
+    "http://13.61.198.98",
+    "https://gogeta20.github.io",  # Ajusta con el dominio de GitHub Pages
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Permitir todas las solicitudes
+
+CORS_ALLOW_CREDENTIALS = True  # Permitir envío de cookies o credenciales

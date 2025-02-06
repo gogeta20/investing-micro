@@ -14,7 +14,7 @@ impl MongoMessageRepository {
         dotenv().ok();
 
         // let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
-        let connection_string = String::from("mongodb://root:password@mongo_db:27017");
+        let connection_string = String::from("mongodb://root:password@34.45.214.187:27017");
         // let db_name = env::var("MONGO_DB_NAME").expect("MONGO_DB_NAME no está configurada");
         let db_name = String::from("pokemondb");
 

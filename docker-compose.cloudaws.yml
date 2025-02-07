@@ -59,6 +59,7 @@ services:
         volumes:
             - ./conf/nginx:/src
             - ./conf/nginx/certs:/etc/nginx/ssl
+            - ./conf/nginx/cerbot:/usr/share/nginx/html
         ports:
             - "80:80"
             - "443:443"

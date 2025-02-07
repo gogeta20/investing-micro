@@ -58,7 +58,7 @@ services:
         #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
         volumes:
             - ./conf/nginx:/src
-            - ./conf/nginx/certs/html:/usr/share/nginx/html
+            - ./conf/nginx/certs:/etc/nginx/ssl
         ports:
             - "80:80"
         depends_on:
@@ -68,20 +68,20 @@ services:
         networks:
             - app_network
 
-    certbot:
-        build:
-            context: .
-            dockerfile: devops/dockerfiles/proxy/Certbot.Dockerfile
-        container_name: certbot
-        volumes:
-            - ./conf/nginx/certs/html:/var/www/html
-            - ./devops/volumes/certbot/letsencrypt:/etc/letsencrypt
-            - ./devops/volumes/cerbot/persist:/var/lib/letsencrypt  # Para guardar datos persistentes
-        profiles:
-            - https
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --quiet; done;'"
-        networks:
-            - app_network
+    # certbot:
+    #     build:
+    #         context: .
+    #         dockerfile: devops/dockerfiles/proxy/Certbot.Dockerfile
+    #     container_name: certbot
+    #     volumes:
+    #         - ./conf/nginx/certs/html:/var/www/html
+    #         - ./devops/volumes/certbot/letsencrypt:/etc/letsencrypt
+    #         - ./devops/volumes/cerbot/persist:/var/lib/letsencrypt  # Para guardar datos persistentes
+    #     profiles:
+    #         - https
+    #     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --quiet; done;'"
+    #     networks:
+    #         - app_network
 
 networks:
     app_network:

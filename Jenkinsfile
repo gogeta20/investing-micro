@@ -23,14 +23,6 @@ pipeline {
         //     }
         // }
 
-
-
-        stage('Start Containers') {
-            steps {
-                sh 'docker-compose -f docker-compose.extra.yml up -d jenkins_micro'
-            }
-        }
-
         stage('Build Symfony Backend') {
             steps {
                 script {

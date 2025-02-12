@@ -2,7 +2,8 @@ FROM node:18-alpine
 RUN npm install -g pnpm vite
 WORKDIR /app
 
-COPY ./project/front/package.json ./project/front/pnpm-lock.yaml ./
+# COPY project/front/package.json project/front/pnpm-lock.yaml ./
+COPY project/front/package.json ./
 RUN pnpm install
 COPY project/front/ .
 

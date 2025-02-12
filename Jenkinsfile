@@ -2,25 +2,79 @@ pipeline {
     agent any
     environment {
         VUE_DOCKER_IMAGE = 'node:18'
-        SYMFONY_DOCKER_IMAGE = 'composer:2.6'
+        // SYMFONY_DOCKER_IMAGE = 'composer:2.6'
+        SYMFONY_DOCKER_IMAGE = 'symfony_backend'
         DJANGO_DOCKER_IMAGE = 'python:3.10'
         SPRINGBOOT_DOCKER_IMAGE = 'maven:3.8.7-eclipse-temurin-17'
     }
     stages {
-        stage('Build Symfony Backend') {
-            agent {
-                docker {
-                    image env.SYMFONY_DOCKER_IMAGE
-                    reuseNode true
-                }
-            }
+        // stage('Build Symfony Backend') {
+        //     agent {
+        //         docker {
+        //             image env.SYMFONY_DOCKER_IMAGE
+        //             reuseNode true
+        //         }
+        //     }
+        //     steps {
+        //         sh '''
+        //             cd project/backend/symfony
+        //             composer install
+        //         '''
+        //     }
+        // }
+
+
+
+        stage('Start Containers') {
             steps {
-                sh '''
-                    cd project/backend/symfony
-                    composer install
-                '''
+                sh 'docker-compose -f docker-compose.extra.yml up -d jenkins_micro'
             }
         }
+
+        stage('Build Symfony Backend') {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-compose.extra.yml up -d symfony_backend mysql_db'
+                    sh 'docker-compose exec -T symfony_backend composer install'
+                    sh 'docker-compose -f docker-compose.extra.yml down symfony_backend'
+                }
+            }
+        }
+
+        stage('Build Vue Front') {
+            steps {
+                script {
+                    sh 'docker-compose -f docker-compose.extra.yml up -d front_micro'
+                    sh 'docker-compose exec -T front_micro pnpm install && pnpm run build'
+                    sh 'docker-compose -f docker-compose.extra.yml down front_micro'
+                }
+            }
+        }
+
+
+        // stage('Build Symfony Backend') {
+        //     steps {
+        //         sh 'docker-compose -f docker-compose.extra.yml up -d symfony_backend'
+        //     }
+        //     steps {
+        //         sh 'docker-compose exec -T symfony_backend composer install'
+        //     }
+        //      steps {
+        //         sh 'docker-compose -f docker-compose.extra.yml down symfony_backend'
+        //     }
+        // }
+
+        // stage('Build Vue Front') {
+        //     steps {
+        //         sh 'docker-compose -f docker-compose.extra.yml up -d front_micro'
+        //     }
+        //     steps {
+        //         sh 'docker-compose exec -T front_micro pnpm install && pnpm run build'
+        //     }
+        //      steps {
+        //         sh 'docker-compose -f docker-compose.extra.yml down front_micro'
+        //     }
+        // }
 
 //         stage('Build Django Backend') {
 //             agent {

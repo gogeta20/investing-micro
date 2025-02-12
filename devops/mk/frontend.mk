@@ -17,3 +17,6 @@ in-front:
 
 logs-front:
 	docker logs $(VF)
+
+copy-dist:
+	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/micro/docs

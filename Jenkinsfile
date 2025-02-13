@@ -26,7 +26,7 @@ pipeline {
         stage('Build Symfony Backend') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.extra.yml up -d symfony_backend mysql_db'
+                    sh 'docker-compose -f docker-compose.extra.yml up -d symfony_backend'
                     sh 'docker-compose exec -T symfony_backend composer install'
                     sh 'docker-compose -f docker-compose.extra.yml down symfony_backend'
                 }

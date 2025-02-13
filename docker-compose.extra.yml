@@ -48,14 +48,14 @@ services:
         extra_hosts:
             - "host.docker.internal:host-gateway"
 
-    mailhog:
-        image: mailhog/mailhog
-        container_name: mailhog_micro
-        ports:
-            - "8025:8025"  # Interfaz web
-            - "1025:1025"  # Puerto SMTP
-        networks:
-            - app_network
+    # mailhog:
+    #     image: mailhog/mailhog
+    #     container_name: mailhog_micro
+    #     ports:
+    #         - "8025:8025"  # Interfaz web
+    #         - "1025:1025"  # Puerto SMTP
+    #     networks:
+    #         - app_network
 
     # nocodb:
     #     image: nocodb/nocodb:latest

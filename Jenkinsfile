@@ -26,9 +26,9 @@ pipeline {
         stage('Build Symfony Backend') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.extra.yml up -d symfony_backend'
-                    sh 'docker-compose exec -T symfony_backend composer install'
-                    sh 'docker-compose -f docker-compose.extra.yml down symfony_backend'
+                    sh 'docker compose -f docker-compose.extra.yml up -d symfony_backend'
+                    sh 'docker compose exec -T symfony_backend composer install'
+                    sh 'docker compose -f docker-compose.extra.yml down symfony_backend'
                 }
             }
         }
@@ -36,9 +36,9 @@ pipeline {
         stage('Build Vue Front') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.extra.yml up -d front_micro'
-                    sh 'docker-compose exec -T front_micro pnpm install && pnpm run build'
-                    sh 'docker-compose -f docker-compose.extra.yml down front_micro'
+                    sh 'docker compose -f docker-compose.extra.yml up -d front_micro'
+                    sh 'docker compose exec -T front_micro pnpm install && pnpm run build'
+                    sh 'docker compose -f docker-compose.extra.yml down front_micro'
                 }
             }
         }

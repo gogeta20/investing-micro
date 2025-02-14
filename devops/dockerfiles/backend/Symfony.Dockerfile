@@ -26,6 +26,7 @@ RUN pecl install xdebug \
 WORKDIR /var/www/html
 
 COPY . .
+COPY project/backend/symfony/package.json ./
 
 RUN mkdir -p /var/www/html/var/cache
 RUN mkdir -p /var/www/html/var/log

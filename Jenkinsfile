@@ -99,21 +99,21 @@ pipeline {
 //             }
 //         }
 
-        stage('Build Vue Frontend') {
-                agent {
-                    docker {
-                        image env.VUE_DOCKER_IMAGE
-                        reuseNode true
-                    }
-                }
-                steps {
-                    sh '''
-                        cd project/front
-                        npm install
-                        npm run build
-                    '''
-                }
-            }
+        // stage('Build Vue Frontend') {
+        //         agent {
+        //             docker {
+        //                 image env.VUE_DOCKER_IMAGE
+        //                 reuseNode true
+        //             }
+        //         }
+        //         steps {
+        //             sh '''
+        //                 cd project/front
+        //                 npm install
+        //                 npm run build
+        //             '''
+        //         }
+        //     }
     }
     post {
         always {

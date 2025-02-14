@@ -27,6 +27,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker compose -f docker-compose.extra.yml up -d symfony_backend'
+                    sh 'docker logs symfony_backend'
                     sh 'docker compose exec -T symfony_backend composer install'
                     sh 'docker compose -f docker-compose.extra.yml down symfony_backend'
                 }

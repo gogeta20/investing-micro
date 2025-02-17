@@ -27,6 +27,7 @@ WORKDIR /var/www/html
 
 # COPY . .
 RUN pwd
+RUN ls -la ./project/backend/symfony/
 COPY ./project/backend/symfony/ .
 COPY ./project/backend/symfony/composer.json ./
 

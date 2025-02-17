@@ -38,8 +38,8 @@ services:
         container_name: symfony_backend
         ports:
             - "9000:9000"
-        volumes:
-            - ./project/backend/symfony:/var/www/html
+        # volumes:
+            # - ./project/backend/symfony:/var/www/html
             # - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
         command: >
             sh -c "composer install && php-fpm"

@@ -27,7 +27,7 @@ WORKDIR /var/www/html
 
 # COPY . .
 RUN pwd
-RUN ls -la ./project/backend/symfony/
+# RUN ls -la ./project/backend/symfony/
 RUN ls -la ../
 RUN ls -la ../../
 COPY ./project/backend/symfony/ .

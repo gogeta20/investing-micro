@@ -42,7 +42,7 @@ services:
             # - ./project/backend/symfony:/var/www/html
             # - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
         command: >
-            sh -c "composer install --no-cache --no-scripts && php-fpm"
+            sh -c "composer install clear-cache && composer install --no-cache --no-scripts && php-fpm"
         networks:
             - app_network
         extra_hosts:

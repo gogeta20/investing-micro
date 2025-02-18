@@ -29,6 +29,7 @@ pipeline {
                     // sh 'docker compose -f docker-compose.extra.yml build --no-cache symfony_backend'
                     // sh 'docker compose -f docker-compose.extra.yml down symfony_backend'
                     sh 'docker compose -f docker-compose.extra.yml up -d symfony_backend'
+                    sh 'docker ps -a'
                     sh 'docker logs symfony_backend'
                     sh 'docker ps -a'
                     // sh 'docker compose -f docker-compose.extra.yml exec -T symfony_backend composer clear-cache'

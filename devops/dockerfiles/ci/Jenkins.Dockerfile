@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
     gnupg \
+    unzip \
     lsb-release
 
 # Creamos el directorio de claves GPG y descargamos la clave oficial de Docker

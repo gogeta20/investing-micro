@@ -34,7 +34,7 @@ pipeline {
                     sh 'docker compose -f docker-compose.extra.yml exec -T symfony_backend composer install --no-cache --no-scripts'
                     sh 'docker compose -f docker-compose.extra.yml down symfony_backend'
                     sh 'docker ps -a'
-                    sh 'docker logs symfony_backend'
+                    // sh 'docker logs symfony_backend'
                 }
             }
         }

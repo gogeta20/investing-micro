@@ -46,7 +46,7 @@ pipeline {
                     sonar-scanner \
                     -Dsonar.projectKey=symfony_project \
                     -Dsonar.sources=./project/backend/symfony \
-                    -Dsonar.host.url=http://sonar:9100 \
+                    -Dsonar.host.url=http://sonar:9000 \
                     -Dsonar.login=admin \
                     -Dsonar.password=admin
                     '''

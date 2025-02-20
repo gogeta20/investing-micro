@@ -39,6 +39,20 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=symfony_project \
+                    -Dsonar.sources=./project/backend/symfony \
+                    -Dsonar.host.url=http://sonar:9100 \
+                    -Dsonar.login=admin \
+                    -Dsonar.password=admin
+                    '''
+                }
+            }
+        }
 
         // stage('Build Vue Front') {
         //     steps {
@@ -51,7 +65,7 @@ pipeline {
         // }
 
 
-        // stage('Build Symfony Backend') {
+        // stage('Build Symfony Backend') {[*]
         //     steps {
         //         sh 'docker-compose -f docker-compose.extra.yml up -d symfony_backend'
         //     }

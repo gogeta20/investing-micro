@@ -35,6 +35,16 @@ RUN apt-get update && apt-get install -y \
 # Agregamos el usuario Jenkins al grupo Docker para que pueda ejecutarlo
 RUN usermod -aG docker jenkins
 
+# Instalamos SonarScanner
+RUN curl -o /tmp/sonar-scanner.zip -L "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip" && \
+    unzip /tmp/sonar-scanner.zip -d /opt/ && \
+    rm -rf /tmp/sonar-scanner.zip && \
+    ln -s /opt/sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+# Configurar variables de entorno para SonarScanner
+ENV SONAR_SCANNER_HOME=/opt/sonar-scanner-5.0.1.3006-linux
+ENV PATH="${SONAR_SCANNER_HOME}/bin:${PATH}"
+
 # Limpiamos archivos innecesarios
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 

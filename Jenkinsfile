@@ -42,7 +42,6 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    sh 'docker compose -f docker-compose.extra.yml up -d sonar'
                     sh '''
                     sonar-scanner \
                     -Dsonar.projectKey=symfony_project \

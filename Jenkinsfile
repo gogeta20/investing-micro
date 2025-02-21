@@ -52,6 +52,28 @@ pipeline {
                 }
             }
         }
+        stage('Package Symfony Backend') {
+    steps {
+        script {
+            sh 'docker compose -f docker-compose.extra.yml down'
+
+            // Leer la versión del .env
+            // def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+            // env.APP_VERSION = version
+
+            // Crear el ZIP sin vendor ni var
+            sh """
+            mkdir -p artifacts
+            tar -czf artifacts/symfony_backend_2.tar.gz \
+                --exclude=vendor --exclude=var --exclude=node_modules \
+                project/backend/symfony
+            """
+
+            // Guardar el ZIP en Jenkins
+            archiveArtifacts artifacts: "artifacts/symfony_backend_2.tar.gz", fingerprint: true
+        }
+    }
+}
 
         // stage('Build Vue Front') {
         //     steps {

@@ -48,15 +48,17 @@ pipeline {
                   string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
               ])
               {
+                def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+                env.APP_VERSION = version
                 sh """
                 export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
                 export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
                 mkdir -p artifacts
-                tar -czf artifacts/symfony_backend_2.tar.gz \
+                tar -czf artifacts/symfony_backend_${env.APP_VERSION} \
                     --exclude=vendor --exclude=var --exclude=node_modules \
                     project/backend/symfony
 
-                aws s3 cp artifacts/symfony_backend_2.tar.gz s3://cubo-micro/
+                aws s3 cp artifacts/symfony_backend_${env.APP_VERSION} s3://cubo-micro/
                 """
               }
             }

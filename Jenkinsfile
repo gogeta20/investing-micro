@@ -75,6 +75,22 @@ pipeline {
     }
 }
 
+        stage('Upload to S3') {
+    steps {
+        script {
+            sh """
+            mkdir -p artifacts
+            tar -czf artifacts/symfony_backend_2.tar.gz \
+                --exclude=vendor --exclude=var --exclude=node_modules \
+                project/backend/symfony
+
+            aws s3 cp artifacts/symfony_backend_2.tar.gz s3://cubo-micro/
+            """
+        }
+    }
+}
+
+
         // stage('Build Vue Front') {
         //     steps {
         //         script {

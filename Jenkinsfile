@@ -32,7 +32,6 @@ pipeline {
                   sh """
                   mkdir -p artifacts
                   tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
-                  tar -czf artifacts/symfony_backend_2.tar.gz \
                       --exclude=vendor --exclude=var --exclude=node_modules \
                       project/backend/symfony
                   """

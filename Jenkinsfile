@@ -39,6 +39,7 @@ pipeline {
                 }
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -53,42 +54,48 @@ pipeline {
             }
         }
         stage('Package Symfony Backend') {
-    steps {
-        script {
-            sh 'docker compose -f docker-compose.extra.yml down'
+          steps {
+              script {
+                  sh 'docker compose -f docker-compose.extra.yml down'
 
-            // Leer la versión del .env
-            // def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
-            // env.APP_VERSION = version
+                  // Leer la versión del .env
+                  // def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+                  // env.APP_VERSION = version
 
-            // Crear el ZIP sin vendor ni var
-            sh """
-            mkdir -p artifacts
-            tar -czf artifacts/symfony_backend_2.tar.gz \
-                --exclude=vendor --exclude=var --exclude=node_modules \
-                project/backend/symfony
-            """
+                  // Crear el ZIP sin vendor ni var
+                  sh """
+                  mkdir -p artifacts
+                  tar -czf artifacts/symfony_backend_2.tar.gz \
+                      --exclude=vendor --exclude=var --exclude=node_modules \
+                      project/backend/symfony
+                  """
 
-            // Guardar el ZIP en Jenkins
-            archiveArtifacts artifacts: "artifacts/symfony_backend_2.tar.gz", fingerprint: true
+                  // Guardar el ZIP en Jenkins
+                  archiveArtifacts artifacts: "artifacts/symfony_backend_2.tar.gz", fingerprint: true
+              }
+          }
         }
-    }
-}
 
         stage('Upload to S3') {
-    steps {
-        script {
-            sh """
-            mkdir -p artifacts
-            tar -czf artifacts/symfony_backend_2.tar.gz \
-                --exclude=vendor --exclude=var --exclude=node_modules \
-                project/backend/symfony
+          steps {
+              script {
+                  withCredentials([
+                      string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
+                      string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
+                  ])
+                  sh """
+                  export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+                  export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+                  mkdir -p artifacts
+                  tar -czf artifacts/symfony_backend_2.tar.gz \
+                      --exclude=vendor --exclude=var --exclude=node_modules \
+                      project/backend/symfony
 
-            aws s3 cp artifacts/symfony_backend_2.tar.gz s3://cubo-micro/
-            """
+                  aws s3 cp artifacts/symfony_backend_2.tar.gz s3://cubo-micro/
+                  """
+              }
+          }
         }
-    }
-}
 
 
         // stage('Build Vue Front') {

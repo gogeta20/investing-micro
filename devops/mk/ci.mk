@@ -8,3 +8,6 @@ in-jenkins:
 
 up-ci:
 	docker compose -f docker-compose.extra.yml --profile ci up -d
+
+sonar-space:
+	sudo sysctl -w vm.max_map_count=262144

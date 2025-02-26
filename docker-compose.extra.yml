@@ -86,8 +86,6 @@ services:
         networks:
             - app_network
 
-    # sudo sysctl -w vm.max_map_count=262144
-
     # mailhog:
     #     image: mailhog/mailhog
     #     container_name: mailhog_micro

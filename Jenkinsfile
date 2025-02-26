@@ -65,24 +65,24 @@ pipeline {
           }
         }
     }
-//     post {
-//         always {
-// //          no --- archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-//             archiveArtifacts artifacts: 'project/front/dist/**', fingerprint: true
-//         }
-//         success {
-//             echo 'Build and tests completed successfully!'
-//             slackSend(channel: 'proyecto', color: 'good', message: "Build SUCCESS: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}\n${env.BUILD_URL}")
-//             mail to: 'dev-team@example.com',
-//               subject: "Build SUCCESS: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-//               body: "The build was successful!\nCheck it here: ${env.BUILD_URL}"
-//         }
-//         failure {
-//             echo 'Build or tests failed.'
-//             slackSend(channel: 'proyecto', color: 'danger', message: "Build FAILED: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}\n${env.BUILD_URL}")
-//             mail to: env.EMAIL_RECIPIENT,
-//                  subject: "Build FAILED: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
-//                  body: "The build failed!\nCheck it here: ${env.BUILD_URL}"
-//         }
-//     }
+    post {
+        // always {
+//          no --- archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            // archiveArtifacts artifacts: 'project/front/dist/**', fingerprint: true
+        // }
+        success {
+            echo 'Build and tests completed successfully!'
+            slackSend(channel: 'proyecto', color: 'good', message: "Build SUCCESS: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}\n${env.BUILD_URL}")
+            mail to: 'dev-team@example.com',
+              subject: "Build SUCCESS: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+              body: "The build was successful!\nCheck it here: ${env.BUILD_URL}"
+        }
+        failure {
+            echo 'Build or tests failed.'
+            slackSend(channel: 'proyecto', color: 'danger', message: "Build FAILED: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}\n${env.BUILD_URL}")
+            mail to: env.EMAIL_RECIPIENT,
+                 subject: "Build FAILED: Job ${env.JOB_NAME} - Build #${env.BUILD_NUMBER}",
+                 body: "The build failed!\nCheck it here: ${env.BUILD_URL}"
+        }
+    }
 }

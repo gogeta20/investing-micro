@@ -25,7 +25,16 @@ RUN pecl install xdebug \
 
 WORKDIR /var/www/html
 
-COPY . .
+# COPY . .
+RUN pwd
+# RUN ls -la ./project/backend/symfony/
+RUN ls -la ../
+RUN ls -la ../../
+RUN ls -la
+COPY ./raiz.txt .
+COPY ./project/backend/symfony/ .
+COPY ./project/backend/symfony/composer.json ./
+RUN ls -la
 
 RUN mkdir -p /var/www/html/var/cache
 RUN mkdir -p /var/www/html/var/log

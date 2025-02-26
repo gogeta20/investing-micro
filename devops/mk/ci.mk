@@ -5,3 +5,6 @@ pass-init-jenkins:
 
 in-jenkins:
 	docker exec -it  $(J) /bin/bash
+
+up-ci:
+	docker compose -f docker-compose.extra.yml --profile ci up -d

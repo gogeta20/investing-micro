@@ -31,6 +31,13 @@
 		controller="App\Main\Infrastructure\Controller\Pokemon\Post\CreatePokemonController">
 	</route>
 
+  <route
+		id="paypal_pay"
+		path="/payments/paypal"
+		methods="POST"
+		controller="App\Main\Infrastructure\Controller\Payments\PaymentPaypalController">
+	</route>
+
 <!--	<route-->
 <!--		id="login"-->
 <!--		path="/api/login"-->

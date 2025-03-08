@@ -28,10 +28,6 @@ WORKDIR /var/www/html
 # COPY . .
 RUN pwd
 # RUN ls -la ./project/backend/symfony/
-RUN ls -la ../
-RUN ls -la ../../
-RUN ls -la
-COPY ./raiz.txt .
 COPY ./project/backend/symfony/ .
 COPY ./project/backend/symfony/composer.json ./
 RUN ls -la

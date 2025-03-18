@@ -23,6 +23,19 @@ class PayPalService
         $this->logger = $logger;
     }
 
+       private function getAccessToken(): string
+    {
+        $response = $this->client->post($this->baseUrl . '/v1/oauth2/token', [
+            'auth' => [$this->clientId, $this->clientSecret],
+            'form_params' => [
+                'grant_type' => 'client_credentials'
+            ]
+        ]);
+
+        $data = json_decode((string) $response->getBody(), true);
+        return $data['access_token'] ?? '';
+    }
+
     public function createPayment(float $amount, string $currency = 'USD'): array
     {
         try {
@@ -48,23 +61,38 @@ class PayPalService
                 ]
             ]);
 
-            return json_decode((string) $response->getBody(), true);
+            $datos = json_decode((string) $response->getBody(), true);
+            $this->logger->info('PayPal Response:', ['response' => $datos]);
+
+            return $datos;
         } catch (\Exception $e) {
             $this->logger->error("Error creando pago en PayPal: " . $e->getMessage());
             return ['error' => $e->getMessage()];
         }
     }
-
-    private function getAccessToken(): string
+    
+    public function executePayment(string $paymentId, string $payerId): array
     {
-        $response = $this->client->post($this->baseUrl . '/v1/oauth2/token', [
-            'auth' => [$this->clientId, $this->clientSecret],
-            'form_params' => [
-                'grant_type' => 'client_credentials'
-            ]
-        ]);
+        try {
+            $token = $this->getAccessToken();
 
-        $data = json_decode((string) $response->getBody(), true);
-        return $data['access_token'] ?? '';
+            $response = $this->client->post($this->baseUrl . "/v1/payments/payment/{$paymentId}/execute", [
+                'headers' => [
+                    'Authorization' => "Bearer $token",
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'payer_id' => $payerId
+                ]
+            ]);
+
+            $datos = json_decode((string) $response->getBody(), true);
+            $this->logger->info('PayPal Execute Payment Response:', ['response' => $datos]);
+
+            return $datos;
+        } catch (\Exception $e) {
+            $this->logger->error("Error ejecutando pago en PayPal: " . $e->getMessage());
+            return ['error' => $e->getMessage()];
+        }
     }
 }

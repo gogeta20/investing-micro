@@ -38,6 +38,13 @@
 		controller="App\Main\Infrastructure\Controller\Payments\PaymentPaypalController">
 	</route>
 
+  <route
+		id="paypal_confirm"
+		path="/payments/paypal/return"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\Payments\PaymentPaypalConfirmController">
+	</route>
+
 <!--	<route-->
 <!--		id="login"-->
 <!--		path="/api/login"-->

@@ -8,7 +8,7 @@ use App\Main\Domain\Exception\StoreException;
 use App\Shared\Domain\Bus\Event\EventBus;
 use App\Main\Domain\Service\PayPalService;
 
-readonly class PaymentPaypal
+readonly class PaymentPaypalCreate
 {
     public function __construct(
         private EventBus $bus,

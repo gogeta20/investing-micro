@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Main\Application\UseCases\Payments\Paypal;
+namespace App\Main\Application\UseCases\Payments\Paypal\Confirm;
 
 use App\Main\Domain\Exception\StoreException;
 use App\Shared\Domain\BaseResponse;
@@ -10,20 +10,20 @@ use App\Shared\Domain\Bus\Command\CommandHandler;
 use App\Shared\Domain\Interfaces\TranslateInterfaceCustom;
 use Symfony\Component\HttpFoundation\Response;
 
-final class PaymentPaypalCommandHandler implements CommandHandler
+final class PaymentPaypalConfirmCommandHandler implements CommandHandler
 {
     public function __construct(
-        private readonly PaymentPaypal $paypal,
+        private readonly PaymentPaypalConfirm $paypal,
         protected TranslateInterfaceCustom $translatorCustom
     ) {}
 
     /**
      * @throws StoreException
      */
-    public function __invoke(PaymentPaypalCommand $command): BaseResponse
+    public function __invoke(PaymentPaypalConfirmCommand $command): BaseResponse
     {
         try {
-             $this->paypal->__invoke($command);
+            $this->paypal->__invoke($command);
             list($status, $message, $data) = $this->resolveResponseParams([]);
             $response = new BaseResponse($data);
             $response->setStatus($status);

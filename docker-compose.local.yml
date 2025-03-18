@@ -16,7 +16,7 @@ services:
         condition: service_healthy
     networks:
       - app_network
-    restart: always
+    # restart: always
     profiles:
       - local
 
@@ -229,7 +229,7 @@ services:
       - NC_AUTH_JWT_SECRET=gbcv123M
     depends_on:
       - mysql_db
-    restart: always
+    # restart: always
     volumes:
       - ./devops/volumes/nocodb:/usr/app/data:z
     networks:

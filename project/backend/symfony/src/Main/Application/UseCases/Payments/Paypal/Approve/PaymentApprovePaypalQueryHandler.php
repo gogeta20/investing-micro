@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace App\Main\Application\UseCases\Payments\Paypal\Create;
+namespace App\Main\Application\UseCases\Payments\Paypal\Approve;
 
 use App\Main\Domain\Exception\StoreException;
 use App\Shared\Domain\BaseResponse;
-use App\Shared\Domain\Bus\Command\CommandHandler;
 use App\Shared\Domain\Interfaces\TranslateInterfaceCustom;
 use Symfony\Component\HttpFoundation\Response;
+use App\Shared\Domain\Bus\Query\QueryHandler;
 
-final class PaymentPaypalCommandHandler implements CommandHandler
+final class PaymentApprovePaypalQueryHandler implements QueryHandler
 {
     public function __construct(
-        private readonly PaymentPaypalCreate $paypal,
+        private readonly PaymentApprovePaypal $paypal,
         protected TranslateInterfaceCustom $translatorCustom
     ) {}
 
     /**
      * @throws StoreException
      */
-    public function __invoke(PaymentPaypalCommand $command): BaseResponse
+    public function __invoke(PaymentApprovePaypalQuery $query): BaseResponse
     {
         try {
-             $this->paypal->__invoke($command);
-            list($status, $message, $data) = $this->resolveResponseParams([]);
+            $response = $this->paypal->__invoke($query);
+            list($status, $message, $data) = $this->resolveResponseParams($response);
             $response = new BaseResponse($data);
             $response->setStatus($status);
             $response->setMessage($message);
@@ -41,7 +41,7 @@ final class PaymentPaypalCommandHandler implements CommandHandler
         } else {
             $message = $this->translatorCustom->translate('success', [], 'basic');
         }
-        $status = Response::HTTP_CREATED;
+        $status = Response::HTTP_OK;
         $data = $result;
         return array($status, $message, $data);
     }

@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/broker/RabbitMQ.Dockerfile
+    container_name: rabbitmq
+    ports:
+      - "15672:15672" # Puerto para el panel de administración
+      - "5672:5672" # Puerto para las conexiones de los clientes
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: your_password
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+
+  mysql_db:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/db/MySQL.Dockerfile
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: pokemondb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./devops/volumes/mysql:/var/lib/mysql:z
+      - ./conf/mysql/db/files:/var/www/html
+    networks:
+      - app_network
+
+  mongo_db:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/db/Mongo.Dockerfile
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./devops/volumes/mongo:/data/db:z
+      - ./conf/mongodb/db/files:/var/www/html
+    networks:
+      - app_network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+networks:
+  app_network:
+    driver: bridge
+
+# en cloud google linuxlite

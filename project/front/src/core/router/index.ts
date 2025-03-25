@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import homeRoutes from '@/modules/home/application/routes';
 import HomeView from "@/pages/HomeView.vue";
 import Projects from '@/pages/Projects.vue';
-import Whoami from '@/pages/Whoami.vue';
 import Skills from '@/pages/Skills.vue';
+import Payments from '@/pages/test/Payments.vue';
 import Symfony from '@/pages/test/Symfony.vue';
+import Whoami from '@/pages/Whoami.vue';
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
       {
         path: "/symfony-cqrs",
         component: Symfony,
+        children: [],
+      },
+      {
+        path: "/payments",
+        component: Payments,
         children: [],
       },
     ],

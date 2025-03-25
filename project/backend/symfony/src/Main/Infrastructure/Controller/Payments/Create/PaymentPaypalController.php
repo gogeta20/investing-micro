@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Main\Infrastructure\Controller\Payments;
+namespace App\Main\Infrastructure\Controller\Payments\Create;
 
-use App\Main\Infrastructure\Controller\Payments\PaymentPaypalRequest;
-use App\Main\Application\UseCases\Payments\Paypal\PaymentPaypalCommand;
+use App\Main\Infrastructure\Controller\Payments\Create\PaymentPaypalRequest;
+use App\Main\Application\UseCases\Payments\Paypal\Create\PaymentPaypalCommand;
 use App\Shared\Infrastructure\Symfony\ApiController;
 use App\Main\Infrastructure\Response\JsonApiResponse;
 use App\Main\Domain\Exception\StoreException;
@@ -24,6 +24,7 @@ class PaymentPaypalController extends ApiController
 
       try {
         $this->dispatch(new PaymentPaypalCommand(
+          $request->data()['id'],
           $request->data()['amount'],
           $request->data()['currency']
         ));

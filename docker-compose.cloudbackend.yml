@@ -88,3 +88,4 @@ services:
 networks:
     app_network:
         driver: bridge
+# en cloud google codigo mau

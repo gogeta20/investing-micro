@@ -44,6 +44,7 @@ Desktop.ini
 
 # Archivos de compilación de Java (Spring Boot)
 # **/target/
+project/backend/symfony/.env.test
 project/backend/springboot/target/
 project/consumer/target/debug/
 project/consumer/target/release/.fingerprint/

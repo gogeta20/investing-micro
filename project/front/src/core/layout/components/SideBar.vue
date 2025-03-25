@@ -57,14 +57,14 @@ const myRoutes = reactive([
         isVisible: true,
         children: [],
       },
-      // {
-      //   id: "4.2",
-      //   title: "django db-trans",
-      //   path: "django-db-trans",
-      //   icon: "plus",
-      //   isVisible: true,
-      //   children: [],
-      // },
+      {
+        id: "4.2",
+        title: "Payments test",
+        path: "/payments",
+        icon: "plus",
+        isVisible: true,
+        children: [],
+      },
     ],
   },
 ]);

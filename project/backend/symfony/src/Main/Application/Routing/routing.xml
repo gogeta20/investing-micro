@@ -35,14 +35,28 @@
 		id="paypal_pay"
 		path="/payments/paypal"
 		methods="POST"
-		controller="App\Main\Infrastructure\Controller\Payments\PaymentPaypalController">
+		controller="App\Main\Infrastructure\Controller\Payments\Create\PaymentPaypalController">
 	</route>
 
   <route
 		id="paypal_confirm"
 		path="/payments/paypal/return"
+		methods="POST"
+		controller="App\Main\Infrastructure\Controller\Payments\Confirm\PaymentPaypalConfirmController">
+	</route>
+
+  <route
+		id="paypal_approve"
+		path="/payments/paypal/approve/{id}"
 		methods="GET"
-		controller="App\Main\Infrastructure\Controller\Payments\PaymentPaypalConfirmController">
+		controller="App\Main\Infrastructure\Controller\Payments\Approve\PaymentPaypalApproveController">
+	</route>
+
+  <route
+		id="paypal_success"
+		path="/payments/paypal/success"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\Payments\Succcess\PaymentPaypalSuccessController">
 	</route>
 
 <!--	<route-->

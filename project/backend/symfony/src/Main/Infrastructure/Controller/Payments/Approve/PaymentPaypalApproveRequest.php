@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Main\Infrastructure\Controller\Payments\Confirm;
+namespace App\Main\Infrastructure\Controller\Payments\Approve;
 
 use App\Main\Infrastructure\Request\StandardRequest;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PaymentPaypalConfirmRequest extends StandardRequest
+class PaymentPaypalApproveRequest extends StandardRequest
 {
     protected function constraints(): Assert\Collection
     {
         return new Assert\Collection([
             'fields' => [
-                'paymentId' => [
+                'id' => [
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'string']),
                 ],

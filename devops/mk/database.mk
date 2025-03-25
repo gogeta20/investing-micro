@@ -106,6 +106,10 @@ mongo-init-db:
 mongo-seed: # make mongo-seed s=1
 	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use intents_db"  < /var/www/html/scripts/seeds/S$(s).js'
 
+mongo-seed-db-primary: # make mongo-seed s=3
+	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use pokemondb"  < /var/www/html/scripts/seeds/S$(s).js'
+
+
 mongo-seed-basic: # make mongo-seed s=1
 	docker exec $(M) sh -c 'mongosh -u root -p password  < /var/www/html/scripts/seeds/S$(s).js'
 

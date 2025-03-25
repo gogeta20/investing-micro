@@ -45,10 +45,10 @@ build-local:
 restart: down up
 
 cloud-back-up:
-	docker compose -f docker-compose.cloudaws.yml up -d
+	docker compose -f docker-compose.cloudbackend.yml up -d
 
 cloud-back-down:
-	docker compose -f docker-compose.cloudaws.yml down
+	docker compose -f docker-compose.cloudbackend.yml down
 
 cloud-back-build:
-	docker compose -f docker-compose.cloudaws.yml build
+	docker compose -f docker-compose.cloudbackend.yml build

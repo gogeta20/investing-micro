@@ -30,8 +30,8 @@ class PaymentPaypalConfirmController extends ApiController
 
         try {
             $this->dispatch(new PaymentPaypalConfirmCommand(
-              $request->data()['paymentId'],
-              $request->data()['PayerID']
+              $request->data()['paymentId']
+              // $request->data()['PayerID']
             ));
 
             return (new StandardApiResponse(

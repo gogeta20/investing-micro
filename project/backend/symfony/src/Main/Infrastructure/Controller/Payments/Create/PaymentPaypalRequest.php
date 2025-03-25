@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Main\Infrastructure\Controller\Payments;
+namespace App\Main\Infrastructure\Controller\Payments\Create;
 
 use App\Main\Infrastructure\Request\StandardRequest;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,6 +13,9 @@ class PaymentPaypalRequest extends StandardRequest
     {
         return new Assert\Collection([
             'fields' => [
+                'id' => [
+                    new Assert\NotBlank(),
+                ],
                 'amount' => [
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'numeric', 'message' => 'The amount must be a valid number.']),

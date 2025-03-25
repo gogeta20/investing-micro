@@ -22,9 +22,8 @@ readonly class PaymentPaypalConfirm
     public function __invoke(PaymentPaypalConfirmCommand $command): array
     {
         try {
-            $response = $this->paypalService->executePayment(
-                $command->paymentId(),
-                $command->payerId()
+            $response = $this->paypalService->captureOrder(
+                $command->paymentId()
             );
 
             if (isset($response['error'])) {

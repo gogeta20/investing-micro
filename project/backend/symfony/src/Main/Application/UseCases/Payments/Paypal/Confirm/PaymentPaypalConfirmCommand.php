@@ -10,24 +10,17 @@ readonly class PaymentPaypalConfirmCommand implements Command
 {
     public function __construct(
         private string $paymentId,
-        private string $payerId
     ) {}
 
     public static function create(array $data): self
     {
         return new self(
-            $data['paymentId'],
-            $data['payerId']
+            $data['paymentId']
         );
     }
 
     public function paymentId(): string
     {
         return $this->paymentId;
-    }
-
-    public function payerId(): string
-    {
-        return $this->payerId;
     }
 }

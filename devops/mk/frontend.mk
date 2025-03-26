@@ -18,5 +18,8 @@ in-front:
 logs-front:
 	docker logs $(VF)
 
+build-front:
+	docker exec -it $(VF) npm run build
+
 copy-dist:
 	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/micro/docs

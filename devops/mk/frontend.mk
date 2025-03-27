@@ -26,6 +26,7 @@ copy-dist: #make copy-dist folder=last;
 	cp -r ~/projects/personal/micro/docs/* ~/projects/personal/dist-vue/$(folder)
 	rm -rf ~/projects/personal/micro/docs/*
 	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/micro/docs
+	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/dist-vue/last
 
 # copy-dist:
 # 	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/micro/docs

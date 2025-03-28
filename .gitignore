@@ -3,6 +3,7 @@
 # **/.vscode/
 /.vscode/
 project/backend/.vscode/
+/project/**/.env
 *.sublime-project
 *.sublime-workspace
 

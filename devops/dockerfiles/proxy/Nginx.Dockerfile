@@ -10,8 +10,8 @@ RUN if [ "$ENVIRONMENT" = "local" ]; then \
     cp /tmp/nginx/local/symfony.conf /etc/nginx/conf.d/; \
     cp /tmp/nginx/local/django.conf /etc/nginx/conf.d/; \
   else \
-    cp /tmp/nginx/prod/symfony.conf /etc/nginx/conf.d/; \
-    cp /tmp/nginx/prod/django.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/symfony.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/django.conf /etc/nginx/conf.d/; \
   fi
 
 # COPY conf/nginx/symfony.conf /etc/nginx/conf.d/

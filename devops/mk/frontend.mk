@@ -18,5 +18,15 @@ in-front:
 logs-front:
 	docker logs $(VF)
 
-copy-dist:
+build-front:
+	docker exec -it $(VF) npm run build
+
+copy-dist: #make copy-dist folder=last;
+	mkdir -p ~/projects/personal/dist-vue/$(folder)
+	cp -r ~/projects/personal/micro/docs/* ~/projects/personal/dist-vue/$(folder)
+	rm -rf ~/projects/personal/micro/docs/*
 	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/micro/docs
+	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/dist-vue/last
+
+# copy-dist:
+# 	cp -r ~/projects/personal/micro/project/front/dist/* ~/projects/personal/micro/docs

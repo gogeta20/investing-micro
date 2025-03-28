@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Main\Infrastructure\Controller\Payments\Confirm;
 
-use App\Main\Application\UseCases\Payments\Paypal\Confirm\PaymentPaypalConfirmCommand;
+use App\Main\Application\UseCases\Payments\Paypal\Confirm\PaymentPaypalConfirmQuery;
 use App\Shared\Infrastructure\Symfony\ApiController;
 use App\Main\Infrastructure\Response\JsonApiResponse;
 use App\Main\Domain\Exception\StoreException;
@@ -21,17 +21,10 @@ class PaymentPaypalConfirmController extends ApiController
         if (null !== $errors) {
           return JsonApiResponse::error(errors: $errors);
         }
-        // $paymentId = $request->query->get('paymentId');
-        // $payerId = $request->query->get('PayerID');
-
-        // if (!$paymentId || !$payerId) {
-        //     return JsonApiResponse::error(errors: ['Faltan parámetros en la URL']);
-        // }
 
         try {
-            $this->dispatch(new PaymentPaypalConfirmCommand(
-              $request->data()['paymentId']
-              // $request->data()['PayerID']
+            $this->ask(new PaymentPaypalConfirmQuery(
+              $request->data()['token']
             ));
 
             return (new StandardApiResponse(

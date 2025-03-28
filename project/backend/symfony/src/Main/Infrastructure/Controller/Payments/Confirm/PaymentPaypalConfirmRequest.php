@@ -13,14 +13,10 @@ class PaymentPaypalConfirmRequest extends StandardRequest
     {
         return new Assert\Collection([
             'fields' => [
-                'paymentId' => [
+                'token' => [
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'string']),
                 ],
-                // 'PayerID' => [
-                //     new Assert\Optional(),
-                //     new Assert\Type(['type' => 'string']),
-                // ],
             ],
         ]);
     }

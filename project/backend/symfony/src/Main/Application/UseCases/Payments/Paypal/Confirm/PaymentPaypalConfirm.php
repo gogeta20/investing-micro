@@ -19,11 +19,11 @@ readonly class PaymentPaypalConfirm
      * 📌 Ejecuta la confirmación del pago en PayPal
      * @throws StoreException
      */
-    public function __invoke(PaymentPaypalConfirmCommand $command): array
+    public function __invoke(PaymentPaypalConfirmQuery $command): array
     {
         try {
             $response = $this->paypalService->captureOrder(
-                $command->paymentId()
+                $command->token()
             );
 
             if (isset($response['error'])) {

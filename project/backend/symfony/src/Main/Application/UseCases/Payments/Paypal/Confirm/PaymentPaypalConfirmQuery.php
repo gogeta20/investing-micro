@@ -6,21 +6,21 @@ namespace App\Main\Application\UseCases\Payments\Paypal\Confirm;
 
 use App\Shared\Domain\Bus\Command\Command;
 
-readonly class PaymentPaypalConfirmCommand implements Command
+readonly class PaymentPaypalConfirmQuery implements Command
 {
     public function __construct(
-        private string $paymentId,
+        private string $token,
     ) {}
 
     public static function create(array $data): self
     {
         return new self(
-            $data['paymentId']
+            $data['token'],
         );
     }
 
-    public function paymentId(): string
+    public function token(): string
     {
-        return $this->paymentId;
+        return $this->token;
     }
 }

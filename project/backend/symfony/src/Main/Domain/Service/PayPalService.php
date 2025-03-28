@@ -84,7 +84,7 @@ class PayPalService
 
     public function captureOrder(string $orderId): array
     {
-        $orderId = "5AL84419GP7713631";
+        // $orderId = "5AL84419GP7713631";
         $token = $this->getAccessToken();
         if (!$token) {
             return ['error' => 'No se pudo obtener el token de PayPal'];

@@ -10,7 +10,7 @@ use App\Shared\Domain\Bus\Command\CommandHandler;
 use App\Shared\Domain\Interfaces\TranslateInterfaceCustom;
 use Symfony\Component\HttpFoundation\Response;
 
-final class PaymentPaypalConfirmCommandHandler implements CommandHandler
+final class PaymentPaypalConfirmQueryHandler implements CommandHandler
 {
     public function __construct(
         private readonly PaymentPaypalConfirm $paypal,
@@ -20,11 +20,12 @@ final class PaymentPaypalConfirmCommandHandler implements CommandHandler
     /**
      * @throws StoreException
      */
-    public function __invoke(PaymentPaypalConfirmCommand $command): BaseResponse
+    public function __invoke(PaymentPaypalConfirmQuery $query): BaseResponse
     {
         try {
-            $this->paypal->__invoke($command);
-            list($status, $message, $data) = $this->resolveResponseParams([]);
+            $response = $this->paypal->__invoke($query);
+            // Aquí puedes manejar la respuesta de PayPal y crear un objeto de respuesta
+            list($status, $message, $data) = $this->resolveResponseParams($response);
             $response = new BaseResponse($data);
             $response->setStatus($status);
             $response->setMessage($message);

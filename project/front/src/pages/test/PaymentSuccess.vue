@@ -8,12 +8,13 @@ const route = useRoute();
 
 onMounted(async () => {
   const token = route.query.token;
+  // const tokenSend = token == null ? '' : token;
   // Aquí puedes hacer la llamada al backend con el token
   // para confirmar el pago si no se ha hecho todavía
-  const useCase = new GetConfirmPaymentPaypal(new RepositorySymfonyGet());
-  const response = await useCase.execute('');
-  console.log(response)
   console.log('Confirmando pago con token:', token);
+  const useCase = new GetConfirmPaymentPaypal(new RepositorySymfonyGet());
+  const response = await useCase.execute(token);
+  console.log(response)
 });
 </script>
 

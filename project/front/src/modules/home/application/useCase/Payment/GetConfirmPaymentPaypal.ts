@@ -10,7 +10,7 @@ export class GetConfirmPaymentPaypal {
   async execute(id: string) {
     const meToast = useMeToast();
     try {
-      this.repository.setEndPoint(`/payments/paypal/return`);
+      this.repository.setEndPoint(`/payments/paypal/return?token=${id}&PayerID=nada`);
       const data = await this.repository.send([]);
       meToast.addToast({ message: 'consulta realizada con éxito', type: 'success', duration: 5000 });
       return data;

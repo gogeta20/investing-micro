@@ -17,6 +17,10 @@ class PaymentPaypalConfirmRequest extends StandardRequest
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'string']),
                 ],
+                'PayerID' => [
+                    new Assert\NotBlank(),
+                    new Assert\Type(['type' => 'string']),
+                ],
             ],
         ]);
     }

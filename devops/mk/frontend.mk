@@ -19,7 +19,7 @@ logs-front:
 	docker logs $(VF)
 
 build-front:
-	docker exec -it $(VF) npm run build
+	docker exec -it $(VF) npm run build-github
 
 copy-dist: #make copy-dist folder=last;
 	mkdir -p ~/projects/personal/dist-vue/$(folder)

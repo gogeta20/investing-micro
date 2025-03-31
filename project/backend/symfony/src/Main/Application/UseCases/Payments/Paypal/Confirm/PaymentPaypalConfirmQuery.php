@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Main\Application\UseCases\Payments\Paypal\Confirm;
 
-use App\Shared\Domain\Bus\Command\Command;
+use App\Shared\Domain\Bus\Query\Query;
 
-readonly class PaymentPaypalConfirmQuery implements Command
+readonly class PaymentPaypalConfirmQuery implements Query
 {
     public function __construct(
         private string $token,

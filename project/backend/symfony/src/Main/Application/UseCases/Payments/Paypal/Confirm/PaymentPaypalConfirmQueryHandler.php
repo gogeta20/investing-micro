@@ -6,11 +6,11 @@ namespace App\Main\Application\UseCases\Payments\Paypal\Confirm;
 
 use App\Main\Domain\Exception\StoreException;
 use App\Shared\Domain\BaseResponse;
-use App\Shared\Domain\Bus\Command\CommandHandler;
+use App\Shared\Domain\Bus\Query\QueryHandler;
 use App\Shared\Domain\Interfaces\TranslateInterfaceCustom;
 use Symfony\Component\HttpFoundation\Response;
 
-final class PaymentPaypalConfirmQueryHandler implements CommandHandler
+final class PaymentPaypalConfirmQueryHandler implements QueryHandler
 {
     public function __construct(
         private readonly PaymentPaypalConfirm $paypal,

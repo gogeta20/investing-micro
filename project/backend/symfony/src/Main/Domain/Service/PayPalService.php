@@ -64,9 +64,10 @@ class PayPalService
                         ]
                     ],
                     'application_context' => [
-                        'return_url' => 'https://d92c-92-172-189-157.ngrok-free.app/payments/paypal/success',
+                        // 'return_url' => 'https://d92c-92-172-189-157.ngrok-free.app/payments/paypal/success',
                         // 'return_url' => 'https://9d8a-92-172-189-157.ngrok-free.app/payments/paypal/success',
                         // 'return_url' => $_ENV['PAYPAL_RETURN_URL'] ?? 'https://9d8a-92-172-189-157.ngrok-free.app/payments/paypal/success',
+                        'return_url' => $_ENV['PAYPAL_RETURN_URL'],
                         'cancel_url' => $_ENV['PAYPAL_CANCEL_URL'] ?? 'https://example.com/cancel'
                     ]
                 ]

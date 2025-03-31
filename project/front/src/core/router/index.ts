@@ -4,6 +4,8 @@ import HomeView from "@/pages/HomeView.vue";
 import Projects from '@/pages/Projects.vue';
 import Skills from '@/pages/Skills.vue';
 import Payments from '@/pages/test/Payments.vue';
+import PaymentCancel from '@/pages/test/PaymentCancel.vue';
+import PaymentSuccess from '@/pages/test/PaymentSuccess.vue';
 import Symfony from '@/pages/test/Symfony.vue';
 import Whoami from '@/pages/Whoami.vue';
 
@@ -42,6 +44,14 @@ const routes = [
         path: "/payments",
         component: Payments,
         children: [],
+      },
+      {
+        path: "/payments/success",
+        component: PaymentSuccess,
+      },
+      {
+        path: "/payments/cancel",
+        component: PaymentCancel,
       },
     ],
   },

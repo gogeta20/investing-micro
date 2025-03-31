@@ -67,8 +67,9 @@ class PayPalService
                         // 'return_url' => 'https://d92c-92-172-189-157.ngrok-free.app/payments/paypal/success',
                         // 'return_url' => 'https://9d8a-92-172-189-157.ngrok-free.app/payments/paypal/success',
                         // 'return_url' => $_ENV['PAYPAL_RETURN_URL'] ?? 'https://9d8a-92-172-189-157.ngrok-free.app/payments/paypal/success',
-                        'return_url' => $_ENV['PAYPAL_RETURN_URL'],
-                        'cancel_url' => $_ENV['PAYPAL_CANCEL_URL'] ?? 'https://example.com/cancel'
+                        // 'return_url' => 'https://gogeta20.github.io/micro/payments/success?token=' . $id,
+                        'return_url' => 'https://gogeta20.github.io/micro/payments/success',
+                        'cancel_url' => $_ENV['PAYPAL_CANCEL_URL']
                     ]
                 ]
             ]);

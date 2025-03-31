@@ -7,6 +7,7 @@ use App\Main\Application\UseCases\Payments\Paypal\Confirm\PaymentPaypalConfirmQu
 use App\Shared\Infrastructure\Symfony\ApiController;
 use App\Main\Infrastructure\Response\JsonApiResponse;
 use App\Main\Domain\Exception\StoreException;
+use App\Shared\Domain\Bus\Query\Response;
 use App\Shared\Domain\StandardApiResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ use Exception;
 
 class PaymentPaypalConfirmController extends ApiController
 {
-    public function __invoke(PaymentPaypalConfirmRequest $request): JsonResponse
+    public function __invoke(PaymentPaypalConfirmRequest $request): JsonResponse | Response
     {
         $errors = $request->validate();
 
@@ -27,11 +28,13 @@ class PaymentPaypalConfirmController extends ApiController
               $request->data()['token']
             ));
 
-            return (new StandardApiResponse(
-                data: [],
-                message: 'Pago confirmado correctamente',
-                code: 200
-            ))->__invoke();
+            return new Response('<h1>✅ ¡Pago confirmado!</h1><p>Gracias por tu compra</p>');
+
+            // return (new StandardApiResponse(
+            //     data: [],
+            //     message: 'Pago confirmado correctamente',
+            //     code: 200
+            // ))->__invoke();
         } catch (\Exception $e) {
             throw new StoreException('Error al confirmar el pago: ' . $e->getMessage());
         }

@@ -5,7 +5,9 @@
         "dev": "vite --host",
         "build": "vite build",
         "build-github": "vite build && cp dist/index.html dist/404.html",
-        "serve": "vite preview"
+        "stg": "vite --host --mode staging",
+        "pro": "vite --host --mode production",
+        "extranet": "vite --host --mode extranet"
     },
     "dependencies": {
         "axios": "^1.7.9",

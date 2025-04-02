@@ -49,6 +49,8 @@ services:
     entrypoint: [ "/app/entrypoint.sh" ]
     volumes:
       - ./project/front:/app
+    environment:
+      - MICRO_ENV=${MICRO_ENV}
     networks:
       - app_network
     profiles:
@@ -185,7 +187,7 @@ services:
       context: .
       dockerfile: devops/dockerfiles/proxy/Nginx.Dockerfile
       args:
-        ENVIRONMENT: ${ENVIRONMENT}
+        MICRO_ENV: ${MICRO_ENV}
     container_name: nginx_proxy
     #    volumes:
     #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf

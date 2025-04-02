@@ -1,4 +1,5 @@
-
+ENV_LOCAL=.env.local
+ENV_CLOUDBACKEND=.env.cloudbackend
 COMPOSE=docker compose
 VF=front_micro
 S=symfony_backend
@@ -11,7 +12,7 @@ MQ=rabbitmq
 J=jenkins_micro
 R=rust_consumer
 C=certbot
-LOCAL=docker-compose.local.yml --profile local
+LOCAL=--env-file $(ENV_LOCAL) -f docker-compose.local.yml --profile local
 
 include devops/mk/*.mk
 
@@ -34,10 +35,10 @@ down-volume:
 	docker compose down -v
 
 up-local:
-	$(COMPOSE) -f $(LOCAL) up -d
+	$(COMPOSE) $(LOCAL) up -d
 
 down-local:
-	$(COMPOSE) -f $(LOCAL) down
+	$(COMPOSE) $(LOCAL) down
 
 build-local:
 	$(COMPOSE) -f $(LOCAL) build --no-cache
@@ -45,10 +46,10 @@ build-local:
 restart: down up
 
 cloud-back-up:
-	docker compose -f docker-compose.cloudbackend.yml up -d
+	docker compose --env-file $(ENV_CLOUDBACKEND) -f docker-compose.cloudbackend.yml up -d
 
 cloud-back-down:
 	docker compose -f docker-compose.cloudbackend.yml down
 
 cloud-back-build:
-	docker compose -f docker-compose.cloudbackend.yml build
+	docker compose --env-file $(ENV_CLOUDBACKEND) -f docker-compose.cloudbackend.yml build

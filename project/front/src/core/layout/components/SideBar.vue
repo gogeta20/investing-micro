@@ -65,6 +65,14 @@ const myRoutes = reactive([
         isVisible: true,
         children: [],
       },
+      {
+        id: "4.3",
+        title: "Chatbot",
+        path: "/chatbot",
+        icon: "plus",
+        isVisible: true,
+        children: [],
+      },
     ],
   },
 ]);

@@ -32,6 +32,7 @@ pip-delete-this-directory.txt
 *.cache
 *.bak
 *.pdf
+*.joblib
 
 # Archivos de migración de Django
 db.sqlite3

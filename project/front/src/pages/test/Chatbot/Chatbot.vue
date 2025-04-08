@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
-
+import { GetIntent } from '@/modules/home/application/useCase/DetectIntent/GetIntent';
+import RepositoryDjangoGet from '@/modules/home/infrastructure/repositories/RepositoryDjangoGet';
 const messages = ref([
   { text: '¡Hola! ¿En qué puedo ayudarte?', from: 'bot' }
 ])
 const newMessage = ref('')
 const chatBody = ref(null);
 console.log("Entorno Vite:", import.meta.env.VITE_MICRO_ENV)
-function sendMessage() {
+
+async function sendMessage() {
   if (!newMessage.value.trim()) return
 
   messages.value.push({ text: newMessage.value, from: 'user' })
@@ -18,6 +20,10 @@ function sendMessage() {
     chatBody.value.scrollTop = chatBody.value.scrollHeight
   })
 
+  const phrase = 'hola, puedo reservar una mesa';
+  const useCase = new GetIntent(new RepositoryDjangoGet());
+  const response = await useCase.execute(phrase)
+  console.log(response);
   // Simular respuesta del bot
   setTimeout(() => {
     messages.value.push({ text: 'Esto es una respuesta automática 😊', from: 'bot' })

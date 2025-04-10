@@ -13,6 +13,7 @@ J=jenkins_micro
 R=rust_consumer
 C=certbot
 LOCAL=--env-file $(ENV_LOCAL) -f docker-compose.local.yml --profile local
+ENV_FILE?=.env
 
 include devops/mk/*.mk
 
@@ -27,6 +28,9 @@ build--no-cache:
 
 up:
 	docker compose up -d
+
+up-env: # make up ENV_FILE=.env.local
+	docker compose --env-file $(ENV_FILE) up -d
 
 down:
 	docker compose down

@@ -9,9 +9,11 @@ RUN if [ "$MICRO_ENV" = "local" ]; then \
     cp /tmp/nginx/local/symfony.conf /etc/nginx/conf.d/; \
     cp /tmp/nginx/local/vue.conf /etc/nginx/conf.d/; \
     cp /tmp/nginx/local/django.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/local/rust.conf /etc/nginx/conf.d/; \
   else \
     cp /tmp/nginx/symfony.conf /etc/nginx/conf.d/; \
     cp /tmp/nginx/django.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/rust.conf /etc/nginx/conf.d/; \
   fi
 
 RUN rm /etc/nginx/conf.d/default.conf

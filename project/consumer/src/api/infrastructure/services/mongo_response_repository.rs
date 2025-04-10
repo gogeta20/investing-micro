@@ -1,8 +1,10 @@
+use std::env;
 use crate::api::domain::interface::iresponse_repository::IResponseRepository;
 use async_trait::async_trait;
 use bson::doc;
 use mongodb::{options::ClientOptions, Client, Collection};
 use serde::{Deserialize, Serialize};
+use dotenv::dotenv;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ResponseDocument {
@@ -16,6 +18,9 @@ pub struct MongoResponseRepository {
 
 impl MongoResponseRepository {
     pub async fn new() -> Self {
+        dotenv().ok();
+        let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
+        println!("📌 Conexión a Mongo: {}", connection_string);
         // Aquí sería bueno más adelante mover a dotenv como comentamos 😉
         let connection_string = "mongodb://root:password@mongo_db:27017";
         let client_options = ClientOptions::parse(connection_string).await.expect("Error conectando a MongoDB");

@@ -11,4 +11,11 @@ pub trait IMongoRepository {
     async fn save<T>(&self, item: T) -> Result<(), Box<dyn Error + Send + Sync>>
     where
         T: Serialize + Send + Sync;
+
+    async fn update_field(
+        &self,
+        uuid: &str,
+        field: &str,
+        value: &str
+    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>>;
 }

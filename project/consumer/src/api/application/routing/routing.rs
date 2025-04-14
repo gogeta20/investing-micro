@@ -5,5 +5,5 @@ use crate::api::application::use_case::detected_intent::detected_intent;
 
 pub fn get_routes() -> Scope {
     web::scope("/api")
-        .route("/intent/{intent}", web::get().to(detected_intent::start))
+        .route("/intent/{intent}", web::post().to(detected_intent::start))
 }

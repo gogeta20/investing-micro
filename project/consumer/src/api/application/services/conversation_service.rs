@@ -13,6 +13,8 @@ impl ConversationService {
             intent: intent.to_string(),
             estado_conversacion: estado.to_string(),
             respuesta_anterior: respuesta_anterior.to_string(),
+            personas: None,
+            hora: None,
         };
 
         if let Err(e) = repository.save(conversation).await {

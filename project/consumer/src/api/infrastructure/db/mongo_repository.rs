@@ -59,4 +59,16 @@ impl IMongoRepository for MongoRepository {
 
         Ok(())
     }
+    async fn update_field(
+        &self,
+        uuid: &str,
+        field: &str,
+        value: &str
+    ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+        let filter = doc! { "uuid": uuid };
+        let update = doc! { "$set": { field: value } };
+
+        self.collection.update_one(filter, update).await?;
+        Ok(())
+    }
 }

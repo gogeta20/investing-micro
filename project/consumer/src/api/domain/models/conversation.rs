@@ -6,4 +6,6 @@ pub struct ConversationDocument {
     pub intent: String,
     pub estado_conversacion: String,
     pub respuesta_anterior: String,
+    pub personas: Option<String>,
+    pub hora: Option<String>,
 }

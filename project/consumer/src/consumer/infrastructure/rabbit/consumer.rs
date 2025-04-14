@@ -31,7 +31,7 @@ impl RabbitConsumer {
         })
     }
 
-    pub async fn start_consuming(&self) -> Result<RabbitMessage, Box<dyn std::error::Error>> {
+    pub async fn start_consuming(&self) -> Result<RabbitMessage, Box<dyn std::error::Error  + Send + Sync>> {
         let consumer_tag = format!("rust_consumer_{}", Uuid::new_v4());
 
         let mut consumer = self.channel
@@ -67,7 +67,7 @@ impl RabbitConsumer {
     async fn handle_message(
         &self,
         delivery: &lapin::message::Delivery,
-    ) -> Result<RabbitMessage, Box<dyn std::error::Error>> {
+    ) -> Result<RabbitMessage, Box<dyn std::error::Error + Send + Sync>> {
         let message = String::from_utf8_lossy(&delivery.data);
         let parsed_message: RabbitMessage = from_str(&message)
             .map_err(|e| format!("Error al deserializar el mensaje: {:?}", e))?;

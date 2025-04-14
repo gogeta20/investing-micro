@@ -14,5 +14,25 @@ consumer-restart: consumer-down consumer-up
 in-rust-consumer:
 	docker exec -it $(R) /bin/bash
 
+rust-check:
+	docker exec -it $(R) /bin/bash -c "cd /app/src && cargo check"
+
+rust-lint:
+	docker exec -it $(R) /bin/bash -c "cd /app/src && cargo clippy"
+
+build-rust-consumer:
+	docker exec -it $(R) /bin/bash -c "cd /app/src && cargo build --release"
+
+rust-pwd:
+	docker exec -it $(R) /bin/bash -c "cd /app && pwd"
+
+run-rust-consumer:
+	docker exec -it $(R) /app/rust_micro_app
+
 logs-consumer:
 	docker logs $(R)
+
+rebuild-rust:
+	docker compose --env-file .env.local -f docker-compose.local.yml down rust_consumer
+	docker compose --env-file .env.local -f docker-compose.local.yml build rust_consumer
+	docker compose --env-file .env.local -f docker-compose.local.yml up -d rust_consumer

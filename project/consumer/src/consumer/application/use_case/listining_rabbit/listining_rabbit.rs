@@ -3,7 +3,7 @@ use crate::consumer::application::use_case::sync_db::new_item::NewItem;
 use crate::consumer::domain::models::{RabbitMessage};
 use crate::consumer::infrastructure::rabbit::RabbitConsumer;
 
-pub async fn start() -> Result<(), Box<dyn Error>> {
+pub async fn start() -> Result<(), Box<dyn Error + Send + Sync>> {
     match RabbitConsumer::new("messages").await {
         Ok(rabbit) => {
             match rabbit.start_consuming().await {
@@ -23,7 +23,7 @@ pub async fn start() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-async fn launch_case_use(event: Result<RabbitMessage, Box<dyn Error>>) {
+async fn launch_case_use(event: Result<RabbitMessage, Box<dyn Error + Send + Sync>>) {
     match event {
         Ok(rabbit_message) => {
             if rabbit_message.eventId == "PokemonCreate" {

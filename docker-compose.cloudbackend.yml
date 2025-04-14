@@ -7,16 +7,20 @@ services:
       dockerfile: devops/dockerfiles/broker/Consumer.Dockerfile
     container_name: rust_consumer
     environment:
-      AMQP_ADDR: "amqp://admin:your_password@rabbitmq:5672/%2f"
+      AMQP_ADDR:  ${AMQP_ADDR}
       OPENSSL_DIR: "/usr"
+      MONGO_DB_URL:  ${MONGO_DB_URL}
+      MONGO_DB_NAME_INTENTS:  ${MONGO_DB_NAME_INTENTS}
     volumes:
       - ./project/consumer:/app/src
-    # depends_on:
-    #     rabbitmq:
-    #         condition: service_healthy
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     networks:
       - app_network
-    restart: always
+    ports:
+      - "9080:9080"
+    # restart: always
 
   symfony_backend:
     build:

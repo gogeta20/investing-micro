@@ -13,7 +13,7 @@ J=jenkins_micro
 R=rust_consumer
 C=certbot
 LOCAL=--env-file $(ENV_LOCAL) -f docker-compose.local.yml --profile local
-BACKENDCLOUD=--env-file $(ENV_CLOUDBACKEND) -f docker-compose.cloudbackend.yml --profile local
+BACKENDCLOUD=--env-file $(ENV_CLOUDBACKEND) -f docker-compose.cloudbackend.yml
 ENV_FILE?=.env
 
 include devops/mk/*.mk
@@ -55,6 +55,6 @@ down-cloud-backend:
 	$(COMPOSE) $(BACKENDCLOUD) down
 
 build-cloud-backend:
-	$(COMPOSE) -f $(BACKENDCLOUD) build --no-cache
+	$(COMPOSE) $(BACKENDCLOUD) build --no-cache
 
 restart: down up

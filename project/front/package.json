@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "vite --host",
         "build": "vite build",
-        "build-github": "vite build --mode production && cp dist/index.html dist/404.html",
+        "build-github": "vite build --mode cloudbackend && cp dist/index.html dist/404.html",
         "stg": "vite --host --mode staging",
         "pro": "vite --host --mode production",
         "extranet": "vite --host --mode extranet"

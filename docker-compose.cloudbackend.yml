@@ -4,7 +4,7 @@ services:
   rust_consumer:
     build:
       context: .
-      dockerfile: devops/dockerfiles/broker/Consumer.Dockerfile
+      dockerfile: devops/dockerfiles/broker/ConsumerCloud.Dockerfile
     container_name: rust_consumer
     environment:
       AMQP_ADDR:  ${AMQP_ADDR}

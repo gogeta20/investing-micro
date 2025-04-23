@@ -55,6 +55,8 @@ project/consumer/target/release/.cargo-lock
 project/consumer/target/release/rabbit_consumer.d
 project/consumer/target/.rustc_info.json
 project/consumer/target/CACHEDIR.TAG
+!project/consumer/target/release/rust_micro_app
+
 **/out/
 *.class
 *.jar

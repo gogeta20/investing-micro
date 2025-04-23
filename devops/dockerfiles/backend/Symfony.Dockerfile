@@ -1,41 +1,54 @@
 FROM php:8.2-fpm
 
+# ------------------------------
+# ENV & ARG
+# ------------------------------
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ARG MICRO_ENV=production
+ENV MICRO_ENV=${MICRO_ENV}
 
+# ------------------------------
+# Dependencias generales
+# ------------------------------
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev \
     unzip \
     git \
     curl \
-    vim \
     librabbitmq-dev \
-    libssl-dev \
-    && pecl install amqp \
-    && docker-php-ext-enable amqp \
-    && pecl install mongodb \
-    && docker-php-ext-enable mongodb
+    libssl-dev
 
-RUN docker-php-ext-install pdo pdo_mysql zip
+# ------------------------------
+# Extensiones PHP
+# ------------------------------
+RUN pecl install amqp && docker-php-ext-enable amqp \
+    && pecl install mongodb && docker-php-ext-enable mongodb \
+    && docker-php-ext-install pdo pdo_mysql zip
 
+# ------------------------------
+# Condicional: solo en entorno local
+# ------------------------------
+RUN if [ "$MICRO_ENV" = "local" ]; then \
+    apt-get install -y vim && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug ; \
+    fi
+
+# ------------------------------
+# Composer
+# ------------------------------
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-
+# ------------------------------
+# Proyecto Symfony
+# ------------------------------
 WORKDIR /var/www/html
 
-# COPY . .
-RUN pwd
-# RUN ls -la ./project/backend/symfony/
 COPY ./project/backend/symfony/ .
-COPY ./project/backend/symfony/composer.json ./
-RUN ls -la
 
-RUN mkdir -p /var/www/html/var/cache
-RUN mkdir -p /var/www/html/var/log
-RUN chown -R www-data:www-data /var/www/html/var/cache /var/www/html/var/log
-RUN #chmod +x /var/www/html/entrypoint.sh
+RUN mkdir -p var/cache var/log \
+    && chown -R www-data:www-data var/cache var/log
 
 EXPOSE 9000
 

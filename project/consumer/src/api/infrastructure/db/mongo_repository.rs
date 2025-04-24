@@ -15,8 +15,8 @@ pub struct MongoRepository {
 impl MongoRepository {
     pub async fn new(collection_name: &str, database_name: &str) -> Self {
         dotenv().ok();
-        let connection_string = "mongodb://root:password@mongo_db:27017";
-        // let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
+        let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
+        // let connection_string = "mongodb://root:password@mongo_db:27017";
         let client_options = ClientOptions::parse(connection_string).await.expect("Error conectando a MongoDB");
         let client = Client::with_options(client_options).expect("Error creando cliente MongoDB");
         let db = client.database(database_name);

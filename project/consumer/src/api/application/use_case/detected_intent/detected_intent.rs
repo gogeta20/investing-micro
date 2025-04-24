@@ -1,6 +1,8 @@
+use std::env;
 use actix_web::{web, HttpResponse, Responder};
 use serde::Deserialize;
 use bson::{doc, from_document};
+use dotenv::dotenv;
 use crate::api::infrastructure::db::mongo_repository::MongoRepository;
 use crate::api::domain::interface::imongo_repository::IMongoRepository;
 use crate::api::domain::models::conversation::ConversationDocument;
@@ -14,11 +16,14 @@ pub struct ConversationInput {
 }
 
 pub async fn start(payload: web::Json<ConversationInput>) -> impl Responder {
+    dotenv().ok();
     let input = payload.into_inner();
     println!("📌 Intent recibido: {}", input.intent);
     println!("📌 UUID Conversación: {}", input.uuid);
     println!("📌 Respuesta del usuario: {}", input.respuesta_usuario);
-
+    // let connection_string = "mongodb://root:password@mongo_db:27017";
+    let connection_string = env::var("MONGO_DB_URL").expect("MONGO_DB_URL no está configurada");
+    println!("📌 connection_string encontrado: {}", connection_string);
     let conversation_repo = MongoRepository::new("conversations_restaurant", "intents_db").await;
 
     let filter_conversation = doc! { "uuid": &input.uuid };

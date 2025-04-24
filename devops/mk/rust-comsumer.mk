@@ -36,3 +36,8 @@ rebuild-rust:
 	docker compose --env-file .env.local -f docker-compose.local.yml down rust_consumer
 	docker compose --env-file .env.local -f docker-compose.local.yml build rust_consumer
 	docker compose --env-file .env.local -f docker-compose.local.yml up -d rust_consumer
+
+upload-cloud:
+	rm -rf ~/rust_micro_app
+	docker cp rust_consumer:/app/rust_micro_app ~/rust_micro_app
+	scp -i ~/.ssh/google_compute_engine ~/rust_micro_app mau@34.60.193.103:/home/mau/binarios/

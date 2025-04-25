@@ -1,0 +1,8 @@
+[
+  { "frase": "hola", "intencion": "saludo" },
+  { "frase": "buenas", "intencion": "saludo" },
+  { "frase": "¿qué tal?", "intencion": "saludo" },
+  { "frase": "adiós", "intencion": "despedida" },
+  { "frase": "hasta luego", "intencion": "despedida" },
+  { "frase": "nos vemos", "intencion": "despedida" }
+]

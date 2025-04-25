@@ -5,6 +5,7 @@ VF=front_micro
 S=symfony_backend
 SB=springboot_backend
 DB=django_backend
+FB=fastapi_backend
 MYSQL=mysql_db
 M=mongo_db
 NG=nginx_proxy

@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Analysis localhost') {
             steps {
                 script {
                     sh '''
@@ -28,6 +28,7 @@ pipeline {
                 }
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 script {

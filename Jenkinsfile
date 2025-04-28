@@ -4,6 +4,8 @@ pipeline {
         stage('Build Symfony Backend') {
             steps {
                 script {
+                    sh 'docker compose -f docker-compose.test.yml down -d sonar'
+                    sh 'docker compose -f docker-compose.test.yml buil -d sonar'
                     sh 'docker compose -f docker-compose.test.yml up -d sonar'
                     sh 'docker compose -f docker-compose.test.yml up -d symfony_tests'
                     sh 'docker logs symfony_tests'

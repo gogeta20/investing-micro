@@ -4,8 +4,10 @@ pipeline {
         stage('Build Symfony Backend') {
             steps {
                 script {
+                    sh 'docker compose -f docker-compose.test.yml up -d sonar'
                     sh 'docker compose -f docker-compose.test.yml up -d symfony_tests'
                     sh 'docker logs symfony_tests'
+                    sh 'docker logs sonar'
                     sh 'docker ps -a'
                 }
             }
@@ -17,7 +19,7 @@ pipeline {
                     sonar-scanner \
                     -Dsonar.projectKey=symfony_project \
                     -Dsonar.sources=./project/backend/symfony \
-                    -Dsonar.host.url=http://localhost:9100 \
+                    -Dsonar.host.url=http://sonar:9000 \
                     -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47 \
                     '''
                 }

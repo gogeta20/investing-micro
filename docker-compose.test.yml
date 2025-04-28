@@ -17,7 +17,7 @@ services:
     environment:
       - "DOCKER_HOST=unix:///var/run/docker.sock"
     profiles:
-      - ci
+      - ci-main
     networks:
       - app_network
 
@@ -30,6 +30,8 @@ services:
       - ./project/backend/fastapi:/app
     working_dir: /app
     entrypoint: tail -f /dev/null
+    profiles:
+      - ci
     networks:
       - app_network
 
@@ -42,6 +44,8 @@ services:
       - ./project/backend/symfony:/var/www/html
     working_dir: /var/www/html
     entrypoint: tail -f /dev/null
+    profiles:
+      - ci
     networks:
       - app_network
 
@@ -59,7 +63,7 @@ services:
     depends_on:
       - sonar_db
     profiles:
-      - ci
+      - ci-main
     networks:
       - app_network
 
@@ -72,6 +76,8 @@ services:
       POSTGRES_DB: sonar
     volumes:
       - ./devops/volumes/sonar/postgres:/var/lib/postgresql/data
+    profiles:
+      - ci-main
     networks:
       - app_network
 

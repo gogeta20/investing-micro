@@ -4,8 +4,8 @@ pipeline {
         stage('Build Symfony Backend') {
             steps {
                 script {
-                    sh 'docker compose -f docker-compose.test.yml up -d symfony_tests'
-                    sh 'docker logs symfony_tests'
+                    sh 'docker compose -f docker-compose.extra.yml up -d symfony_backend'
+                    sh 'docker logs symfony_backend'
                     sh 'docker ps -a'
                 }
             }
@@ -69,8 +69,8 @@ pipeline {
           steps {
               script {
                   sh '''
-                  docker compose -f docker-compose.test.yml up -d fastapi_tests
-                  docker exec fastapi_tests pytest tests/
+                  docker compose -f docker-compose.test.yml up -d chatbot_tests
+                  docker exec chatbot_tests pytest tests/
                   docker compose -f docker-compose.test.yml down
                   '''
               }

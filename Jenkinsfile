@@ -14,6 +14,20 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    sh '''
+                    sonar-scanner \
+                    -Dsonar.projectKey=symfony_project \
+                    -Dsonar.sources=./project/backend/symfony \
+                    -Dsonar.host.url=http://localhost:9100 \
+                    -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47 \
+                    '''
+                }
+            }
+        }
         stage('SonarQube Analysis') {
             steps {
                 script {

@@ -15,22 +15,36 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis localhost') {
+        // stage('SonarQube Analysis localhost') {
+        //     steps {
+        //         script {
+        //             sh '''
+        //             # Esperar a que Sonar esté listo
+        //             until curl -s http://localhost:9100/api/system/health | grep -q '"status":"UP"'; do
+        //               echo "Waiting for SonarQube to be up..."
+        //               sleep 5
+        //             done
+
+        //             # Ahora sí lanzar el análisis
+        //             sonar-scanner \
+        //               -Dsonar.projectKey=symfony_project \
+        //               -Dsonar.sources=./project/backend/symfony \
+        //               -Dsonar.host.url=http://localhost:9100 \
+        //               -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47
+        //             '''
+        //         }
+        //     }
+        // }
+
+        stage('SonarQube Analysis test') {
             steps {
                 script {
                     sh '''
-                    # Esperar a que Sonar esté listo
-                    until curl -s http://localhost:9100/api/system/health | grep -q '"status":"UP"'; do
-                      echo "Waiting for SonarQube to be up..."
-                      sleep 5
-                    done
-
-                    # Ahora sí lanzar el análisis
                     sonar-scanner \
-                      -Dsonar.projectKey=symfony_project \
-                      -Dsonar.sources=./project/backend/symfony \
-                      -Dsonar.host.url=http://localhost:9100 \
-                      -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47
+                    -Dsonar.projectKey=symfony_project \
+                    -Dsonar.sources=./project/backend/symfony \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47 \
                     '''
                 }
             }

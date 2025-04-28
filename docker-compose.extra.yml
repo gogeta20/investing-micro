@@ -18,7 +18,7 @@ services:
         profiles:
             - ci
         networks:
-            - app_network
+            - app_network_test
 
     front_micro:
         build:
@@ -33,7 +33,7 @@ services:
         profiles:
             - project
         networks:
-            - app_network
+            - app_network_test
 
     symfony_backend:
         build:
@@ -48,7 +48,7 @@ services:
         command: >
             sh -c "composer clear-cache && composer install && php-fpm"
         networks:
-            - app_network
+            - app_network_test
         profiles:
             - project
         extra_hosts:
@@ -71,7 +71,7 @@ services:
         profiles:
             - ci
         networks:
-            - app_network
+            - app_network_test
 
     # Base de datos para SonarQube
     sonar_db:
@@ -84,7 +84,7 @@ services:
         volumes:
             - ./devops/volumes/sonar/postgres:/var/lib/postgresql/data
         networks:
-            - app_network
+            - app_network_test
 
     # mailhog:
     #     image: mailhog/mailhog
@@ -134,5 +134,5 @@ services:
     #         - app_network
 
 networks:
-    app_network:
+    app_network_test:
         driver: bridge

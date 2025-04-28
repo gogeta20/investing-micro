@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker compose -f docker-compose.test.yml down sonar'
-                    sh 'docker compose -f docker-compose.test.yml buil sonar'
+                    sh 'docker compose -f docker-compose.test.yml build sonar'
                     sh 'docker compose -f docker-compose.test.yml up -d sonar'
                     sh 'docker compose -f docker-compose.test.yml up -d symfony_tests'
                     sh 'docker logs symfony_tests'

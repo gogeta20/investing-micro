@@ -19,7 +19,7 @@ services:
     profiles:
       - ci-main
     networks:
-      - app_network
+      - app_network_test
 
   fastapi_tests:
     build:
@@ -33,7 +33,7 @@ services:
     profiles:
       - ci
     networks:
-      - app_network
+      - app_network_test
 
   symfony_tests:
     build:
@@ -47,7 +47,7 @@ services:
     profiles:
       - ci
     networks:
-      - app_network
+      - app_network_test
 
   sonar:
     build:
@@ -65,7 +65,7 @@ services:
     profiles:
       - ci-main
     networks:
-      - app_network
+      - app_network_test
 
   sonar_db:
     image: postgres:15
@@ -79,8 +79,8 @@ services:
     profiles:
       - ci-main
     networks:
-      - app_network
+      - app_network_test
 
 networks:
-  app_network:
+  app_network_test:
     driver: bridge

@@ -86,7 +86,7 @@ pipeline {
                     -Dsonar.projectKey=fastapi_project \
                     -Dsonar.sources=project/backend/fastapi \
                     -Dsonar.host.url=http://sonar:9000 \
-                    -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47 \
+                    -Dsonar.login=sqa_7dd9b8e0d1ba25992c8c270c300caf15f3318746 \
                   '''
               }
           }

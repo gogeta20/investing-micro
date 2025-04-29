@@ -4,8 +4,8 @@ pipeline {
         stage('Build Symfony Backend') {
             steps {
                 script {
-                    sh 'docker compose -f docker-compose.extra.yml up -d symfony_backend'
-                    sh 'docker logs symfony_backend'
+                    sh 'docker compose -f docker-compose.test.yml up -d symfony_tests'
+                    sh 'docker logs symfony_tests'
                     sh 'docker ps -a'
                 }
             }
@@ -18,52 +18,79 @@ pipeline {
                     -Dsonar.projectKey=symfony_project \
                     -Dsonar.sources=./project/backend/symfony \
                     -Dsonar.host.url=http://sonar:9000 \
-                    -Dsonar.login=squ_077ab16d273236b5ce68c2a830e72efcd7f48c47 \
+                    -Dsonar.login=sqa_7dd9b8e0d1ba25992c8c270c300caf15f3318746 \
                     '''
                 }
             }
         }
-        stage('Package Symfony Backend') {
+        // stage('Package Symfony Backend') {
+        //   steps {
+        //       script {
+        //           sh 'docker compose -f docker-compose.extra.yml down'
+        //           def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+        //           env.APP_VERSION = version
+        //           sh """
+        //           mkdir -p artifacts
+        //           tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
+        //               --exclude=vendor --exclude=var --exclude=node_modules \
+        //               project/backend/symfony
+        //           """
+        //           archiveArtifacts artifacts: "artifacts/symfony_backend_${env.APP_VERSION}.tar.gz", fingerprint: true
+        //       }
+        //   }
+        // }
+
+        // stage('Upload to S3') {
+        //   steps {
+        //     script {
+        //       withCredentials([
+        //           string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
+        //           string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
+        //       ])
+        //       {
+        //         def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+        //         env.APP_VERSION = version
+        //         sh """
+        //         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        //         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        //         mkdir -p artifacts
+        //         tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
+        //             --exclude=vendor --exclude=var --exclude=node_modules \
+        //             project/backend/symfony
+
+        //         aws s3 cp artifacts/symfony_backend_${env.APP_VERSION}.tar.gz s3://cubo-micro/
+        //         """
+        //       }
+        //     }
+        //   }
+        // }
+
+      //   stage('Test Chatbot FastAPI') {
+      //     steps {
+      //         script {
+      //             sh '''
+      //             docker compose -f docker-compose.test.yml up -d fastapi_tests
+      //             docker exec fastapi_tests ls -la
+      //             docker exec fastapi_tests pytest /app/tests
+      //             '''
+      //         }
+      //     }
+      // }
+
+      stage('SonarQube Analysis FastAPI') {
           steps {
               script {
-                  sh 'docker compose -f docker-compose.extra.yml down'
-                  def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
-                  env.APP_VERSION = version
-                  sh """
-                  mkdir -p artifacts
-                  tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
-                      --exclude=vendor --exclude=var --exclude=node_modules \
-                      project/backend/symfony
-                  """
-                  archiveArtifacts artifacts: "artifacts/symfony_backend_${env.APP_VERSION}.tar.gz", fingerprint: true
+                  sh '''
+                  sonar-scanner \
+                    -Dsonar.projectKey=fastapi_project \
+                    -Dsonar.sources=project/backend/fastapi \
+                    -Dsonar.host.url=http://sonar:9000 \
+                    -Dsonar.login=sqa_7dd9b8e0d1ba25992c8c270c300caf15f3318746 \
+                  '''
               }
           }
-        }
+      }
 
-        stage('Upload to S3') {
-          steps {
-            script {
-              withCredentials([
-                  string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
-                  string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
-              ])
-              {
-                def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
-                env.APP_VERSION = version
-                sh """
-                export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-                export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-                mkdir -p artifacts
-                tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
-                    --exclude=vendor --exclude=var --exclude=node_modules \
-                    project/backend/symfony
-
-                aws s3 cp artifacts/symfony_backend_${env.APP_VERSION}.tar.gz s3://cubo-micro/
-                """
-              }
-            }
-          }
-        }
     }
     post {
         // always {

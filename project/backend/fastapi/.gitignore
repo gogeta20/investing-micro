@@ -19,3 +19,7 @@ venv/
 # IDEs
 .vscode/
 .idea/
+
+# Modelos generados
+model/*.joblib
+

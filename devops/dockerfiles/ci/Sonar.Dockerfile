@@ -1,6 +1,7 @@
-FROM sonarqube:latest
+# FROM sonarqube:latest
+# EXPOSE 9100
+# WORKDIR /opt/sonarqube
 
-# Exponer los puertos predeterminados de SonarQube
-EXPOSE 9100
-# Directorio de trabajo
+FROM sonarqube:9.9.3-community
+EXPOSE 9000
 WORKDIR /opt/sonarqube

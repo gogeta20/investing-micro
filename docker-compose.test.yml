@@ -1,0 +1,86 @@
+version: '3.9'
+
+services:
+  jenkins_micro:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/ci/Jenkins.Dockerfile
+    container_name: jenkins_micro
+    user: root
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - ./conf/jenkins/files:/var/home/files
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./devops/volumes/jenkins:/var/jenkins_home:z
+    environment:
+      - "DOCKER_HOST=unix:///var/run/docker.sock"
+    profiles:
+      - ci-main
+    networks:
+      - app_network_test
+
+  fastapi_tests:
+    build:
+      context: .
+      dockerfile: devops/test/Dockerfile.fastapi.test
+    container_name: fastapi_tests
+    volumes:
+      - ./project/backend/fastapi:/app
+    # working_dir: /app
+    entrypoint: tail -f /dev/null
+    profiles:
+      - ci
+    networks:
+      - app_network_test
+
+  symfony_tests:
+    build:
+      context: .
+      dockerfile: devops/test/Dockerfile.symfony.test
+    container_name: symfony_tests
+    volumes:
+      - ./project/backend/symfony:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: tail -f /dev/null
+    profiles:
+      - ci
+    networks:
+      - app_network_test
+
+  sonar:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/ci/Sonar.Dockerfile
+    container_name: sonar
+    ports:
+      - "9100:9000"
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://sonar_db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+    depends_on:
+      - sonar_db
+    profiles:
+      - ci-main
+    networks:
+      - app_network_test
+
+  sonar_db:
+    image: postgres:15
+    container_name: sonar_db
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+      POSTGRES_DB: sonar
+    volumes:
+      - ./devops/volumes/sonar/postgres:/var/lib/postgresql/data
+    profiles:
+      - ci-main
+    networks:
+      - app_network_test
+
+networks:
+  app_network_test:
+    driver: bridge

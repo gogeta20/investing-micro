@@ -23,47 +23,47 @@ pipeline {
                 }
             }
         }
-        stage('Package Symfony Backend') {
-          steps {
-              script {
-                  sh 'docker compose -f docker-compose.extra.yml down'
-                  def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
-                  env.APP_VERSION = version
-                  sh """
-                  mkdir -p artifacts
-                  tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
-                      --exclude=vendor --exclude=var --exclude=node_modules \
-                      project/backend/symfony
-                  """
-                  archiveArtifacts artifacts: "artifacts/symfony_backend_${env.APP_VERSION}.tar.gz", fingerprint: true
-              }
-          }
-        }
+        // stage('Package Symfony Backend') {
+        //   steps {
+        //       script {
+        //           sh 'docker compose -f docker-compose.extra.yml down'
+        //           def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+        //           env.APP_VERSION = version
+        //           sh """
+        //           mkdir -p artifacts
+        //           tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
+        //               --exclude=vendor --exclude=var --exclude=node_modules \
+        //               project/backend/symfony
+        //           """
+        //           archiveArtifacts artifacts: "artifacts/symfony_backend_${env.APP_VERSION}.tar.gz", fingerprint: true
+        //       }
+        //   }
+        // }
 
-        stage('Upload to S3') {
-          steps {
-            script {
-              withCredentials([
-                  string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
-                  string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
-              ])
-              {
-                def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
-                env.APP_VERSION = version
-                sh """
-                export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-                export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-                mkdir -p artifacts
-                tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
-                    --exclude=vendor --exclude=var --exclude=node_modules \
-                    project/backend/symfony
+        // stage('Upload to S3') {
+        //   steps {
+        //     script {
+        //       withCredentials([
+        //           string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
+        //           string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
+        //       ])
+        //       {
+        //         def version = sh(script: "grep VERSION .env | cut -d '=' -f2", returnStdout: true).trim()
+        //         env.APP_VERSION = version
+        //         sh """
+        //         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+        //         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+        //         mkdir -p artifacts
+        //         tar -czf artifacts/symfony_backend_${env.APP_VERSION}.tar.gz \
+        //             --exclude=vendor --exclude=var --exclude=node_modules \
+        //             project/backend/symfony
 
-                aws s3 cp artifacts/symfony_backend_${env.APP_VERSION}.tar.gz s3://cubo-micro/
-                """
-              }
-            }
-          }
-        }
+        //         aws s3 cp artifacts/symfony_backend_${env.APP_VERSION}.tar.gz s3://cubo-micro/
+        //         """
+        //       }
+        //     }
+        //   }
+        // }
 
         stage('Test Chatbot FastAPI') {
           steps {

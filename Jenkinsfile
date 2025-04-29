@@ -69,6 +69,8 @@ pipeline {
           steps {
               script {
                   sh '''
+                  docker compose -f docker-compose.test.yml down fastapi_tests
+                  docker compose -f docker-compose.test.yml build fastapi_tests
                   docker compose -f docker-compose.test.yml up -d fastapi_tests
                   docker exec fastapi_tests ls -la
                   docker exec fastapi_tests pytest /app/tests/

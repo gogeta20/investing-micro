@@ -77,4 +77,4 @@ project/consumer/target/CACHEDIR.TAG
 *.swp
 *~
 
-*.local
+.env.local

@@ -112,6 +112,8 @@ services:
       context: .
       dockerfile: devops/dockerfiles/backend/FastAPI.Dockerfile
     container_name: fastapi_backend
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
     ports:
       - "8100:8000"
     volumes:

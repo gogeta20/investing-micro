@@ -76,3 +76,5 @@ project/consumer/target/CACHEDIR.TAG
 # Archivos temporales del sistema
 *.swp
 *~
+
+*.local

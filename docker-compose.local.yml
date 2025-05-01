@@ -119,7 +119,7 @@ services:
     volumes:
       - ./project/backend/fastapi:/app
     profiles:
-      - testing
+      - local
     networks:
       - app_network
 

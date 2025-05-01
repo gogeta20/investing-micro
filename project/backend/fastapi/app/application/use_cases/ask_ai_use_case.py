@@ -14,7 +14,7 @@ class AskAIUseCase:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "user", "content": "¿Qué modelo eres?"}
+                    {"role": "user", "content": message}
                 ]
             )
 

@@ -34,6 +34,25 @@ fastapi-install-requirements:
 fastapi-pip: # make fastapi-pip f=kaggle
 	docker exec -it $(FB) pip install $(f)
 
+# Instala un paquete y recompila requirements.txt
+# make pip-add p=python-dotenv
+# make pip-install
+pip-add:
+	docker exec -it $(FB) sh -c "echo '$(p)' >> requirements.in && pip-compile requirements.in && pip install -r requirements.txt"
+
+# Instala todo desde el .txt
+pip-install:
+	docker exec -it $(FB) pip install -r requirements.txt
+
+# Actualiza todas las versiones
+pip-upgrade:
+	docker exec -it $(FB) pip-compile --upgrade
+
+# Inspecciona lo que hay instalado (opcional)
+pip-freeze:
+	docker exec -it $(FB) pip freeze
+
+
 fastapi-migrations:
 	docker exec -it $(FB) python manage.py makemigrations
 

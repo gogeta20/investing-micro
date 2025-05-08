@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fastapi
-        image: linuxlite20/fastapi-chatbot:0.0.2
+        image: linuxlite20/fastapi-chatbot:metrics-v1
         ports:
         - containerPort: 8000
         envFrom:

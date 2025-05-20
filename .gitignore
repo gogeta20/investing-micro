@@ -8,7 +8,7 @@
 **/node_modules/
 **/.pnpm-store/
 **/.vite/
-**/pnpm-lock.yaml
+# **/pnpm-lock.yaml
 
 # Dependencias de PHP (Symfony)
 **/vendor/

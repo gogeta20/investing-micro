@@ -1,0 +1,25 @@
+from myproject.core.application.UseCase.GetResultsPortafolio import GetResultsPortafolioQuery
+from myproject.core.application.UseCase.GetResultsPortafolio.GetResultsPortafolio import GetResultsPortfolio
+from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLService
+from myproject.shared.domain.bus.query.query_handler import QueryHandler
+from myproject.shared.domain.response import BaseResponse
+
+class GetResultsPortafolioQueryHandler(QueryHandler):
+    def __init__(self, use_case):
+        self.use_case = use_case
+
+    def handle(self, query: GetResultsPortafolioQuery):
+        result = self.use_case.execute(query)
+        return BaseResponse(
+            data={
+                "result": result
+            },
+            message="success request",
+            status=200
+        ).to_dict()
+
+    @classmethod
+    def create(cls):
+        mysql_service = MySQLService()
+        use_case = GetResultsPortfolio(mysql_service)
+        return cls(use_case)

@@ -1,8 +1,5 @@
 from django.http import JsonResponse
-
-from myproject.core.application.UseCase.Stock.GetStock import GetStock
 from myproject.core.application.UseCase.Stock.GetStockQuery import GetStockQuery
-from myproject.core.application.UseCase.Stock.GetStockQueryHandler import GetStockQueryHandler
 from myproject.shared.application.handlers.handlers import get_handler
 from myproject.shared.infrastructure.bus.query_bus import QueryBus
 from myproject.shared.infrastructure.controller.api_controller import ApiController

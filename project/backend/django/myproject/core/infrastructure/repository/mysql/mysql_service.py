@@ -11,7 +11,8 @@ class MySQLService:
             password=settings.DATABASES['default']['PASSWORD'],
             db=settings.DATABASES['default']['NAME'],
             charset='utf8mb4',
-            cursorclass=DictCursor
+            cursorclass=DictCursor,
+            autocommit=True
         )
         self.cursor = self.connection.cursor()
 
@@ -23,6 +24,21 @@ class MySQLService:
     def execute_query(self, query):
         self.cursor.execute(query)
         return self.cursor.fetchall()
+
+    def execute_query_params(self, query, params=None):
+        """Ejecuta SELECT o INSERT/UPDATE/DELETE"""
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, params or ())
+            # Si es SELECT → devuelve datos
+            if query.strip().lower().startswith("select"):
+                return cursor.fetchall()
+            else:
+                return cursor.lastrowid
+
+    def fetch_one(self, query, params=None):
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, params or ())
+            return cursor.fetchone()
 
     def list_views(self):
         query = """

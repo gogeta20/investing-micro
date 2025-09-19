@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pokemondb',
+        'NAME': 'investing_micro_db',
         'USER': 'user',
         'PASSWORD': 'password',
-        # 'HOST': 'mysql_db',  # Nombre del contenedor
-        'HOST': '34.45.214.187',  # Nombre del contenedor
+        'HOST': 'mysql_db',  # Nombre del contenedor
+        # 'HOST': '34.45.214.187',  # external ip google
         'PORT': 3306,
     },
     'secondary': {
@@ -93,14 +93,14 @@ DATABASES = {
     }
 }
 
-MONGO_DB_SETTINGS = {
-    'HOST': '34.45.214.187',
-    # 'HOST': 'mongo_db',
-    'PORT': 27017,
-    'DB_NAME': 'pokemondb',
-    'USERNAME': 'root',
-    'PASSWORD': 'password',
-}
+# MONGO_DB_SETTINGS = {
+#     'HOST': '34.45.214.187',
+#     # 'HOST': 'mongo_db',
+#     'PORT': 27017,
+#     'DB_NAME': 'investing_micro_db',
+#     'USERNAME': 'root',
+#     'PASSWORD': 'password',
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

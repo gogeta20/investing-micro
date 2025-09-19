@@ -47,7 +47,8 @@ down-local:
 	$(COMPOSE) $(LOCAL) down
 
 build-local:
-	$(COMPOSE) -f $(LOCAL) build --no-cache
+	$(COMPOSE) -f $(LOCAL) build --build-arg MICRO_ENV=local --no-cache
+#     docker compose build --build-arg MICRO_ENV=local nginx_proxy
 
 up-cloud-backend:
 	$(COMPOSE) $(BACKENDCLOUD) up -d

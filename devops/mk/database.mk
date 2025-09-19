@@ -25,12 +25,12 @@ mysql-update:
 	@echo "Updating database..."
 	@for file in $$(ls conf/mysql/db/files/sql/migrations/*.sql | sort); do \
 		echo "Executing $$file..."; \
-		docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/migrations/'$$(basename $$file); \
+		docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/migrations/'$$(basename $$file); \
 	done
 
 mysql-reset:
 	@echo "Resetting database..."
-	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/00_reset.sql'
+	docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/00_reset.sql'
 
 mysql-init: mysql-reset mysql-update
 
@@ -40,9 +40,7 @@ mysql-migrate:
 		exit 1; \
 	fi
 	@echo "Executing migration V$(v)..."
-	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/migrations/V$(v).sql'
-# docker exec  mysql_db  sh -c 'mysql -u user -ppassword my_database < /var/www/html/sql/migrations/V1_base_tables.sql'
-
+	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/migrations/V$(v).sql'
 
 # Para ejecutar un seed específico
 mysql-seed:
@@ -51,7 +49,7 @@ mysql-seed:
 		exit 1; \
 	fi
 	@echo "Executing seed S$(s)..."
-	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword my_database < /var/www/html/sql/seeds/S$(s).sql'
+	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/seeds/S$(s).sql'
 
 # Para revertir una migración específica
 mysql-rollback:

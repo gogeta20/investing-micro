@@ -19,3 +19,4 @@ cryptography
 
 docker~=7.1.0
 django-cors-headers
+yfinance>=0.2.37

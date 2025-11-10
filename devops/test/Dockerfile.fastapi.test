@@ -1,0 +1,9 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+COPY project/backend/fastapi /app
+# COPY ./project/backend/fastapi/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install pytest
+
+# No COPY de código. Se monta por volumen.

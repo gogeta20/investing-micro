@@ -23,10 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+l-+%=1!1pri1*b&6z)s3&ol+&u#gz4_zawu(^ty1kw7#z_81o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*", "django-aws.duckdns.org", "13.61.198.98"]
 
 # Application definition
 
@@ -45,12 +46,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -79,11 +80,19 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pokemondb',
+        'NAME': 'investing_micro_db',
         'USER': 'user',
         'PASSWORD': 'password',
         'HOST': 'mysql_db',  # Nombre del contenedor
+        # 'HOST': '34.45.214.187',  # external ip google
         'PORT': 3306,
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES', character_set_connection=utf8mb4, collation_connection=utf8mb4_unicode_ci",
+            'charset': 'utf8mb4',
+            'connect_timeout': 10,
+            'read_timeout': 30,
+            'write_timeout': 30,
+        },
     },
     'secondary': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -91,13 +100,14 @@ DATABASES = {
     }
 }
 
-MONGO_DB_SETTINGS = {
-    'HOST': 'mongo_db',
-    'PORT': 27017,
-    'DB_NAME': 'pokemondb',
-    'USERNAME': 'root',
-    'PASSWORD': 'password',
-}
+# MONGO_DB_SETTINGS = {
+#     'HOST': '34.45.214.187',
+#     # 'HOST': 'mongo_db',
+#     'PORT': 27017,
+#     'DB_NAME': 'investing_micro_db',
+#     'USERNAME': 'root',
+#     'PASSWORD': 'password',
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -142,4 +152,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://vue.localhost",
+    "http://django-aws.duckdns.org",
+    "http://symf-aws.duckdns.org",
+    "http://13.61.198.98",
+    "https://gogeta20.github.io",  # Ajusta con el dominio de GitHub Pages
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Permitir todas las solicitudes
+
+CORS_ALLOW_CREDENTIALS = True  # Permitir envío de cookies o credenciales

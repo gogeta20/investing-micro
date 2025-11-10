@@ -1,0 +1,14 @@
+[
+  { "frase": "hola", "intencion": "saludo" },
+  { "frase": "buenas", "intencion": "saludo" },
+  { "frase": "¿qué tal?", "intencion": "saludo" },
+  { "frase": "adiós", "intencion": "despedida" },
+  { "frase": "hasta luego", "intencion": "despedida" },
+  { "frase": "nos vemos", "intencion": "despedida" },
+  { "frase": "wiki", "intencion": "buscar_informacion" },
+  { "frase": "info", "intencion": "buscar_informacion" },
+  { "frase": "saber de", "intencion": "buscar_informacion" },
+  { "frase": "quiero informacion", "intencion": "buscar_informacion" },
+  { "frase": "algo sobre este tema", "intencion": "buscar_informacion" },
+  { "frase": "datos de", "intencion": "buscar_informacion" }
+]

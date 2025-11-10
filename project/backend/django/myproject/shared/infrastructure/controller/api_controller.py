@@ -34,6 +34,7 @@ class ApiController(APIView, ABC):
             return self._handle_exception(e)
 
     def _handle_exception(self, exception: Exception):
+        print(f"[DEBUG] {str(exception)}")
         exception_mappings = self.register_exceptions()
         status_code = exception_mappings.get(type(exception), 500)
         error_data = {

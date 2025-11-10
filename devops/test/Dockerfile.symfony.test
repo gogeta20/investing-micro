@@ -1,0 +1,15 @@
+FROM php:8.2-cli
+
+# Instalamos extensiones necesarias para Symfony (ajustable a tu setup)
+RUN apt-get update && apt-get install -y \
+  git unzip zip libicu-dev libonig-dev libxml2-dev \
+  && docker-php-ext-install intl pdo pdo_mysql
+
+# Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# Instalamos phpunit
+RUN curl -LsS https://phar.phpunit.de/phpunit-10.phar -o /usr/local/bin/phpunit && \
+  chmod +x /usr/local/bin/phpunit

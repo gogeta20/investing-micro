@@ -1,0 +1,98 @@
+version: '3.9'
+
+services:
+  rust_consumer:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/broker/ConsumerCloud.Dockerfile
+    container_name: rust_consumer
+    environment:
+      AMQP_ADDR:  ${AMQP_ADDR}
+      OPENSSL_DIR: "/usr"
+      MONGO_DB_URL:  ${MONGO_DB_URL}
+      MONGO_DB_NAME_INTENTS:  ${MONGO_DB_NAME_INTENTS}
+    volumes:
+      - ./project/consumer:/app/src
+    # depends_on:
+    #   rabbitmq:
+    #     condition: service_healthy
+    networks:
+      - app_network
+    ports:
+      - "9080:9080"
+    # restart: always
+
+  symfony_backend:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
+    container_name: symfony_backend
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./project/backend/symfony:/var/www/html
+      # - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
+    command: >
+      sh -c "composer install && php-fpm"
+    networks:
+      - app_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  django_backend:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/backend/Django.Dockerfile
+    container_name: django_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./project/backend/django:/app:z
+      - ./conf/django/data:/app/data:z
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app_network
+
+  nginx_proxy:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/proxy/Nginx.Dockerfile
+      args:
+        MICRO_ENV: ${MICRO_ENV}
+    container_name: nginx_proxy
+    #    volumes:
+    #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+    volumes:
+      - ./conf/nginx:/src
+      - ./conf/nginx/certs:/etc/nginx/ssl
+      - ./conf/nginx/cerbot:/usr/share/nginx/html
+      - ./conf/nginx/letsencrypt:/usr/share/nginx/html
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - symfony_backend
+      - django_backend
+      # - rust_consumer
+    networks:
+      - app_network
+
+  certbot:
+    build:
+      context: .
+      dockerfile: devops/dockerfiles/proxy/Certbot.Dockerfile
+    container_name: certbot
+    volumes:
+      - ./conf/nginx/cerbot:/var/www/html
+      - ./conf/nginx/letsencrypt:/etc/letsencrypt:z
+    profiles:
+      - https
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --quiet; done;'"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+# en cloud google codigo mau

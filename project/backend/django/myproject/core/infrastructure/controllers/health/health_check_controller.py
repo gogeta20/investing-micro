@@ -1,6 +1,3 @@
-from abc import ABC
-from pprint import pprint
-
 from django.http import JsonResponse
 
 from myproject.core.application.UseCase.HealthCheck.HealthCheckQueryHandler import HealthCheckQueryHandler

@@ -1,0 +1,138 @@
+version: '3.9'
+
+services:
+    jenkins_micro:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/ci/Jenkins.Dockerfile
+        container_name: jenkins_micro
+        user: root
+        ports:
+            - "8081:8080"
+            - "50000:50000"
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./devops/volumes/jenkins:/var/jenkins_home:z
+        environment:
+            - "DOCKER_HOST=unix:///var/run/docker.sock"
+        profiles:
+            - ci
+        networks:
+            - app_network
+
+    front_micro:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/frontend/Vue.Dockerfile
+        container_name: front_micro
+        ports:
+            - "5173:5173"
+        entrypoint: [ "/app/entrypoint.sh" ]
+        volumes:
+            - ./project/front:/app
+        profiles:
+            - project
+        networks:
+            - app_network
+
+    symfony_backend:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
+        container_name: symfony_backend
+        ports:
+            - "9000:9000"
+        # volumes:
+            # - ./project/backend/symfony:/var/www/html
+            # - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
+        command: >
+            sh -c "composer clear-cache && composer install && php-fpm"
+        networks:
+            - app_network
+        profiles:
+            - project
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    # SonarQube Server
+    sonar:
+        build:
+            context: .
+            dockerfile: devops/dockerfiles/ci/Sonar.Dockerfile
+        container_name: sonar
+        ports:
+            - "9100:9000"
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://sonar_db:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar
+        depends_on:
+            - sonar_db
+        profiles:
+            - ci
+        networks:
+            - app_network
+
+    # Base de datos para SonarQube
+    sonar_db:
+        image: postgres:15
+        container_name: sonar_db
+        environment:
+            POSTGRES_USER: sonar
+            POSTGRES_PASSWORD: sonar
+            POSTGRES_DB: sonar
+        volumes:
+            - ./devops/volumes/sonar/postgres:/var/lib/postgresql/data
+        networks:
+            - app_network
+
+    # mailhog:
+    #     image: mailhog/mailhog
+    #     container_name: mailhog_micro
+    #     ports:
+    #         - "8025:8025"  # Interfaz web
+    #         - "1025:1025"  # Puerto SMTP
+    #     networks:
+    #         - app_network
+
+    # nocodb:
+    #     image: nocodb/nocodb:latest
+    #     container_name: nocodb_micro
+    #     ports:
+    #         - "8082:8080"
+    #     environment:
+    #         - NC_DB_TYPE=mysql  # Cambiado a mysql
+    #         - NC_DB_HOST=mysql_db_micro  # Nombre del contenedor de MySQL
+    #         - NC_DB_PORT=3306  # Puerto de MySQL
+    #         - NC_DB_USER=user
+    #         - NC_DB_PASSWORD=password
+    #         - NC_DB_NAME=my_database
+    #         - NC_AUTH_JWT_SECRET=gbcv123M
+    #     depends_on:
+    #         - mysql_db
+    #     restart: always
+    #     volumes:
+    #         - ./devops/volumes/nocodb:/usr/app/data:z
+    #     networks:
+    #         - app_network
+
+    # chartdb:
+    #     image: ghcr.io/chartdb/chartdb:latest
+    #     container_name: chartdb
+    #     environment:
+    #         - DB_TYPE=mysql
+    #         - DB_HOST=mysql_db
+    #         - DB_PORT=3306
+    #         - DB_USER=user
+    #         - DB_PASSWORD=password
+    #         - DB_NAME=my_database
+    #     ports:
+    #         - "8083:80"
+    #     depends_on:
+    #         - mysql_db
+    #     networks:
+    #         - app_network
+
+networks:
+    app_network:
+        driver: bridge

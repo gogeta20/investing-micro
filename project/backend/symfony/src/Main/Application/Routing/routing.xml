@@ -31,6 +31,39 @@
 		controller="App\Main\Infrastructure\Controller\Pokemon\Post\CreatePokemonController">
 	</route>
 
+<!-- creacion del pago -->
+  <route
+		id="paypal_pay"
+		path="/payments/paypal"
+		methods="POST"
+		controller="App\Main\Infrastructure\Controller\Payments\Create\PaymentPaypalController">
+	</route>
+
+
+<!-- recuperacion de los pagos creados con la url de redireccion-->
+  <route
+		id="paypal_approve"
+		path="/payments/paypal/approve/{id}"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\Payments\Approve\PaymentPaypalApproveController">
+	</route>
+
+<!-- cuando el user  confirma el pago este es el endpoint que recibira los datos de confirm de paypal -->
+  <route
+		id="paypal_confirm"
+		path="/payments/paypal/return"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\Payments\Confirm\PaymentPaypalConfirmController">
+	</route>
+
+
+  <route
+		id="paypal_success"
+		path="/payments/paypal/success"
+		methods="GET"
+		controller="App\Main\Infrastructure\Controller\Payments\Succcess\PaymentPaypalSuccessController">
+	</route>
+
 <!--	<route-->
 <!--		id="login"-->
 <!--		path="/api/login"-->

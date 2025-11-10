@@ -1,7 +1,20 @@
 FROM nginx:latest
-COPY ../../../conf/nginx/symfony.conf /etc/nginx/conf.d/
-COPY ../../../conf/nginx/vue.conf /etc/nginx/conf.d/
-COPY ../../../conf/nginx/django.conf /etc/nginx/conf.d/
+
+ARG MICRO_ENV=local
+ENV MICRO_ENV=${MICRO_ENV}
+
+COPY conf/nginx /tmp/nginx
+
+RUN if [ "$MICRO_ENV" = "production" ]; then \
+    cp /tmp/nginx/symfony.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/django.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/rust.conf /etc/nginx/conf.d/; \
+  else \
+    # cp /tmp/nginx/local/symfony.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/local/vue.conf /etc/nginx/conf.d/; \
+    cp /tmp/nginx/local/django.conf /etc/nginx/conf.d/; \
+    # cp /tmp/nginx/local/rust.conf /etc/nginx/conf.d/; \
+  fi
 
 RUN rm /etc/nginx/conf.d/default.conf
 EXPOSE 80

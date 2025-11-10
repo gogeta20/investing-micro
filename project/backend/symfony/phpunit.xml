@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         shortenArraysForExportThreshold="10"
+         requireCoverageMetadata="true"
+         beStrictAboutCoverageMetadata="false"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
+         failOnWarning="true">
+
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests/Main</directory>
+        </testsuite>
+
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+
+
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+    <coverage>
+        <report>
+            <text outputFile="php://stdout" showUncoveredFiles="true"/>
+            <html outputDirectory="build/coverage-html"/>
+            <clover outputFile="build/logs/clover.xml"/>
+        </report>
+    </coverage>
+
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="display_errors" value="1"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="PAYPAL_CLIENT_ID" value="AYnmY4JfBF7odDX8rXzNMYHhLqlRwQ2hJ6zZOumq1ZEpf-LEsFZKOCSXVBrKnYVT1WsFVF6RNAOsqdXn"/>
+        <env name="PAYPAL_CLIENT_SECRET" value="EF_1gTpZGZ-EwsxW2DF-IvWEkXuUKMbCZj4oQdOI8BFkZ-NFNs_8ZlOCDBUx7y9FpIzxxtvNfakdW2ct"/>
+        <env name="PAYPAL_RETURN_URL" value="https://miapp.com/return"/>
+        <env name="PAYPAL_CANCEL_URL" value="https://miapp.com/cancel"/>
+    </php>
+</phpunit>

@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for Xdebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9001,
+            "idekey": "PHPSTORM",
+            "pathMappings": {
+              "/var/www/html": "${workspaceFolder}"
+            },
+            "hostname": "0.0.0.0",
+            "log": true,
+            "ignore": ["**/vendor/**/*.php"]
+        }
+    ]
+}

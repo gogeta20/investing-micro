@@ -12,6 +12,15 @@ in-db-mysql-root:
 mysql-down:
 	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
 
+mysql-clean-volume:
+	@echo "⚠️  WARNING: This will delete all MySQL data!"
+	@echo "Stopping and removing MySQL container..."
+	$(COMPOSE) stop $(MYSQL) || true
+	$(COMPOSE) rm -f $(MYSQL) || true
+	@echo "Removing MySQL volume data..."
+	@rm -rf ./devops/volumes/mysql/*
+	@echo "✅ MySQL volume cleaned. You can now start MySQL with: make mysql-up"
+
 mysql-build:
 	$(COMPOSE) build $(MYSQL) --no-cache
 
@@ -25,12 +34,12 @@ mysql-update:
 	@echo "Updating database..."
 	@for file in $$(ls conf/mysql/db/files/sql/migrations/*.sql | sort); do \
 		echo "Executing $$file..."; \
-		docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/migrations/'$$(basename $$file); \
+		docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/migrations/'$$(basename $$file); \
 	done
 
 mysql-reset:
 	@echo "Resetting database..."
-	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword pokemondb < /var/www/html/sql/00_reset.sql'
+	docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/00_reset.sql'
 
 mysql-init: mysql-reset mysql-update
 
@@ -40,7 +49,7 @@ mysql-migrate:
 		exit 1; \
 	fi
 	@echo "Executing migration V$(v)..."
-	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword my_database < /var/www/html/sql/migrations/V$(v).sql'
+	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/migrations/V$(v).sql'
 
 # Para ejecutar un seed específico
 mysql-seed:
@@ -49,7 +58,7 @@ mysql-seed:
 		exit 1; \
 	fi
 	@echo "Executing seed S$(s)..."
-	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword my_database < /var/www/html/sql/seeds/S$(s).sql'
+	@docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(MYSQL_DATABASE) < /var/www/html/sql/seeds/S$(s).sql'
 
 # Para revertir una migración específica
 mysql-rollback:
@@ -103,6 +112,10 @@ mongo-init-db:
 
 mongo-seed: # make mongo-seed s=1
 	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use intents_db"  < /var/www/html/scripts/seeds/S$(s).js'
+
+mongo-seed-db-primary: # make mongo-seed s=3
+	docker exec $(M) sh -c 'mongosh -u root -p password --eval "use pokemondb"  < /var/www/html/scripts/seeds/S$(s).js'
+
 
 mongo-seed-basic: # make mongo-seed s=1
 	docker exec $(M) sh -c 'mongosh -u root -p password  < /var/www/html/scripts/seeds/S$(s).js'

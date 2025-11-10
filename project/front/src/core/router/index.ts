@@ -2,9 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 // import homeRoutes from '@/modules/home/application/routes';
 import HomeView from "@/pages/HomeView.vue";
 import Projects from '@/pages/Projects.vue';
-import Whoami from '@/pages/Whoami.vue';
 import Skills from '@/pages/Skills.vue';
+import Payments from '@/pages/test/Payments/Payments.vue';
+import PaymentCancel from '@/pages/test/Payments/PaymentCancel.vue';
+import PaymentSuccess from '@/pages/test/Payments/PaymentSuccess.vue';
 import Symfony from '@/pages/test/Symfony.vue';
+import Whoami from '@/pages/Whoami.vue';
+import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
 
 const routes = [
   {
@@ -36,6 +40,23 @@ const routes = [
         path: "/symfony-cqrs",
         component: Symfony,
         children: [],
+      },
+      {
+        path: "/payments",
+        component: Payments,
+        children: [],
+      },
+      {
+        path: "/payments/success",
+        component: PaymentSuccess,
+      },
+      {
+        path: "/payments/cancel",
+        component: PaymentCancel,
+      },
+      {
+        path: "/chatbot",
+        component: Chatbot,
       },
     ],
   },

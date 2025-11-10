@@ -1,16 +1,21 @@
-
+ENV_LOCAL=.env.local
+ENV_CLOUDBACKEND=.env.cloudbackend
 COMPOSE=docker compose
 VF=front_micro
 S=symfony_backend
 SB=springboot_backend
 DB=django_backend
+FB=fastapi_backend
 MYSQL=mysql_db
 M=mongo_db
 NG=nginx_proxy
 MQ=rabbitmq
 J=jenkins_micro
 R=rust_consumer
-LOCAL=docker-compose.local.yml --profile local
+C=certbot
+LOCAL=--env-file $(ENV_LOCAL) -f docker-compose.local.yml --profile local
+BACKENDCLOUD=--env-file $(ENV_CLOUDBACKEND) -f docker-compose.cloudbackend.yml
+ENV_FILE?=.env
 
 include devops/mk/*.mk
 
@@ -26,6 +31,9 @@ build--no-cache:
 up:
 	docker compose up -d
 
+up-env: # make up ENV_FILE=.env.local
+	docker compose --env-file $(ENV_FILE) up -d
+
 down:
 	docker compose down
 
@@ -33,12 +41,22 @@ down-volume:
 	docker compose down -v
 
 up-local:
-	$(COMPOSE) -f $(LOCAL) up -d
+	$(COMPOSE) $(LOCAL) up -d
 
 down-local:
-	$(COMPOSE) -f $(LOCAL) down
+	$(COMPOSE) $(LOCAL) down
 
 build-local:
-	$(COMPOSE) -f $(LOCAL) build --no-cache
+	$(COMPOSE) $(LOCAL) build --build-arg MICRO_ENV=local --no-cache
+#     docker compose build --build-arg MICRO_ENV=local nginx_proxy
+
+up-cloud-backend:
+	$(COMPOSE) $(BACKENDCLOUD) up -d
+
+down-cloud-backend:
+	$(COMPOSE) $(BACKENDCLOUD) down
+
+build-cloud-backend:
+	$(COMPOSE) $(BACKENDCLOUD) build --no-cache
 
 restart: down up

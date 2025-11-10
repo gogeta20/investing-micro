@@ -1,6 +1,9 @@
 # Archivos de configuración de IDE y editores
 **/.idea/
-**/.vscode/
+# **/.vscode/
+/.vscode/
+project/backend/.vscode/
+/project/**/.env
 *.sublime-project
 *.sublime-workspace
 
@@ -29,6 +32,7 @@ pip-delete-this-directory.txt
 *.cache
 *.bak
 *.pdf
+*.joblib
 
 # Archivos de migración de Django
 db.sqlite3
@@ -41,7 +45,18 @@ ehthumbs.db
 Desktop.ini
 
 # Archivos de compilación de Java (Spring Boot)
-**/target/
+# **/target/
+project/backend/symfony/.env.test
+project/backend/springboot/target/
+project/consumer/target/debug/
+project/consumer/target/release/.fingerprint/
+project/consumer/target/release/deps/
+project/consumer/target/release/.cargo-lock
+project/consumer/target/release/rabbit_consumer.d
+project/consumer/target/.rustc_info.json
+project/consumer/target/CACHEDIR.TAG
+!project/consumer/target/release/rust_micro_app
+
 **/out/
 *.class
 *.jar
@@ -61,3 +76,6 @@ Desktop.ini
 # Archivos temporales del sistema
 *.swp
 *~
+
+.env.local
+devops/k8s/fastapi/secret.yml

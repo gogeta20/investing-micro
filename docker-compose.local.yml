@@ -82,6 +82,14 @@ services:
       context: .
       dockerfile: devops/dockerfiles/backend/Django.Dockerfile
     container_name: django_backend
+    depends_on:
+      - mysql_db
+    environment:
+      - DB_HOST=mysql_db
+      - DB_PORT=3306
+      - DB_NAME=investing_micro_db
+      - DB_USER=user
+      - DB_PASSWORD=password
     ports:
       - "8000:8000"
     volumes:

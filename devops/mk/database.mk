@@ -12,6 +12,15 @@ in-db-mysql-root:
 mysql-down:
 	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
 
+mysql-clean-volume:
+	@echo "⚠️  WARNING: This will delete all MySQL data!"
+	@echo "Stopping and removing MySQL container..."
+	$(COMPOSE) stop $(MYSQL) || true
+	$(COMPOSE) rm -f $(MYSQL) || true
+	@echo "Removing MySQL volume data..."
+	@rm -rf ./devops/volumes/mysql/*
+	@echo "✅ MySQL volume cleaned. You can now start MySQL with: make mysql-up"
+
 mysql-build:
 	$(COMPOSE) build $(MYSQL) --no-cache
 

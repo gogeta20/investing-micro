@@ -6,6 +6,7 @@ from myproject.core.infrastructure.controllers.stock.get_results_portafolio_cont
 from myproject.core.infrastructure.controllers.stock.get_stock_by_symbol_controller import GetStockBySymbolController
 from myproject.core.infrastructure.controllers.stock.get_stock_controller import GetStockController
 from myproject.core.infrastructure.controllers.stock.get_stock_history_controller import GetStockHistoryController
+from myproject.core.infrastructure.controllers.stock.get_stocks_overview_controller import GetStocksOverviewController
 from myproject.core.infrastructure.controllers.stock.post_stock_snapshot_controller import PostStockSnapshotController
 
 urlpatterns = [
@@ -16,4 +17,6 @@ urlpatterns = [
     path('portfolio/<int:id_portafolio>/results', GetResultsPortafolioController.as_view(), name='get_results_portafolio'),
     path('stocks/<str:symbol>/history', GetStockHistoryController.as_view(), name='get_stock_history'),
     path('stocks/current/state', GetCurrentStocksController.as_view(), name='get_current_stocks'),
+    path('stocks/overview/list', GetStocksOverviewController.as_view(), name='get_stocks_overview'),
+
 ]

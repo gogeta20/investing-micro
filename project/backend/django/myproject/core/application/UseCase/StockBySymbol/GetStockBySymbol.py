@@ -3,6 +3,10 @@ class GetStockBySymbol:
         self.mysql_service = mysql_service
 
     def execute(self, name):
-        data = self.mysql_service.execute_query(f"SELECT * FROM stocks where symbol = '{name}'")
+        # Usar parámetros para evitar SQL injection
+        data = self.mysql_service.execute_query_params(
+            "SELECT * FROM stocks WHERE symbol = %s",
+            (name,)
+        )
         print(f"[DEBUG] in use case {data}")
         return {"result": data}

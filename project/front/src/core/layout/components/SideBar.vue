@@ -43,6 +43,14 @@ const myRoutes = reactive([
     children: [],
   },
   {
+    id: "5",
+    title: "stocks",
+    path: "/stocks",
+    icon: "plus",
+    isVisible: true,
+    children: [],
+  },
+  {
     id: "4",
     title: "test",
     path: "/test",

@@ -1,0 +1,253 @@
+{
+	"info": {
+		"_postman_id": "investing-micro-api",
+		"name": "Investing Micro API",
+		"description": "Colección de API para Investing Micro - Django Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "8000",
+			"type": "string"
+		},
+		{
+			"key": "api_base",
+			"value": "{{base_url}}:{{port}}/api",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "python",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/health/",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"health",
+								""
+							]
+						},
+						"description": "Endpoint para verificar el estado del servicio"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Stocks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/stocks/",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"stocks",
+								""
+							]
+						},
+						"description": "Obtener todas las acciones"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock by Symbol",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/stocks/:symbol",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"stocks",
+								":symbol"
+							],
+							"variable": [
+								{
+									"key": "symbol",
+									"value": "AAPL",
+									"description": "Símbolo de la acción (ej: AAPL, MSFT, GOOGL)"
+								}
+							]
+						},
+						"description": "Obtener una acción por su símbolo"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stock History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/stocks/:symbol/history?from=&to=",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"stocks",
+								":symbol",
+								"history"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "",
+									"description": "Fecha de inicio (opcional, formato: YYYY-MM-DD)",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "",
+									"description": "Fecha de fin (opcional, formato: YYYY-MM-DD)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "symbol",
+									"value": "AAPL",
+									"description": "Símbolo de la acción"
+								}
+							]
+						},
+						"description": "Obtener el historial de una acción. Ejemplo: http://localhost:8000/api/stocks/AAPL/history"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Stocks State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/stocks/current/state?portfolio_id=1",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"stocks",
+								"current",
+								"state"
+							],
+							"query": [
+								{
+									"key": "portfolio_id",
+									"value": "1",
+									"description": "ID del portafolio"
+								}
+							]
+						},
+						"description": "Obtener el estado actual de las acciones de un portafolio"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stocks Overview",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/stocks/overview/list?portfolio_id=1",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"stocks",
+								"overview",
+								"list"
+							],
+							"query": [
+								{
+									"key": "portfolio_id",
+									"value": "1",
+									"description": "ID del portafolio"
+								}
+							]
+						},
+						"description": "Obtener vista general de acciones (precio actual y último snapshot). NOTA: Este endpoint puede no estar funcionando correctamente."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Portfolio Results",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api_base}}/portfolio/:id_portafolio/results",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"portfolio",
+								":id_portafolio",
+								"results"
+							],
+							"variable": [
+								{
+									"key": "id_portafolio",
+									"value": "1",
+									"description": "ID del portafolio"
+								}
+							]
+						},
+						"description": "Obtener los resultados de un portafolio específico"
+					},
+					"response": []
+				},
+				{
+					"name": "Post Stock Snapshot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AAPL\",\n    \"price\": 150.00,\n    \"recorded_at\": \"2025-01-10T12:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_base}}/stock/snapshot/save",
+							"host": [
+								"{{api_base}}"
+							],
+							"path": [
+								"stock",
+								"snapshot",
+								"save"
+							]
+						},
+						"description": "Guardar un snapshot de una acción"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints del backend Django"
+		}
+	]
+}

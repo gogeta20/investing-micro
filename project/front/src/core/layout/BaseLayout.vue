@@ -2,7 +2,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import ParticlesView from "@/components/ParticlesView.vue";
 import Header from "@/core/layout/components/Header.vue";
 import SideBar from "@/core/layout/components/SideBar.vue";
 
@@ -18,8 +17,7 @@ const closeSideBar = () => {
 </script>
 
 <template>
-  <div>
-    <ParticlesView />
+  <div class="base-layout">
     <SideBar :isOpenSideBar="isOpenMenu" />
 
     <main @click="closeSideBar">
@@ -34,20 +32,27 @@ const closeSideBar = () => {
 </template>
 
 <style lang="scss" scoped>
+.base-layout {
+  min-height: 100vh;
+  background-color: var(--tokyo-bg);
+}
+
+main {
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+section {
+  min-height: calc(100vh - var(--header-height));
+}
+
 .page-fade-enter-active,
 .page-fade-leave-active {
-  transition: opacity 0.8s ease, filter 0.8s ease;
+  transition: opacity 0.3s ease;
 }
 
 .page-fade-enter-from,
 .page-fade-leave-to {
   opacity: 0;
-  filter: blur(10px);
-}
-
-.page-fade-enter-to,
-.page-fade-leave-from {
-  opacity: 1;
-  filter: blur(0);
 }
 </style>

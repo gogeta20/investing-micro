@@ -3,26 +3,37 @@ import StocksTable from "@/components/StocksTable.vue";
 </script>
 
 <template>
-    <div class="stocks-view">
-        <div class="container mx-auto p-6">
-            <h1 class="text-3xl font-bold text-white mb-6">
-                Tabla de Acciones
-            </h1>
-            <p class="text-gray-400 mb-4">
-                Vista general de las acciones en tu portafolio
-            </p>
-            <StocksTable :portfolio-id="1" />
-        </div>
+  <div class="stocks-view">
+    <div class="stocks-container">
+      <h1 class="stocks-title">Tabla de Acciones</h1>
+      <p class="stocks-subtitle">Vista general de las acciones en tu portafolio</p>
+      <StocksTable :portfolio-id="1" />
     </div>
+  </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .stocks-view {
-    min-height: 100vh;
-    padding: 2rem 0;
+  min-height: calc(100vh - var(--header-height));
+  padding: 2rem;
+  background-color: var(--tokyo-bg);
 }
 
-.container {
-    max-width: 1200px;
+.stocks-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.stocks-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--tokyo-fg);
+  margin-bottom: 0.5rem;
+}
+
+.stocks-subtitle {
+  color: var(--tokyo-fg-secondary);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
 }
 </style>

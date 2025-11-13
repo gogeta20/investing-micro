@@ -1,83 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted } from "vue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import HttpClientDjango from "@/core/http/HttpClientDjango";
-
-interface StockOverview {
-    portfolio_id: number;
-    symbol: string;
-    current: {
-        price: number;
-        recorded_at: string;
-    };
-    last_snapshot: {
-        price: number;
-        recorded_at: string;
-    } | null;
-}
-
-const stocks = ref<StockOverview[]>([]);
-const loading = ref<boolean>(false);
-const error = ref<string | null>(null);
-
-// Por defecto portfolio_id = 1, puede ser pasado como prop
-const props = defineProps<{
-    portfolioId?: number;
-}>();
-
-const loadStocks = async () => {
-    loading.value = true;
-    error.value = null;
-
-    try {
-        const response = await HttpClientDjango.get("/api/stocks/current/state");
-        stocks.value = response.data.data;
-        console.log(stocks.value);
-        console.log(response.data);
-    } catch (err: any) {
-        console.error("Error cargando overview:", err);
-        error.value =
-            err.response?.data?.error ||
-            err.message ||
-            "Error al cargar los datos de acciones";
-    } finally {
-        loading.value = false;
-    }
-};
-
-const formatPrice = (price: number | undefined): string => {
-    if (!price) return "0.00";
-    return price.toFixed(2);
-};
-
-const formatDate = (dateString: string | undefined): string => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleString("es-ES", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
-};
-
-const formatVariation = (currentPrice: number, lastPrice: number): string => {
-    const variation = ((currentPrice - lastPrice) / lastPrice) * 100;
-    const sign = variation >= 0 ? "+" : "";
-    return `${sign}${variation.toFixed(2)}%`;
-};
-
-const getVariationClass = (currentPrice: number, lastPrice: number): string => {
-    const variation = ((currentPrice - lastPrice) / lastPrice) * 100;
-    return variation >= 0 ? "positive" : "negative";
-};
-
-onMounted(() => {
-    loadStocks();
-});
-</script>
 <template>
     <div class="stocks-table-container">
         <div v-if="loading" class="loading-container">
@@ -167,9 +87,94 @@ onMounted(() => {
     </div>
 </template>
 
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import HttpClientDjango from "@/core/http/HttpClientDjango";
 
+interface StockOverview {
+    portfolio_id: number;
+    symbol: string;
+    current: {
+        price: number;
+        recorded_at: string;
+    };
+    last_snapshot: {
+        price: number;
+        recorded_at: string;
+    } | null;
+}
 
-<style scoped>
+interface StocksResponse {
+    data: StockOverview[];
+}
+
+const stocks = ref<StockOverview[]>([]);
+const loading = ref<boolean>(false);
+const error = ref<string | null>(null);
+
+// Por defecto portfolio_id = 1, puede ser pasado como prop
+const props = defineProps<{
+    portfolioId?: number;
+}>();
+
+const loadStocks = async () => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+        const portfolioId = props.portfolioId || 1;
+        const response = await HttpClientDjango.get<StocksResponse>("/api/stocks/current/state");
+
+        stocks.value = response.data.data;
+        console.log(stocks.value);
+        console.log(response.data);
+    } catch (err: any) {
+        console.error("Error cargando overview:", err);
+        error.value =
+            err.response?.data?.error ||
+            err.message ||
+            "Error al cargar los datos de acciones";
+    } finally {
+        loading.value = false;
+    }
+};
+
+const formatPrice = (price: number | undefined): string => {
+    if (!price) return "0.00";
+    return price.toFixed(2);
+};
+
+const formatDate = (dateString: string | undefined): string => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleString("es-ES", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
+
+const formatVariation = (currentPrice: number, lastPrice: number): string => {
+    const variation = ((currentPrice - lastPrice) / lastPrice) * 100;
+    const sign = variation >= 0 ? "+" : "";
+    return `${sign}${variation.toFixed(2)}%`;
+};
+
+const getVariationClass = (currentPrice: number, lastPrice: number): string => {
+    const variation = ((currentPrice - lastPrice) / lastPrice) * 100;
+    return variation >= 0 ? "positive" : "negative";
+};
+
+onMounted(() => {
+    loadStocks();
+});
+</script>
+
+<style scoped lang="scss">
 .stocks-table-container {
     padding: 1rem;
 }
@@ -178,38 +183,110 @@ onMounted(() => {
 .error-container {
     text-align: center;
     padding: 2rem;
+    color: var(--tokyo-fg);
 }
 
 .error-message {
-    color: #dc3545;
+    color: var(--tokyo-red);
     margin-bottom: 1rem;
 }
 
 .retry-button {
     padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
+    background-color: var(--tokyo-blue);
+    color: var(--tokyo-bg);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     cursor: pointer;
-}
+    font-weight: 500;
+    transition: background-color 0.2s ease;
 
-.retry-button:hover {
-    background-color: #0056b3;
+    &:hover {
+        background-color: var(--primary-hover);
+    }
+
+    &:active {
+        background-color: var(--primary-active);
+    }
 }
 
 .no-data {
-    color: #6c757d;
+    color: var(--tokyo-fg-dim);
     font-style: italic;
 }
 
 .positive {
-    color: #28a745;
-    font-weight: bold;
+    color: var(--tokyo-green);
+    font-weight: 600;
 }
 
 .negative {
-    color: #dc3545;
-    font-weight: bold;
+    color: var(--tokyo-red);
+    font-weight: 600;
+}
+
+// Estilos para PrimeVue DataTable con tema Tokyo Night
+:deep(.p-datatable) {
+    background-color: var(--tokyo-bg-secondary);
+    color: var(--tokyo-fg);
+    border: 1px solid var(--tokyo-bg-tertiary);
+    border-radius: var(--border-radius);
+}
+
+:deep(.p-datatable-header) {
+    background-color: var(--tokyo-bg-secondary);
+    color: var(--tokyo-fg);
+    border-bottom: 1px solid var(--tokyo-bg-tertiary);
+}
+
+:deep(.p-datatable-thead > tr > th) {
+    background-color: var(--tokyo-bg-tertiary);
+    color: var(--tokyo-fg);
+    border-bottom: 1px solid var(--tokyo-bg-tertiary);
+    font-weight: 600;
+}
+
+:deep(.p-datatable-tbody > tr) {
+    background-color: var(--tokyo-bg-secondary);
+    color: var(--tokyo-fg);
+    border-bottom: 1px solid var(--tokyo-bg-tertiary);
+
+    &:hover {
+        background-color: var(--tokyo-bg-tertiary);
+    }
+}
+
+:deep(.p-datatable-tbody > tr > td) {
+    border-bottom: 1px solid var(--tokyo-bg-tertiary);
+    color: var(--tokyo-fg);
+}
+
+:deep(.p-paginator) {
+    background-color: var(--tokyo-bg-secondary);
+    color: var(--tokyo-fg);
+    border-top: 1px solid var(--tokyo-bg-tertiary);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+:deep(.p-paginator .p-paginator-page) {
+    color: var(--tokyo-fg);
+
+    &.p-highlight {
+        background-color: var(--tokyo-blue);
+        color: var(--tokyo-bg);
+    }
+
+    &:hover {
+        background-color: var(--tokyo-bg-tertiary);
+    }
+}
+
+:deep(.p-paginator .p-paginator-prev),
+:deep(.p-paginator .p-paginator-next) {
+    color: var(--tokyo-fg);
+
+    &:hover {
+        background-color: var(--tokyo-bg-tertiary);
+    }
 }
 </style>

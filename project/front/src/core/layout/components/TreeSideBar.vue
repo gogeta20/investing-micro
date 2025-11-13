@@ -71,15 +71,14 @@ function handleClickMenu(path: string) {
     }
 
     :deep(.bh-nav__icon) {
-      color: #fff;
+      color: var(--tokyo-fg);
       text-align: center;
     }
 
     &:hover {
       :deep(.bh-nav__icon) {
         font-size: 1.4rem;
-        color: #fff;
-        text-shadow: 2px 2px rgba(0, 0, 0, 0.8);
+        color: var(--tokyo-blue);
       }
     }
   }
@@ -99,7 +98,7 @@ function handleClickMenu(path: string) {
   &__item {
     position: relative;
     display: block;
-    color: #ffffff;
+    color: var(--tokyo-fg);
   }
 
   &__link {
@@ -116,7 +115,14 @@ function handleClickMenu(path: string) {
     transition: all 0.15s linear;
 
     &:hover {
-      background-color: var(--purple-secondary);
+      background-color: var(--tokyo-bg-tertiary);
+      color: var(--tokyo-blue);
+    }
+
+    &.router-link-exact-active {
+      background-color: var(--tokyo-bg-tertiary);
+      color: var(--tokyo-blue);
+      font-weight: 500;
     }
 
     .glyphicon {
@@ -126,13 +132,13 @@ function handleClickMenu(path: string) {
       line-height: 0;
       vertical-align: text-top;
       position: relative;
-      color: #fff;
+      color: var(--tokyo-fg);
     }
   }
 
   :deep(.bh-nav__icon) {
     font-size: 1.2rem;
-    color: #fff;
+    color: var(--tokyo-fg);
   }
 }
 
@@ -154,7 +160,8 @@ function handleClickMenu(path: string) {
 }
 
 .bh-open>.bh-nav__link--dropdown {
-  background-color: var(--purple-main);
+  background-color: var(--tokyo-bg-tertiary);
+  color: var(--tokyo-blue);
 }
 
 .bh-open .bh-collapse .bh-nav__link {

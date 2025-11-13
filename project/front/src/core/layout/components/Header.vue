@@ -8,11 +8,10 @@ function onMenuToggle(event: Event) {
 </script>
 
 <template>
-  <header :class="['fixed top-0 left-0 w-full z-50 transition-all duration-300']">
-    <div class="container mx-auto px-4 flex items-center justify-between py-8">
-      <router-link to="/" class="text-white text-2xl">MV</router-link>
-
-      <button class="text-white focus:outline-none" @click="onMenuToggle">
+  <header class="header">
+    <div class="header-container">
+      <router-link to="/" class="header-logo">MV</router-link>
+      <button class="header-menu-button" @click="onMenuToggle" aria-label="Toggle menu">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -33,7 +32,61 @@ function onMenuToggle(event: Event) {
 </template>
 
 <style scoped lang="scss">
-.bg-transparent {
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--tokyo-bg-secondary);
+  border-bottom: 1px solid var(--tokyo-bg-tertiary);
+  z-index: 50;
   backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-logo {
+  color: var(--tokyo-fg);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--tokyo-blue);
+  }
+}
+
+.header-menu-button {
+  color: var(--tokyo-fg);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  outline: none;
+
+  &:hover {
+    color: var(--tokyo-blue);
+  }
+
+  &:focus {
+    outline: 2px solid var(--tokyo-blue);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 }
 </style>

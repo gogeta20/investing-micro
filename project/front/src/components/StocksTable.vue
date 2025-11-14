@@ -12,16 +12,25 @@
         <DataTable
             v-else
             :value="stocks"
-            tableStyle="min-width: 60rem"
+            tableStyle="min-width: 80rem"
             paginator
             :rows="10"
             :rowsPerPageOptions="[10, 20, 50]"
             class="p-datatable-sm"
         >
-            <Column field="symbol" header="Símbolo" sortable></Column>
-            <Column field="price" header="Precio Actual" sortable>
+            <Column field="name" header="Nombre" sortable>
                 <template #body="slotProps">
-                    ${{ formatPrice(slotProps.data.price) }}
+                    <span class="stock-name">{{ slotProps.data.name }}</span>
+                </template>
+            </Column>
+            <Column field="symbol" header="Símbolo" sortable></Column>
+            <Column
+                field="current.price"
+                header="Precio Actual"
+                sortable
+            >
+                <template #body="slotProps">
+                    ${{ formatPrice(slotProps.data.current?.price) }}
                 </template>
             </Column>
             <Column
@@ -59,7 +68,7 @@
                     <span v-else class="no-data">N/A</span>
                 </template>
             </Column>
-            <Column header="Variación">
+            <Column header="Variación" sortable>
                 <template #body="slotProps">
                     <span
                         v-if="
@@ -96,12 +105,13 @@ import HttpClientDjango from "@/core/http/HttpClientDjango";
 interface StockOverview {
     portfolio_id: number;
     symbol: string;
+    name: string;
     current: {
         price: number;
         recorded_at: string;
     };
     last_snapshot: {
-        price: number;
+        price: number | string;
         recorded_at: string;
     } | null;
 }
@@ -125,47 +135,73 @@ const loadStocks = async () => {
 
     try {
         const portfolioId = props.portfolioId || 1;
-        const response = await HttpClientDjango.get<StocksResponse>("/api/stocks/current/state");
+        const response = await HttpClientDjango.get<StocksResponse>(
+            `/api/stocks/overview/list?portfolio_id=${portfolioId}`
+        );
 
-        stocks.value = response.data.data;
-        console.log(stocks.value);
-        console.log(response.data);
+        // Verificar si la respuesta tiene un error
+        if (response.data.data && typeof response.data.data === "object" && "error" in response.data.data) {
+            error.value = (response.data.data as any).error;
+            stocks.value = [];
+            return;
+        }
+
+        // Verificar que sea un array
+        if (Array.isArray(response.data.data)) {
+            stocks.value = response.data.data;
+        } else {
+            error.value = "Formato de respuesta inválido";
+            stocks.value = [];
+        }
     } catch (err: any) {
         console.error("Error cargando overview:", err);
         error.value =
             err.response?.data?.error ||
+            err.response?.data?.data?.error ||
             err.message ||
             "Error al cargar los datos de acciones";
+        stocks.value = [];
     } finally {
         loading.value = false;
     }
 };
 
-const formatPrice = (price: number | undefined): string => {
+const formatPrice = (price: number | string | undefined): string => {
     if (!price) return "0.00";
-    return price.toFixed(2);
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    if (isNaN(numPrice)) return "0.00";
+    return numPrice.toFixed(2);
 };
 
 const formatDate = (dateString: string | undefined): string => {
     if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleString("es-ES", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return "N/A";
+        return date.toLocaleString("es-ES", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    } catch (e) {
+        return "N/A";
+    }
 };
 
-const formatVariation = (currentPrice: number, lastPrice: number): string => {
-    const variation = ((currentPrice - lastPrice) / lastPrice) * 100;
+const formatVariation = (currentPrice: number, lastPrice: number | string): string => {
+    const numLastPrice = typeof lastPrice === "string" ? parseFloat(lastPrice) : lastPrice;
+    if (isNaN(numLastPrice) || numLastPrice === 0) return "0.00%";
+    const variation = ((currentPrice - numLastPrice) / numLastPrice) * 100;
     const sign = variation >= 0 ? "+" : "";
     return `${sign}${variation.toFixed(2)}%`;
 };
 
-const getVariationClass = (currentPrice: number, lastPrice: number): string => {
-    const variation = ((currentPrice - lastPrice) / lastPrice) * 100;
+const getVariationClass = (currentPrice: number, lastPrice: number | string): string => {
+    const numLastPrice = typeof lastPrice === "string" ? parseFloat(lastPrice) : lastPrice;
+    if (isNaN(numLastPrice) || numLastPrice === 0) return "";
+    const variation = ((currentPrice - numLastPrice) / numLastPrice) * 100;
     return variation >= 0 ? "positive" : "negative";
 };
 
@@ -213,6 +249,11 @@ onMounted(() => {
 .no-data {
     color: var(--tokyo-fg-dim);
     font-style: italic;
+}
+
+.stock-name {
+    font-weight: 500;
+    color: var(--tokyo-fg);
 }
 
 .positive {

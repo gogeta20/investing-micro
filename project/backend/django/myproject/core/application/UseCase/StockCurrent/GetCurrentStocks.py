@@ -3,36 +3,47 @@ from datetime import datetime
 
 from myproject.core.application.UseCase.StockCurrent import GetCurrentStocksQuery
 
+
 class GetCurrentStocks:
     def __init__(self, mysql_service):
         self.mysql_service = mysql_service
 
     def execute(self, query: GetCurrentStocksQuery):
-        # 1. Recuperar los símbolos desde DB
+        # 1. Recuperar los símbolos Y nombres desde DB
         if query.portfolio_id:
             sql = """
-                SELECT s.symbol
+                SELECT s.symbol, s.name
                 FROM portfolio_stocks ps
                 JOIN stocks s ON ps.stock_id = s.id
                 WHERE ps.portfolio_id = %s
             """
-            symbols = [row["symbol"] for row in self.mysql_service.execute_query_params(sql, (query.portfolio_id,))]
+            stocks_data = self.mysql_service.execute_query_params(sql, (query.portfolio_id,))
         else:
-            sql = "SELECT symbol FROM stocks"
-            symbols = [row["symbol"] for row in self.mysql_service.execute_query(sql)]
+            sql = "SELECT symbol, name FROM stocks"
+            stocks_data = self.mysql_service.execute_query(sql)
 
-        if not symbols:
+        if not stocks_data:
             return {"error": "No se encontraron acciones"}
 
         results = []
         now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[DEBUG] stocks_data: {stocks_data}")
 
         # 2. Consultar precios en yfinance
-        for symbol in symbols:
+        for stock in stocks_data:
+            symbol = stock["symbol"]
+            name = stock["name"]
+
             try:
                 ticker = yf.Ticker(symbol)
                 price = ticker.history(period="1d")["Close"].iloc[-1]
-                results.append({"symbol": symbol, "price": float(price), "recorded_at": now})
+
+                results.append({
+                    "symbol": symbol,
+                    "name": name,  # ⬅️ Ahora incluimos el nombre
+                    "price": float(price),
+                    "recorded_at": now
+                })
 
                 # 3. Guardar snapshot en DB
                 insert_sql = """
@@ -43,7 +54,11 @@ class GetCurrentStocks:
                 """
                 self.mysql_service.execute_query_params(insert_sql, (symbol, price, now))
             except Exception as e:
-                results.append({"symbol": symbol, "error": str(e)})
+                results.append({
+                    "symbol": symbol,
+                    "name": name,  # ⬅️ También en el error
+                    "error": str(e)
+                })
 
         return {
             "portfolio_id": query.portfolio_id,

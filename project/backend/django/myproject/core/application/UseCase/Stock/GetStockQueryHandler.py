@@ -3,7 +3,6 @@ from django.conf import settings
 
 from myproject.core.application.UseCase.Stock.GetStock import GetStock
 from myproject.core.application.UseCase.Stock.GetStockQuery import GetStockQuery
-from myproject.core.infrastructure.repository.mysql.mysql_repository import PokemonRepository
 from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLService
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
 from myproject.shared.domain.response import BaseResponse

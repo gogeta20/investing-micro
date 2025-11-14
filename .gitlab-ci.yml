@@ -8,8 +8,8 @@ test:hello:
     image: alpine:latest
     script:
         - echo "✅ Runner is working!"
-        - echo "Branch: $CI_COMMIT_BRANCH"
-        - echo "Commit: $CI_COMMIT_SHORT_SHA"
+        - echo "Branch $CI_COMMIT_BRANCH"
+        - echo "Commit $CI_COMMIT_SHORT_SHA"
     only:
         - merge_requests
         - master

@@ -78,4 +78,5 @@ project/consumer/target/CACHEDIR.TAG
 *~
 
 .env.local
+.env.local
 devops/k8s/fastapi/secret.yml

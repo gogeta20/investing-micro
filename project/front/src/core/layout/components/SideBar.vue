@@ -20,61 +20,37 @@ const myRoutes = reactive([
   },
   {
     id: "2",
-    title: "projects",
-    path: "/projects",
-    icon: "plus",
-    isVisible: true,
-    children: [],
-  },
-  {
-    id: "3",
-    title: "whoami",
-    path: "/whoami",
-    icon: "plus",
-    isVisible: true,
-    children: [],
-  },
-  {
-    id: "3",
-    title: "skills",
-    path: "/skills",
-    icon: "plus",
-    isVisible: true,
-    children: [],
-  },
-  {
-    id: "4",
-    title: "test",
-    path: "/test",
+    title: "stocks",
+    path: "/stocks",
     icon: "plus",
     isVisible: true,
     children: [
       {
-        id: "4.1",
-        title: "symfony cqrs",
-        path: "/symfony-cqrs",
+        id: "2.1",
+        title: "acciones",
+        path: "/stocks",
         icon: "plus",
         isVisible: true,
         children: [],
       },
       {
-        id: "4.2",
-        title: "Payments test",
-        path: "/payments",
+        id: "2.2",
+        title: "portafolios",
+        path: "/portafolios",
         icon: "plus",
         isVisible: true,
         children: [],
       },
       {
-        id: "4.3",
-        title: "Chatbot",
-        path: "/chatbot",
+        id: "2.3",
+        title: "notas",
+        path: "/notas",
         icon: "plus",
         isVisible: true,
         children: [],
       },
     ],
-  },
+  }
 ]);
 </script>
 
@@ -88,19 +64,17 @@ const myRoutes = reactive([
 
 <style lang="scss" scoped>
 .bh-sidebar {
-  position: absolute;
+  position: fixed;
   left: 0;
-  top: 0;
+  top: var(--header-height);
   bottom: 0;
   min-width: var(--sidbar-width);
-  background-color: var(--bg-dark);
-  box-shadow: inset -5px 5px 18px -5px rgb(0 0 0 / 80%);
+  background-color: var(--tokyo-bg-secondary);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
   overflow: auto;
-  transition: left 0.4s ease 0s;
+  transition: left 0.3s ease;
   z-index: 1000;
-  opacity: 0.9;
-  backdrop-filter: blur(8px);
-  border-right: var(--purple-main) solid 1px;
+  border-right: 1px solid var(--tokyo-bg-tertiary);
 
   &--hidden {
     left: -250px;
@@ -137,122 +111,7 @@ const myRoutes = reactive([
   }
 }
 
-// .bh-nav {
-//   &__list {
-//     list-style: none;
-//     padding: 0.2rem 0 0 0;
-//     margin: 0;
-//   }
 
-//   &__item {
-//     position: relative;
-//     display: block;
-//     color: #ffffff;
-//   }
-
-//   &__link {
-//     align-items: center;
-//     gap: 0.5rem;
-//     color: inherit;
-//     position: relative;
-//     display: flex;
-//     text-decoration: none;
-//     padding: 0.5rem 1rem;
-//     overflow: hidden;
-//     white-space: nowrap;
-//     transition: all 0.15s linear;
-
-//     &:hover {
-//       background-color: var(--light-blue);
-//     }
-
-//     &.router-link-exact-active {
-//       background-color: var(--light-blue);
-
-//       &:hover {
-//         background-color: #070b0e;
-//       }
-//     }
-
-//     .glyphicon {
-//       font-size: 0.991rem;
-//       margin-right: 0.5rem;
-//       top: 10px;
-//       line-height: 0;
-//       vertical-align: text-top;
-//       position: relative;
-//       color: #fff;
-//     }
-//   }
-
-//   :deep(.bh-nav__icon) {
-//     font-size: 1.2rem;
-//     color: #fff;
-//   }
-// }
-
-// .bh-nav__link svg {
-//   transition: all 0.4s ease;
-// }
-
-// .bh-nav__link svg.fa-chevron-down {
-//   position: absolute;
-//   right: 12px;
-//   left: auto;
-// }
-
-// .bh-collapse {
-//   transition: all 0.4s ease-out;
-//   opacity: 0;
-//   height: 0;
-//   overflow: hidden;
-// }
-
-// svg.fa-chevron-down {
-//   top: 12px;
-//   transform: rotate(180deg);
-// }
-
-// .bh-open svg.fa-chevron-down {
-//   top: 12px;
-//   transform: initial;
-// }
-
-// .bh-open .bh-collapse {
-//   opacity: 1;
-//   height: auto;
-// }
-
-// .bh-collapse .bh-nav__link {
-//   padding-left: 3rem;
-//   text-align: center;
-// }
-
-// .bh-collapse .bh-nav__link:before {
-//   content: "•";
-//   position: absolute;
-//   top: 3px;
-//   left: 18.5px;
-//   width: 15px;
-//   height: 100%;
-//   font-size: 50px;
-//   line-height: 32px;
-//   z-index: 2;
-//   overflow: hidden;
-// }
-
-// .bh-collapse .bh-nav__link:after {
-//   content: "";
-//   position: absolute;
-//   top: 0;
-//   left: 26px;
-//   width: 1px;
-//   height: 100%;
-//   background-image: linear-gradient(to bottom, #ccc 50%, rgba(255, 255, 255, 0) 0);
-//   background-position: left;
-//   background-size: 1px 5px;
-//   background-repeat: repeat-y;
-// }
 
 @media (min-width: 540px) {
   .bh-sidebar {

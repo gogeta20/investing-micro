@@ -9,6 +9,7 @@ import PaymentSuccess from '@/pages/test/Payments/PaymentSuccess.vue';
 import Symfony from '@/pages/test/Symfony.vue';
 import Whoami from '@/pages/Whoami.vue';
 import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
+import StocksView from '@/pages/StocksView.vue';
 
 const routes = [
   {
@@ -57,6 +58,11 @@ const routes = [
       {
         path: "/chatbot",
         component: Chatbot,
+      },
+      {
+        path: "/stocks",
+        component: StocksView,
+        children: [],
       },
     ],
   },

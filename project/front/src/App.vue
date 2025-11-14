@@ -8,13 +8,22 @@
 </template>
 
 <style lang="scss">
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.dark {
-  --color-bg: #1a1b26;
-  --color-text: #c0caf5;
+body {
+  background-color: var(--tokyo-bg);
+  color: var(--tokyo-fg);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+  background-color: var(--tokyo-bg);
 }
 </style>

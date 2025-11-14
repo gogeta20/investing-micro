@@ -12,6 +12,14 @@ class GetStocksOverviewController(ApiController):
 
     def get(self, request):
         portfolio_id = request.GET.get("portfolio_id")
+        # Convertir a int si viene, usar 1 por defecto si no viene (igual que el frontend)
+        if portfolio_id:
+            try:
+                portfolio_id = int(portfolio_id)
+            except (ValueError, TypeError):
+                portfolio_id = 1  # Por defecto usar 1
+        else:
+            portfolio_id = 1  # Por defecto usar 1
         query = GetStocksOverviewQuery(portfolio_id=portfolio_id)
         try:
             response = self.ask(query)

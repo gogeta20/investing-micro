@@ -91,14 +91,23 @@ services:
       - DB_USER=user
       - DB_PASSWORD=password
     ports:
-      - "8000:8000"
+        - "8000:8000"
+        - "5678:5678"  # Puerto para debugpy
     volumes:
-      - ./project/backend/django:/app:z
-      - ./conf/django/data:/app/data:z
+        - ./project/backend/django:/app:z
+        - ./conf/django/data:/app/data:z
+    # Comando con debugpy para desarrollo
+    command: python -m debugpy --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
     networks:
-      - app_network
+        - app_network
+    extra_hosts:
+        - host.docker.internal:host-gateway
     profiles:
-      - local
+        - local
+    # Para mantener el contenedor vivo y poder entrar con zsh
+    stdin_open: true
+    tty: true
 
   springboot_backend:
     build:

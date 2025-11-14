@@ -1,44 +1,60 @@
 :root {
-  --surface-a: rgb(255, 255, 255);
-  --surface-b: #fafafa;
-  --surface-c: rgba(0, 0, 0, 0.04);
-  --surface-d: rgba(0, 0, 0, 0.12);
-  /* Bootstrap */
-  --primary-color: #1d71b8;
-  --primary-active: #16568c;
-  --primary-hover: #16568c;
-  --success-color: #5cb85c;
-  --info-color: #5bc0de;
-  --warning-color: #f0ad4e;
-  --danger-color: #d9534f;
+  /* Tokyo Night Soft Theme */
+  --tokyo-bg: #1a1b26;
+  --tokyo-bg-secondary: #24283b;
+  --tokyo-bg-tertiary: #2f3549;
+  --tokyo-fg: #c0caf5;
+  --tokyo-fg-secondary: #a9b1d6;
+  --tokyo-fg-dim: #565f89;
 
-  /* Azuis */
-  --dark-blue: #074d87;
-  --main-blue: #1d71b8;
-  --medium-blue: #1184b8;
-  --light-blue: #009ee0;
+  /* Tokyo Night Soft Accent Colors */
+  --tokyo-blue: #7aa2f7;
+  --tokyo-purple: #bb9af7;
+  --tokyo-green: #9ece6a;
+  --tokyo-yellow: #e0af68;
+  --tokyo-red: #f7768e;
+  --tokyo-cyan: #7dcfff;
+  --tokyo-orange: #ff9e64;
 
-  /* Grisis */
-  --light-gray: #ddd;
-  --medium-gray: #666;
-  --dark-gray: #1a1b26ed;
+  /* Legacy variables - manteniendo compatibilidad */
+  --surface-a: var(--tokyo-bg-secondary);
+  --surface-b: var(--tokyo-bg);
+  --surface-c: var(--tokyo-bg-tertiary);
+  --surface-d: rgba(192, 202, 245, 0.1);
 
+  /* Bootstrap colors adaptados al tema */
+  --primary-color: var(--tokyo-blue);
+  --primary-active: #5a7dd4;
+  --primary-hover: #6b8de8;
+  --success-color: var(--tokyo-green);
+  --info-color: var(--tokyo-cyan);
+  --warning-color: var(--tokyo-yellow);
+  --danger-color: var(--tokyo-red);
 
-  // --bg-dark: #1a1b26ed;
-  // --bg-dark: rgb(12, 12, 17);
-  --bg-dark: rgba(12, 12, 17, 0.349);
-  --purple-main: #5a3e8e;
-  --purple-secondary: #5a3e8e56;
-  --blue-secondary: #000018d0;
-  --purple-three: #9301b133;
-  --green-bg: #001803d5;
+  /* Azuis - adaptados */
+  --dark-blue: #5a7dd4;
+  --main-blue: var(--tokyo-blue);
+  --medium-blue: #8bb3ff;
+  --light-blue: var(--tokyo-cyan);
 
+  /* Grisis - adaptados */
+  --light-gray: var(--tokyo-fg-dim);
+  --medium-gray: var(--tokyo-fg-secondary);
+  --dark-gray: var(--tokyo-bg-secondary);
+
+  /* Backgrounds legacy - adaptados */
+  --bg-dark: var(--tokyo-bg-secondary);
+  --purple-main: var(--tokyo-purple);
+  --purple-secondary: rgba(187, 154, 247, 0.2);
+  --blue-secondary: rgba(122, 162, 247, 0.15);
+  --purple-three: rgba(187, 154, 247, 0.1);
+  --green-bg: rgba(158, 206, 106, 0.15);
 
   /* Fuente */
-  --text-color: #444444;
-  --text-color-secondary: #787878;
+  --text-color: var(--tokyo-fg);
+  --text-color-secondary: var(--tokyo-fg-secondary);
 
-  --font-family: Roboto, sans-serif;
+  --font-family: 'JetBrains Mono', monospace;
   --font-size: 14px;
   --font-size-small: 0.991rem;
 
@@ -52,17 +68,17 @@
 
   --maskbg: rgba(0, 0, 0, 0.4);
 
-  --error: rgb(176, 0, 32);
-  --focus-ring: 0 0 0 0.2rem rgba(29, 113, 255, 0.5);
-  --background-primary-color: rgba(29, 113, 255, 0.16);
+  --error: var(--tokyo-red);
+  --focus-ring: 0 0 0 0.2rem rgba(122, 162, 247, 0.3);
+  --background-primary-color: rgba(122, 162, 247, 0.16);
 
-  --wizard-stepper--active: #68cf79;
-  --wizard-stepper--active-font: Roboto, sans-serif;
-  --wizard-line-color: #19242f;
-  --wizard-circle-color: #7e7e7e;
-  --wizard-stepper--disabled: #787878;
-  --wizard-stepper--disabled-font: #16568c;
+  --wizard-stepper--active: var(--tokyo-green);
+  --wizard-stepper--active-font: 'JetBrains Mono', monospace;
+  --wizard-line-color: var(--tokyo-bg-tertiary);
+  --wizard-circle-color: var(--tokyo-fg-dim);
+  --wizard-stepper--disabled: var(--tokyo-fg-dim);
+  --wizard-stepper--disabled-font: var(--tokyo-blue);
   --circle-size: 10rem !important;
 
-  --color-required: #ffffd3;
+  --color-required: rgba(224, 175, 104, 0.2);
 }

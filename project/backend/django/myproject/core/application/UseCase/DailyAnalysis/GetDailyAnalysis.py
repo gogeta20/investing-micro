@@ -7,40 +7,42 @@ class GetDailyAnalysis:
     def execute(self, query):
         sql = """
         WITH
-        valid_days AS (
-            SELECT DATE(recorded_at) AS d
-            FROM stock_prices
-            GROUP BY DATE(recorded_at)
-            HAVING COUNT(*) > 0
-            ORDER BY d DESC
-            LIMIT 2
-        ),
-        days AS (
-            SELECT
-                MAX(d) AS today_day,
-                MIN(d) AS yesterday_day
-            FROM valid_days
-        ),
-        today_snap AS (
-            SELECT
-                sp.stock_id,
-                sp.price,
-                sp.recorded_at,
-                ROW_NUMBER() OVER (PARTITION BY sp.stock_id ORDER BY sp.recorded_at DESC) AS rn
-            FROM stock_prices sp
-            WHERE DATE(sp.recorded_at) = (SELECT today_day FROM days)
-        ),
-        yesterday_snap AS (
-            SELECT
-                sp.stock_id,
-                sp.price,
-                sp.recorded_at,
-                ROW_NUMBER() OVER (PARTITION BY sp.stock_id ORDER BY sp.recorded_at DESC) AS rn
-            FROM stock_prices sp
-            WHERE DATE(sp.recorded_at) = (SELECT yesterday_day FROM days)
-        )
+            valid_days AS (
+                SELECT DATE(recorded_at) AS d
+                FROM stock_prices
+                GROUP BY DATE(recorded_at)
+                HAVING COUNT(*) > 0
+                ORDER BY d DESC
+                LIMIT 2
+            ),
+            days AS (
+                SELECT
+                    MAX(d) AS today_day,
+                    MIN(d) AS yesterday_day
+                FROM valid_days
+            ),
+            today_snap AS (
+                SELECT
+                    sp.stock_id,
+                    sp.price,
+                    sp.recorded_at,
+                    ROW_NUMBER() OVER (PARTITION BY sp.stock_id ORDER BY sp.recorded_at DESC) AS rn
+                FROM stock_prices sp
+                WHERE DATE(sp.recorded_at) = (SELECT today_day FROM days)
+            ),
+            yesterday_snap AS (
+                SELECT
+                    sp.stock_id,
+                    sp.price,
+                    sp.recorded_at,
+                    ROW_NUMBER() OVER (PARTITION BY sp.stock_id ORDER BY sp.recorded_at DESC) AS rn
+                FROM stock_prices sp
+                WHERE DATE(sp.recorded_at) = (SELECT yesterday_day FROM days)
+            )
         SELECT
             t.stock_id,
+            s.symbol,
+            s.name,
             t.price AS price_today,
             y.price AS price_yesterday,
             ROUND(((t.price - y.price) / y.price) * 100, 2) AS change_percent,
@@ -54,6 +56,8 @@ class GetDailyAnalysis:
         FROM today_snap t
         LEFT JOIN yesterday_snap y
             ON y.stock_id = t.stock_id AND y.rn = 1
+        LEFT JOIN stocks s
+            ON s.id = t.stock_id
         WHERE t.rn = 1;
         """
 

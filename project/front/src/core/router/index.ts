@@ -10,6 +10,7 @@ import Symfony from '@/pages/test/Symfony.vue';
 import Whoami from '@/pages/Whoami.vue';
 import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
 import StocksView from '@/pages/StocksView.vue';
+import AnalysisDaily from '@/pages/AnalysisDaily.vue';
 
 const routes = [
   {
@@ -62,6 +63,11 @@ const routes = [
       {
         path: "/stocks",
         component: StocksView,
+        children: [],
+      },
+      {
+        path: "/analysis/daily",
+        component: AnalysisDaily,
         children: [],
       },
     ],

@@ -12,6 +12,10 @@ in-db-mysql-root:
 mysql-down:
 	$(COMPOSE) stop  $(MYSQL) && $(COMPOSE) rm -f  $(MYSQL)
 
+dump-db:
+	docker exec $(MYSQL) mysqldump -u user -ppassword investing_micro_db > dumpdb.sql
+#     docker exec $(MYSQL) mysqldump -u root -prootpassword investing_micro_db > backup_$(date +%Y%m%d_%H%M%S).sql
+
 mysql-clean-volume:
 	@echo "⚠️  WARNING: This will delete all MySQL data!"
 	@echo "Stopping and removing MySQL container..."

@@ -2,14 +2,21 @@ import yfinance as yf
 from datetime import datetime
 
 from myproject.core.application.UseCase.StockCurrent import GetCurrentStocksQuery
+from myproject.core.infrastructure.services.market.market_status_service import MarketStatusService
 
 
 class GetCurrentStocks:
     def __init__(self, mysql_service):
         self.mysql_service = mysql_service
+        self.market_service = MarketStatusService()
 
     def execute(self, query: GetCurrentStocksQuery):
-        # 1. Recuperar los símbolos Y nombres desde DB
+        # ---------------------------------------------
+        # 0. Verificar estado del mercado
+        # ---------------------------------------------
+        market_open = self.market_service.is_market_open()
+
+        # 1. Recuperar símbolos desde DB
         if query.portfolio_id:
             sql = """
                 SELECT s.symbol, s.name
@@ -38,30 +45,37 @@ class GetCurrentStocks:
                 ticker = yf.Ticker(symbol)
                 price = ticker.history(period="1d")["Close"].iloc[-1]
 
-                results.append({
+                result_item = {
                     "symbol": symbol,
-                    "name": name,  # ⬅️ Ahora incluimos el nombre
+                    "name": name,
                     "price": float(price),
-                    "recorded_at": now
-                })
+                    "recorded_at": now,
+                    "market_open": market_open
+                }
 
-                # 3. Guardar snapshot en DB
-                insert_sql = """
-                    INSERT INTO stock_prices (uid, stock_id, price, recorded_at)
-                    VALUES (UUID(),
-                            (SELECT id FROM stocks WHERE symbol = %s),
-                            %s, %s)
-                """
-                self.mysql_service.execute_query_params(insert_sql, (symbol, price, now))
+                results.append(result_item)
+
+                # 3. SOLO GUARDAR SNAPSHOT SI EL MERCADO ESTA ABIERTO
+                if market_open:
+                    insert_sql = """
+                        INSERT INTO stock_prices (uid, stock_id, price, recorded_at)
+                        VALUES (UUID(),
+                                (SELECT id FROM stocks WHERE symbol = %s),
+                                %s, %s)
+                    """
+                    self.mysql_service.execute_query_params(insert_sql, (symbol, price, now))
+
             except Exception as e:
                 results.append({
                     "symbol": symbol,
-                    "name": name,  # ⬅️ También en el error
-                    "error": str(e)
+                    "name": name,
+                    "error": str(e),
+                    "market_open": market_open
                 })
-
+        print(f"[DEBUG] market_open: {market_open}")
         return {
             "portfolio_id": query.portfolio_id,
             "updated_at": now,
+            "market_open": market_open,
             "data": results
         }

@@ -2,6 +2,7 @@ from django.urls import path
 
 from myproject.core.infrastructure.controllers.health.health_check_controller import HealthCheckController
 from myproject.core.infrastructure.controllers.stock.get_current_stocks_controller import GetCurrentStocksController
+from myproject.core.infrastructure.controllers.stock.get_daily_analysis_controller import GetDailyAnalysisController
 from myproject.core.infrastructure.controllers.stock.get_results_portafolio_controller import GetResultsPortafolioController
 from myproject.core.infrastructure.controllers.stock.get_stock_by_symbol_controller import GetStockBySymbolController
 from myproject.core.infrastructure.controllers.stock.get_stock_controller import GetStockController
@@ -18,5 +19,5 @@ urlpatterns = [
     path('stocks/<str:symbol>/history', GetStockHistoryController.as_view(), name='get_stock_history'),
     path('stocks/current/state', GetCurrentStocksController.as_view(), name='get_current_stocks'),
     path('stocks/overview/list', GetStocksOverviewController.as_view(), name='get_stocks_overview'),
-
+    path("analysis/daily", GetDailyAnalysisController.as_view(), name="analysis_daily"),
 ]

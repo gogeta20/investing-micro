@@ -1,0 +1,58 @@
+stages:
+    - test
+    - build
+
+# Test simple para verificar que el runner funciona
+test:hello:
+    stage: test
+    image: alpine:latest
+    script:
+        - echo "✅ Runner is working!"
+        - echo "Branch $CI_COMMIT_BRANCH"
+        - echo "Commit $CI_COMMIT_SHORT_SHA"
+    only:
+        - merge_requests
+        - master
+
+# Test de Python - validar sintaxis
+test:python:
+    stage: test
+    image: python:3.10
+    before_script:
+        - cd project/backend/django
+        - pip install flake8
+    script:
+        - echo "🐍 Checking Python syntax..."
+        - python -m py_compile manage.py
+        - flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=migrations,venv
+    only:
+        - merge_requests
+        - master
+    allow_failure: false
+
+# Test de PHP - validar sintaxis
+test:php:
+    stage: test
+    image: php:8.2-cli
+    before_script:
+        - cd project/backend/symfony
+    script:
+        - echo "🐘 Checking PHP syntax..."
+        - find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+    only:
+        - merge_requests
+        - master
+    allow_failure: false
+
+# Build info
+build:info:
+    stage: build
+    image: docker:24.0.5
+    services:
+        - docker:24.0.5-dind
+    script:
+        - echo "🐳 Docker version:"
+        - docker --version
+        - echo "📦 Would build images here in real scenario"
+    only:
+        - master

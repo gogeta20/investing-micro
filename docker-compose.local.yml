@@ -294,6 +294,53 @@ services:
       - app_network
     profiles:
       - extra
+  gitlab:
+    image: gitlab/gitlab-ce:16.11.1-ce.0
+    container_name: gitlab_micro
+    hostname: gitlab.local
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost:8090'
+        gitlab_rails['initial_root_password'] ='S3cure!X9z$QwT7'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        # Reducir uso de memoria para desarrollo local
+        puma['worker_processes'] = 2
+        postgresql['shared_buffers'] = "256MB"
+        postgresql['max_worker_processes'] = 4
+        prometheus_monitoring['enable'] = false
+    ports:
+      - "8090:8090"
+      - "2222:22"
+    volumes:
+      - ./devops/volumes/gitlab/config:/etc/gitlab:z
+      - ./devops/volumes/gitlab/logs:/var/log/gitlab:z
+      - ./devops/volumes/gitlab/data:/var/opt/gitlab:z
+    shm_size: '256m'
+    networks:
+      - app_network
+    profiles:
+      - ci
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090/-/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 240s
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:v16.11.1
+    container_name: gitlab_runner
+    volumes:
+      - ./devops/volumes/gitlab-runner:/etc/gitlab-runner:z
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app_network
+    profiles:
+      - ci
+    depends_on:
+      gitlab:
+        condition: service_healthy
+    restart: unless-stopped
 
 networks:
   app_network:

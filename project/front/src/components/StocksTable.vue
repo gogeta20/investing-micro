@@ -92,7 +92,24 @@
                     <span v-else class="no-data">N/A</span>
                 </template>
             </Column>
+            <Column header="Acciones">
+                <template #body="slotProps">
+                    <button
+                        @click="openValuationModal(slotProps.data.symbol)"
+                        class="valuation-button"
+                        title="Ver valoración"
+                    >
+                        Valoración
+                    </button>
+                </template>
+            </Column>
         </DataTable>
+
+        <!-- Modal de Valoración -->
+        <StockValuationModal
+            :symbol="selectedSymbol"
+            v-model:visible="valuationModalVisible"
+        />
     </div>
 </template>
 
@@ -101,6 +118,7 @@ import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import HttpClientDjango from "@/core/http/HttpClientDjango";
+import StockValuationModal from "@/components/StockValuationModal.vue";
 
 interface StockOverview {
     portfolio_id: number;
@@ -123,6 +141,8 @@ interface StocksResponse {
 const stocks = ref<StockOverview[]>([]);
 const loading = ref<boolean>(false);
 const error = ref<string | null>(null);
+const valuationModalVisible = ref<boolean>(false);
+const selectedSymbol = ref<string>("");
 
 // Por defecto portfolio_id = 1, puede ser pasado como prop
 const props = defineProps<{
@@ -205,6 +225,11 @@ const getVariationClass = (currentPrice: number, lastPrice: number | string): st
     return variation >= 0 ? "positive" : "negative";
 };
 
+const openValuationModal = (symbol: string) => {
+    selectedSymbol.value = symbol;
+    valuationModalVisible.value = true;
+};
+
 onMounted(() => {
     loadStocks();
 });
@@ -264,6 +289,26 @@ onMounted(() => {
 .negative {
     color: var(--tokyo-red);
     font-weight: 600;
+}
+
+.valuation-button {
+    padding: 0.4rem 0.8rem;
+    background-color: var(--tokyo-blue);
+    color: var(--tokyo-bg);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background-color: var(--primary-hover);
+    }
+
+    &:active {
+        background-color: var(--primary-active);
+    }
 }
 
 // Estilos para PrimeVue DataTable con tema Tokyo Night

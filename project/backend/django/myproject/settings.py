@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'investing_micro_db',
+        'NAME': 'investing_db',
         'USER': 'user',
         'PASSWORD': 'password',
         'HOST': 'mysql_db',  # Nombre del contenedor

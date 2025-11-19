@@ -67,13 +67,14 @@ class GetDailyAnalysis:
         upsert_sql = """
         INSERT INTO daily_summary (
             stock_id,
+            uid,
             price_open,
             price_close,
             change_percent,
             trend,
             recorded_day
         ) VALUES (
-            %s, %s, %s, %s, %s, %s
+            %s, UUID(), %s, %s, %s, %s, %s
         )
         ON DUPLICATE KEY UPDATE
             price_open = VALUES(price_open),

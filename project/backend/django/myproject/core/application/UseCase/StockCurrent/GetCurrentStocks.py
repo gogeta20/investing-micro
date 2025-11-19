@@ -15,7 +15,7 @@ class GetCurrentStocks:
         # 0. Verificar estado del mercado
         # ---------------------------------------------
         market_open = self.market_service.is_market_open()
-
+        market_open = 1
         # 1. Recuperar símbolos desde DB
         if query.portfolio_id:
             sql = """

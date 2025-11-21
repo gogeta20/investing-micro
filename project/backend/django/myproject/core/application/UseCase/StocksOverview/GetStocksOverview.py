@@ -19,7 +19,6 @@ class GetStocksOverview:
         current_query = GetCurrentStocksQuery(portfolio_id=query.portfolio_id)
         current_data = self.current_use_case.execute(current_query)
 
-        # Debug: ver qué está devolviendo GetCurrentStocks
         print(f"[DEBUG] GetStocksOverview - portfolio_id: {query.portfolio_id}")
         print(
             f"[DEBUG] GetStocksOverview - current_data keys: {current_data.keys() if isinstance(current_data, dict) else 'not a dict'}")

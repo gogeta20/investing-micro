@@ -5,7 +5,7 @@ in-django:
 logs-back-django:
 	docker logs $(DB)
 
-py-require:
+django-py-require:
 	docker exec -it $(DB) bash -c ""
 
 django-down:

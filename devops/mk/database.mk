@@ -58,7 +58,11 @@ mysql-migrate:
 ## use: make mysql-execute v=2
 mysql-execute:
 	docker exec $(MYSQL) sh -c 'mysql -u user -ppassword < /var/www/html/sql/migrations/V$(v).sql'
-    
+
+## use: make mysql-execute-in-db v=2 db=my_database
+mysql-execute-in-db:
+	docker exec $(MYSQL) sh -c 'mysql -u user -ppassword $(db) < /var/www/html/sql/migrations/$(v).sql'
+
 # Para ejecutar un seed específico
 mysql-seed:
 	@if [ -z "$(s)" ]; then \

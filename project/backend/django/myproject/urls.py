@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('myproject.core.application.routing.urls')),  # Delegar todo el routing del API
+    path('api/', include('myproject.core.application.routing.urls')),
+    path('api/stock/', include('myproject.stock.application.routing.urls')), # Delegar todo el routing del API
 ]

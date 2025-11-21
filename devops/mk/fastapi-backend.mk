@@ -13,7 +13,7 @@ build-trainer-fastapi-two:
 	docker build -f ../../../../devops/dockerfiles/backend/FastAPI.Trainer.Dockerfile \
   -t chatbot-trainer:latest .
 
-py-require:
+fastapi-py-require:
 	docker exec -it $(FB) bash -c ""
 
 fastapi-down:

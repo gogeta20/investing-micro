@@ -4,16 +4,17 @@ from pprint import pprint
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from myproject.shared.domain.bus.query.query import Query
-from myproject.shared.infrastructure.bus.command_bus import CommandBus
-from myproject.shared.infrastructure.bus.query_bus import QueryBus
+from myproject.shared.infrastructure.bus.command_bus import CommandBus, get_command_bus
+from myproject.shared.infrastructure.bus.query_bus import QueryBus, get_query_bus
 from myproject.shared.domain.bus.command.command import Command
 
 
 class ApiController(APIView, ABC):
     def __init__(self, query_bus: QueryBus = None, command_bus: CommandBus = None):
         super().__init__()
-        self.query_bus = query_bus or QueryBus()
-        self.command_bus = command_bus or CommandBus()
+        # Usa la instancia compartida si no se proporciona una
+        self.query_bus = query_bus if query_bus is not None else get_query_bus()
+        self.command_bus = command_bus if command_bus is not None else get_command_bus()
         self.register_exceptions()
 
     @abstractmethod

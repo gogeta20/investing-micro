@@ -13,3 +13,12 @@ class CommandBus:
         if not handler:
             raise Exception(f"dispatch No handler for {type(command)}")
         handler.handle(command)
+
+
+# Instancia compartida del CommandBus (singleton pattern)
+_shared_command_bus = CommandBus()
+
+
+def get_command_bus() -> CommandBus:
+    """Retorna la instancia compartida del CommandBus"""
+    return _shared_command_bus

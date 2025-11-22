@@ -7,9 +7,8 @@ from myproject.core.infrastructure.services.market.market_status_service import 
 
 
 class GetCurrentStocks:
-    def __init__(self, mysql_service: Optional[MySQLService] = None):
-        # Si no se pasa mysql_service, lo creamos internamente
-        self.mysql_service = mysql_service if mysql_service is not None else MySQLService()
+    def __init__(self):
+        self.mysql_service =  MySQLService()
         self.market_service = MarketStatusService()
 
     def execute(self, query: GetCurrentStocksQuery):

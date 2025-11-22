@@ -95,33 +95,6 @@ const loadPortfolios = async () => {
   error.value = null;
 
   try {
-    // MOCK: Simular respuesta del backend
-    console.log("MOCK GET /api/portfolio/list");
-
-    // Simular delay de red
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Mock response con un portafolio fake
-    const mockPortfolios: Portfolio[] = [
-      {
-        id: 1,
-        name: "Portafolio Principal",
-        stocks_count: 5,
-        created_at: new Date().toISOString(),
-        stocks: [
-          { id: 1, symbol: "AAPL" },
-          { id: 2, symbol: "MSFT" },
-          { id: 3, symbol: "GOOGL" },
-          { id: 4, symbol: "AMZN" },
-          { id: 5, symbol: "TSLA" },
-        ],
-      },
-    ];
-
-    portfolios.value = mockPortfolios;
-
-    // TODO: Cuando el endpoint esté listo, descomentar esto:
-    /*
     const response = await HttpClientDjango.get<PortfoliosResponse>(
       "/api/portfolio/list"
     );
@@ -132,7 +105,6 @@ const loadPortfolios = async () => {
       error.value = "Formato de respuesta inválido";
       portfolios.value = [];
     }
-    */
   } catch (err: any) {
     console.error("Error cargando portafolios:", err);
     error.value =

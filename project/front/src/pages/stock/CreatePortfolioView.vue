@@ -61,28 +61,6 @@ const createPortfolio = async () => {
       })),
     };
 
-    // MOCK: Simular respuesta del backend
-    console.log("MOCK POST /api/portfolio/create", payload);
-
-    // Simular delay de red
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Mock response
-    const mockResponse: CreatePortfolioResponse = {
-      portfolio_id: Math.floor(Math.random() * 1000) + 1,
-      message: "Portafolio creado exitosamente",
-      stocks: payload.stocks,
-    };
-
-    success.value = true;
-
-    // Redirigir después de 1 segundo
-    setTimeout(() => {
-      router.push("/portfolio");
-    }, 1000);
-
-    // TODO: Cuando el endpoint esté listo, descomentar esto:
-    /*
     const response = await HttpClientDjango.post<CreatePortfolioResponse>(
       "/api/portfolio/create",
       payload
@@ -96,7 +74,6 @@ const createPortfolio = async () => {
     } else {
       error.value = "Error al crear el portafolio";
     }
-    */
   } catch (err: any) {
     console.error("Error creando portafolio:", err);
     error.value =

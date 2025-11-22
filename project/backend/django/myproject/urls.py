@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myproject.core.application.routing.urls')),
     path('api/stock/', include('myproject.stock.application.routing.urls')), # Delegar todo el routing del API
+    path('api/portfolio/', include('myproject.stock.application.routing.portfolio_urls')), # Routing de portafolios
 ]

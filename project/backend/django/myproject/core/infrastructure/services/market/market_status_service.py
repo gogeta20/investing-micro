@@ -1,14 +1,11 @@
 import os
 import requests
 
-
 class MarketStatusService:
     def __init__(self):
         self.api_key = os.getenv("ALPHA_VANTAGE_TOKEN")
 
-        # Manejo seguro si la API key NO está configurada
         if not self.api_key:
-            print("[WARN] ALPHA_VANTAGE_TOKEN is missing. Market will be treated as CLOSED.")
             self.api_key = None
 
         if self.api_key:
@@ -17,12 +14,9 @@ class MarketStatusService:
                 + self.api_key
             )
         else:
-            self.url = None  # No llamar a la API sin key
+            self.url = None
 
     def is_market_open(self) -> bool:
-        """Devuelve True si el mercado está abierto. False si no hay API key o falla la petición."""
-
-        # Si no tenemos API key → tratamos mercado como CERRADO
         if not self.api_key:
             return False
 

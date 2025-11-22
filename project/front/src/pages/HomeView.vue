@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import ParticlesView from "@/components/ParticlesView.vue";
 import IconView from "@/components/IconView.vue";
 </script>
 

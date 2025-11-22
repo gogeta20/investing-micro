@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AllStocksTable from "@/components/AllStocksTable.vue";
 import StocksTable from "@/components/StocksTable.vue";
 </script>
 
@@ -7,14 +6,8 @@ import StocksTable from "@/components/StocksTable.vue";
   <div class="stocks-view">
     <div class="stocks-container">
       <h1 class="stocks-title">Todas las Acciones</h1>
-      <p class="stocks-subtitle">Estado actual de todas las acciones en la base de datos</p>
-      <AllStocksTable />
-    </div>
-
-    <div class="stocks-container">
-      <h1 class="stocks-title">Tabla de Acciones</h1>
-      <p class="stocks-subtitle">Vista general de las acciones en tu portafolio</p>
-      <StocksTable :portfolio-id="1" />
+      <p class="stocks-subtitle">Estado actual de todas las acciones en el portafolio</p>
+       <StocksTable :portfolio-id="1" />
     </div>
   </div>
 </template>

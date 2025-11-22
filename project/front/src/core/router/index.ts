@@ -9,8 +9,9 @@ import PaymentSuccess from '@/pages/test/Payments/PaymentSuccess.vue';
 import Symfony from '@/pages/test/Symfony.vue';
 import Whoami from '@/pages/Whoami.vue';
 import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
-import StocksView from '@/pages/StocksView.vue';
-import AnalysisDaily from '@/pages/AnalysisDaily.vue';
+import StocksView from '@/pages/stock/StocksView.vue';
+import AnalysisDaily from '@/pages/stock/AnalysisDaily.vue';
+import PortafolioView from '@/pages/stock/PortafolioView.vue';
 
 const routes = [
   {
@@ -63,6 +64,11 @@ const routes = [
       {
         path: "/stocks",
         component: StocksView,
+        children: [],
+      },
+      {
+        path: "/portfolio",
+        component: PortafolioView,
         children: [],
       },
       {

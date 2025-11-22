@@ -56,10 +56,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
 import HttpClientDjango from "@/core/http/HttpClientDjango";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
+import { onMounted, ref } from "vue";
 
 type Trend = "up" | "down";
 
@@ -87,7 +87,7 @@ const loadData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const response = await HttpClientDjango.get<AnalysisResponse>("/api/analysis/daily");
+    const response = await HttpClientDjango.get<AnalysisResponse>("/api/stock/analysis/daily");
     if (Array.isArray(response.data?.data)) {
       rows.value = response.data.data;
     } else {

@@ -12,19 +12,9 @@ class GetCurrentStocks:
         self.market_service = MarketStatusService()
 
     def execute(self, query: GetCurrentStocksQuery):
+        stocks_data = self.get_stocks_data(query)
         market_open = self.market_service.is_market_open()
-        market_open = 1
-        if query.portfolio_id:
-            sql = """
-                SELECT s.symbol, s.name
-                FROM portfolio_stocks ps
-                JOIN stocks s ON ps.stock_id = s.id
-                WHERE ps.portfolio_id = %s
-            """
-            stocks_data = self.mysql_service.execute_query_params(sql, (query.portfolio_id,))
-        else:
-            sql = "SELECT symbol, name FROM stocks"
-            stocks_data = self.mysql_service.execute_query(sql)
+        # market_open = 1
 
         if not stocks_data:
             return {"error": "No se encontraron acciones"}
@@ -74,3 +64,16 @@ class GetCurrentStocks:
             "market_open": market_open,
             "data": results
         }
+
+    def get_stocks_data(self, query: GetCurrentStocksQuery):
+        if query.portfolio_id:
+            sql = """
+                SELECT s.symbol, s.name
+                FROM portfolio_stocks ps
+                JOIN stocks s ON ps.stock_id = s.id
+                WHERE ps.portfolio_id = %s
+            """
+            return self.mysql_service.execute_query_params(sql, (query.portfolio_id,))
+        else:
+            sql = "SELECT symbol, name FROM stocks"
+            return self.mysql_service.execute_query(sql)

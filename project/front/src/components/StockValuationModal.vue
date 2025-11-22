@@ -178,7 +178,7 @@ const loadValuation = async () => {
 
   try {
     const response = await HttpClientDjango.get<ValuationResponse>(
-      `/api/stocks/${props.symbol}/valuation`
+      `/api/stock/${props.symbol}/valuation`
     );
 
     if (response.data.data) {

@@ -11,6 +11,11 @@ function onMenuToggle(event: Event) {
   <header class="header">
     <div class="header-container">
       <router-link to="/" class="header-logo">MV</router-link>
+      <div class="flex gap-2">
+        <router-link to="/stocks" class="header-logo"> <i class="pi pi-chart-line"></i></router-link>
+        <router-link to="/analysis/daily" class="header-logo"> <i class="pi pi-chart-bar"></i></router-link>
+        <router-link to="/portfolio" class="header-logo"> <i class="pi pi-chart-pie"></i></router-link>
+      </div>
       <button class="header-menu-button" @click="onMenuToggle" aria-label="Toggle menu">
         <svg
           xmlns="http://www.w3.org/2000/svg"

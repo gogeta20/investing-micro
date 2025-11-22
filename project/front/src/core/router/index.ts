@@ -1,52 +1,52 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 // import homeRoutes from '@/modules/home/application/routes';
 import HomeView from "@/pages/HomeView.vue";
 import Projects from '@/pages/Projects.vue';
 import Skills from '@/pages/Skills.vue';
-import Payments from '@/pages/test/Payments/Payments.vue';
+import AnalysisDaily from '@/pages/stock/AnalysisDaily.vue';
+import CreatePortfolioView from '@/pages/stock/CreatePortfolioView.vue';
+import PortafolioView from '@/pages/stock/PortafolioView.vue';
+import SingleStockView from '@/pages/stock/SingleStockView.vue';
+import StocksView from '@/pages/stock/StocksView.vue';
+import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
 import PaymentCancel from '@/pages/test/Payments/PaymentCancel.vue';
+import Payments from '@/pages/test/Payments/Payments.vue';
 import PaymentSuccess from '@/pages/test/Payments/PaymentSuccess.vue';
 import Symfony from '@/pages/test/Symfony.vue';
 import Whoami from '@/pages/Whoami.vue';
-import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
-import StocksView from '@/pages/StocksView.vue';
-import AnalysisDaily from '@/pages/AnalysisDaily.vue';
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: "/home",
     component: () => import("@/core/layout/BaseLayout.vue"),
     children: [
       {
+        path: "",
+        redirect: "/home",
+      },
+      {
         path: "/home",
         component: HomeView,
-        children: [],
       },
       {
         path: "/projects",
         component: Projects,
-        children: [],
       },
       {
         path: "/whoami",
         component: Whoami,
-        children: [],
       },
       {
         path: "/skills",
         component: Skills,
-        children: [],
       },
       {
         path: "/symfony-cqrs",
         component: Symfony,
-        children: [],
       },
       {
         path: "/payments",
         component: Payments,
-        children: [],
       },
       {
         path: "/payments/success",
@@ -63,12 +63,22 @@ const routes = [
       {
         path: "/stocks",
         component: StocksView,
-        children: [],
+      },
+      {
+        path: "/stock/:symbol",
+        component: SingleStockView,
+      },
+      {
+        path: "/portfolio",
+        component: PortafolioView,
+      },
+      {
+        path: "/portfolio/create",
+        component: CreatePortfolioView,
       },
       {
         path: "/analysis/daily",
         component: AnalysisDaily,
-        children: [],
       },
     ],
   },

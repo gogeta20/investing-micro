@@ -1,7 +1,6 @@
 from myproject.stock.application.queries.get_stock_valuation.GetStockValuation import GetStockValuation
 from myproject.stock.application.queries.get_stock_valuation.GetStockValuationQuery import GetStockValuationQuery
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
-from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLService
 
 
 class GetStockValuationQueryHandler(QueryHandler):
@@ -13,6 +12,5 @@ class GetStockValuationQueryHandler(QueryHandler):
 
     @classmethod
     def create(cls):
-        mysql_service = MySQLService()
-        use_case = GetStockValuation(mysql_service)
+        use_case = GetStockValuation()
         return cls(use_case)

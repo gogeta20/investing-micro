@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from myproject.stock.application.queries.get_current_stocks.GetCurrentStocks import GetCurrentStocks
 from myproject.stock.application.queries.get_current_stocks.GetCurrentStocksQuery import GetCurrentStocksQuery
 from myproject.stock.application.queries.get_stock_history.GetStockHistory import GetStockHistory
@@ -8,7 +9,8 @@ from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLSe
 
 
 class GetStocksOverview:
-    def __init__(self, mysql_service: MySQLService):
+    def __init__(self, mysql_service: Optional[MySQLService] = None):
+        # Si no se pasa mysql_service, GetCurrentStocks y GetStockHistory lo crearán internamente
         self.mysql_service = mysql_service
         self.current_use_case = GetCurrentStocks(mysql_service)
         self.history_use_case = GetStockHistory(mysql_service)

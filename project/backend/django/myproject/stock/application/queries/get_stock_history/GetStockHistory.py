@@ -1,9 +1,10 @@
+from typing import Optional
 from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLService
 
 
 class GetStockHistory:
-    def __init__(self, mysql_service: MySQLService):
-        self.mysql_service = mysql_service
+    def __init__(self, mysql_service: Optional[MySQLService] = None):
+        self.mysql_service = mysql_service if mysql_service is not None else MySQLService()
 
     def execute(self, query):
         sql = """

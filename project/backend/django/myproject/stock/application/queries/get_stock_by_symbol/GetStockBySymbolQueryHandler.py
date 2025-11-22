@@ -1,12 +1,11 @@
 from myproject.stock.application.queries.get_stock_by_symbol.GetStockBySymbolQuery import GetStockBySymbolQuery
 from myproject.stock.application.queries.get_stock_by_symbol.GetStockBySymbol import GetStockBySymbol
-from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLService
 from myproject.shared.domain.bus.query.query_handler import QueryHandler
 from myproject.shared.domain.response import BaseResponse
 
 
 class GetStockBySymbolQueryHandler(QueryHandler):
-    def __init__(self, use_case):
+    def __init__(self, use_case: GetStockBySymbol):
         self.use_case = use_case
 
     def handle(self, query: GetStockBySymbolQuery):
@@ -22,6 +21,5 @@ class GetStockBySymbolQueryHandler(QueryHandler):
 
     @classmethod
     def create(cls):
-        mysql_service = MySQLService()
-        use_case = GetStockBySymbol(mysql_service)
+        use_case = GetStockBySymbol()
         return cls(use_case)

@@ -1,12 +1,15 @@
 import yfinance as yf
 from datetime import datetime
+from typing import Optional
 from myproject.stock.application.queries.get_current_stocks.GetCurrentStocksQuery import GetCurrentStocksQuery
+from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLService
 from myproject.core.infrastructure.services.market.market_status_service import MarketStatusService
 
 
 class GetCurrentStocks:
-    def __init__(self, mysql_service):
-        self.mysql_service = mysql_service
+    def __init__(self, mysql_service: Optional[MySQLService] = None):
+        # Si no se pasa mysql_service, lo creamos internamente
+        self.mysql_service = mysql_service if mysql_service is not None else MySQLService()
         self.market_service = MarketStatusService()
 
     def execute(self, query: GetCurrentStocksQuery):

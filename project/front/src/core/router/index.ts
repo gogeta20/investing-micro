@@ -4,7 +4,9 @@ import HomeView from "@/pages/HomeView.vue";
 import Projects from '@/pages/Projects.vue';
 import Skills from '@/pages/Skills.vue';
 import AnalysisDaily from '@/pages/stock/AnalysisDaily.vue';
+import CreatePortfolioView from '@/pages/stock/CreatePortfolioView.vue';
 import PortafolioView from '@/pages/stock/PortafolioView.vue';
+import SingleStockView from '@/pages/stock/SingleStockView.vue';
 import StocksView from '@/pages/stock/StocksView.vue';
 import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
 import PaymentCancel from '@/pages/test/Payments/PaymentCancel.vue';
@@ -63,8 +65,16 @@ const routes: RouteRecordRaw[] = [
         component: StocksView,
       },
       {
+        path: "/stock/:symbol",
+        component: SingleStockView,
+      },
+      {
         path: "/portfolio",
         component: PortafolioView,
+      },
+      {
+        path: "/portfolio/create",
+        component: CreatePortfolioView,
       },
       {
         path: "/analysis/daily",

@@ -1,7 +1,7 @@
 <template>
-  <div class="all-stocks-table-container">
+  <div class="create-portfolio-table-container">
     <div v-if="loading" class="loading-container">
-      <p>Cargando datos de acciones...</p>
+      <p>Cargando acciones disponibles...</p>
     </div>
 
     <div v-else-if="error" class="error-container">
@@ -10,21 +10,28 @@
     </div>
 
     <div v-else>
-      <div v-if="updatedAt" class="updated-info">
-        <p>Última actualización: {{ formatDate(updatedAt) }}</p>
+      <div class="selection-info">
+        <p class="selection-count">
+          {{ selectedStocks.length }} acción{{ selectedStocks.length !== 1 ? 'es' : '' }} seleccionada{{ selectedStocks.length !== 1 ? 's' : '' }}
+        </p>
       </div>
 
-      <DataTable :value="stocks" tableStyle="min-width: 60rem" paginator :rows="20"
-        :rowsPerPageOptions="[10, 20, 50, 100]" class="p-datatable-sm">
+      <DataTable
+        v-model:selection="selectedStocks"
+        :value="stocks"
+        tableStyle="min-width: 60rem"
+        paginator
+        :rows="20"
+        :rowsPerPageOptions="[10, 20, 50, 100]"
+        class="p-datatable-sm"
+        selectionMode="multiple"
+        dataKey="id"
+        :metaKeySelection="false"
+      >
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
         <Column field="name" header="Nombre" sortable>
           <template #body="slotProps">
-            <router-link
-              v-if="!slotProps.data.error"
-              :to="`/stock/${slotProps.data.symbol}`"
-              class="stock-name-link">
-              {{ slotProps.data.name }}
-            </router-link>
-            <span v-else class="stock-name">{{ slotProps.data.name }}</span>
+            <span class="stock-name">{{ slotProps.data.name }}</span>
           </template>
         </Column>
         <Column field="symbol" header="Símbolo" sortable></Column>
@@ -48,41 +55,19 @@
             </span>
           </template>
         </Column>
-        <Column header="Estado">
-          <template #body="slotProps">
-            <span v-if="slotProps.data.error" class="error-badge">
-              {{ slotProps.data.error }}
-            </span>
-            <span v-else class="success-badge">
-              OK
-            </span>
-          </template>
-        </Column>
-        <Column header="Acciones">
-          <template #body="slotProps">
-            <button v-if="!slotProps.data.error" @click="openValuationModal(slotProps.data.symbol)"
-              class="valuation-button" title="Ver valoración">
-              Valoración
-            </button>
-            <span v-else class="no-data">-</span>
-          </template>
-        </Column>
       </DataTable>
     </div>
-
-    <!-- Modal de Valoración -->
-    <StockValuationModal :symbol="selectedSymbol" v-model:visible="valuationModalVisible" />
   </div>
 </template>
 
 <script setup lang="ts">
-import StockValuationModal from "@/components/StockValuationModal.vue";
 import HttpClientDjango from "@/core/http/HttpClientDjango";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import { onMounted, ref } from "vue";
 
-interface StockCurrent {
+interface StockOption {
+  id: number;
   symbol: string;
   name: string;
   price?: number;
@@ -93,15 +78,13 @@ interface StockCurrent {
 interface CurrentStocksResponse {
   portfolio_id: number | null;
   updated_at: string;
-  data: StockCurrent[];
+  data: StockOption[];
 }
 
-const stocks = ref<StockCurrent[]>([]);
+const stocks = ref<StockOption[]>([]);
+const selectedStocks = ref<StockOption[]>([]);
 const loading = ref<boolean>(false);
 const error = ref<string | null>(null);
-const updatedAt = ref<string | null>(null);
-const valuationModalVisible = ref<boolean>(false);
-const selectedSymbol = ref<string>("");
 
 const loadStocks = async () => {
   loading.value = true;
@@ -111,9 +94,13 @@ const loadStocks = async () => {
     const response = await HttpClientDjango.get<CurrentStocksResponse>(
       "/api/stock/current/state"
     );
+
     if (Array.isArray(response.data.data)) {
-      stocks.value = response.data.data;
-      updatedAt.value = response.data.updated_at;
+      // Asignar IDs si no vienen del backend (mock)
+      stocks.value = response.data.data.map((stock, index) => ({
+        ...stock,
+        id: stock.id || index + 1, // Mock: asignar ID si no viene
+      }));
     } else if (response.data.data && typeof response.data.data === "object" && "error" in response.data.data) {
       error.value = (response.data.data as any).error;
       stocks.value = [];
@@ -127,7 +114,7 @@ const loadStocks = async () => {
       err.response?.data?.error ||
       err.response?.data?.data?.error ||
       err.message ||
-      "Error al cargar los datos de acciones";
+      "Error al cargar las acciones disponibles";
     stocks.value = [];
   } finally {
     loading.value = false;
@@ -156,10 +143,11 @@ const formatDate = (dateString: string | undefined): string => {
   }
 };
 
-const openValuationModal = (symbol: string) => {
-  selectedSymbol.value = symbol;
-  valuationModalVisible.value = true;
-};
+// Exponer métodos y datos para el componente padre
+defineExpose({
+  selectedStocks,
+  loadStocks,
+});
 
 onMounted(() => {
   loadStocks();
@@ -167,7 +155,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.all-stocks-table-container {
+.create-portfolio-table-container {
   padding: 1rem;
 }
 
@@ -202,30 +190,23 @@ onMounted(() => {
   }
 }
 
-.updated-info {
+.selection-info {
   margin-bottom: 1rem;
   padding: 0.75rem;
   background-color: var(--tokyo-bg-tertiary);
   border-radius: var(--border-radius);
-  color: var(--tokyo-fg-secondary);
-  font-size: 0.9rem;
+  border-left: 4px solid var(--tokyo-blue);
+}
+
+.selection-count {
+  color: var(--tokyo-fg);
+  font-weight: 500;
+  margin: 0;
 }
 
 .stock-name {
   font-weight: 500;
   color: var(--tokyo-fg);
-}
-
-.stock-name-link {
-  font-weight: 500;
-  color: var(--tokyo-blue);
-  text-decoration: none;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: var(--tokyo-cyan);
-    text-decoration: underline;
-  }
 }
 
 .no-data {
@@ -241,36 +222,6 @@ onMounted(() => {
   background-color: rgba(247, 118, 142, 0.15);
   border-radius: 4px;
   display: inline-block;
-}
-
-.success-badge {
-  color: var(--tokyo-green);
-  font-size: 0.85rem;
-  font-weight: 500;
-  padding: 0.25rem 0.5rem;
-  background-color: rgba(158, 206, 106, 0.15);
-  border-radius: 4px;
-  display: inline-block;
-}
-
-.valuation-button {
-  padding: 0.4rem 0.8rem;
-  background-color: var(--tokyo-blue);
-  color: var(--tokyo-bg);
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: var(--primary-hover);
-  }
-
-  &:active {
-    background-color: var(--primary-active);
-  }
 }
 
 // Estilos para PrimeVue DataTable con tema Tokyo Night
@@ -302,11 +253,29 @@ onMounted(() => {
   &:hover {
     background-color: var(--tokyo-bg-tertiary);
   }
+
+  &.p-highlight {
+    background-color: rgba(122, 162, 247, 0.2);
+  }
 }
 
 :deep(.p-datatable-tbody > tr > td) {
   border-bottom: 1px solid var(--tokyo-bg-tertiary);
   color: var(--tokyo-fg);
+}
+
+:deep(.p-checkbox .p-checkbox-box) {
+  background-color: var(--tokyo-bg-secondary);
+  border-color: var(--tokyo-bg-tertiary);
+
+  &.p-highlight {
+    background-color: var(--tokyo-blue);
+    border-color: var(--tokyo-blue);
+  }
+}
+
+:deep(.p-checkbox .p-checkbox-box .p-checkbox-icon) {
+  color: var(--tokyo-bg);
 }
 
 :deep(.p-paginator) {

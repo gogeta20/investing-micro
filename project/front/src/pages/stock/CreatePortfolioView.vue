@@ -2,7 +2,10 @@
 import CreatePortfolioTable from "@/components/CreatePortfolioTable.vue";
 import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
-import HttpClientDjango from "@/core/http/HttpClientDjango";
+import {
+  CreatePortfolioUseCase,
+  type CreatePortfolioRequest,
+} from "@/modules/stock/application/useCase/post/CreatePortfolio/CreatePortfolioUseCase";
 
 const router = useRouter();
 const tableRef = ref<InstanceType<typeof CreatePortfolioTable> | null>(null);
@@ -10,29 +13,6 @@ const portfolioName = ref<string>("");
 const loading = ref<boolean>(false);
 const error = ref<string | null>(null);
 const success = ref<boolean>(false);
-
-interface StockSelection {
-  id: number;
-  symbol: string;
-}
-
-interface CreatePortfolioRequest {
-  portfolio_id?: number;
-  name?: string;
-  stocks: Array<{
-    id: number;
-    symbol: string;
-  }>;
-}
-
-interface CreatePortfolioResponse {
-  portfolio_id: number;
-  message: string;
-  stocks: Array<{
-    id: number;
-    symbol: string;
-  }>;
-}
 
 const createPortfolio = async () => {
   if (!tableRef.value) {
@@ -61,12 +41,9 @@ const createPortfolio = async () => {
       })),
     };
 
-    const response = await HttpClientDjango.post<CreatePortfolioResponse>(
-      "/api/portfolio/create",
-      payload
-    );
+    const response = await CreatePortfolioUseCase(payload);
 
-    if (response.data.portfolio_id) {
+    if (response.portfolio_id) {
       success.value = true;
       setTimeout(() => {
         router.push("/portfolio");

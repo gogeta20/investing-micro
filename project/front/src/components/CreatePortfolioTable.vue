@@ -61,24 +61,13 @@
 </template>
 
 <script setup lang="ts">
-import HttpClientDjango from "@/core/http/HttpClientDjango";
+import { CurrentStateUseCase, type StockCurrent } from "@/modules/stock/application/useCase/get/CurrentState/CurrentStateUseCase";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import { onMounted, ref } from "vue";
 
-interface StockOption {
+interface StockOption extends StockCurrent {
   id: number;
-  symbol: string;
-  name: string;
-  price?: number;
-  recorded_at?: string;
-  error?: string;
-}
-
-interface CurrentStocksResponse {
-  portfolio_id: number | null;
-  updated_at: string;
-  data: StockOption[];
 }
 
 const stocks = ref<StockOption[]>([]);
@@ -91,18 +80,17 @@ const loadStocks = async () => {
   error.value = null;
 
   try {
-    const response = await HttpClientDjango.get<CurrentStocksResponse>(
-      "/api/stock/current/state"
-    );
+    const response = await CurrentStateUseCase();
 
-    if (Array.isArray(response.data.data)) {
-      // Asignar IDs si no vienen del backend (mock)
-      stocks.value = response.data.data.map((stock, index) => ({
+    if (Array.isArray(response.data)) {
+      // Asignar IDs si no vienen del backend (el backend debería incluirlos)
+      // Por ahora usamos el índice + 1 como fallback
+      stocks.value = response.data.map((stock, index) => ({
         ...stock,
-        id: stock.id || index + 1, // Mock: asignar ID si no viene
+        id: (stock as any).id || index + 1, // TODO: El backend debe incluir el ID
       }));
-    } else if (response.data.data && typeof response.data.data === "object" && "error" in response.data.data) {
-      error.value = (response.data.data as any).error;
+    } else if (response.data && typeof response.data === "object" && "error" in response.data) {
+      error.value = (response.data as any).error;
       stocks.value = [];
     } else {
       error.value = "Formato de respuesta inválido";

@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "IDACTDISP": "3005",
+      "IDMONTE": "840",
+      "S_NIFCIF": "A43161623",
+      "NUMEXPEDIENTE": "LU-06-EXP/04",
+      "S_SUPERFICIE": "47.71",
+      "CODTIPO": "2",
+      "TIPO": "Expropiación"
+    },
+    {
+      "IDACTDISP": "3009",
+      "IDMONTE": "840",
+      "S_NIFCIF": "A43161623",
+      "NUMEXPEDIENTE": "LU-10-EXP/04",
+      "S_SUPERFICIE": "1.16",
+      "CODTIPO": "2",
+      "TIPO": "Expropiación"
+    }
+  ],
+  "message": "A consulta foi realizada correctamente.",
+  "status": 200
+}

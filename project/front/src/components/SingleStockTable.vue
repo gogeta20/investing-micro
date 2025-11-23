@@ -68,26 +68,14 @@
 </template>
 
 <script setup lang="ts">
-import HttpClientDjango from "@/core/http/HttpClientDjango";
+import {
+  GetStockHistoryUseCase,
+  type StockHistoryItem,
+  type StockHistoryResponse,
+} from "@/modules/stock/application/useCase/get/GetStockHistory/GetStockHistoryUseCase";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import { onMounted, ref, watch } from "vue";
-
-interface StockHistoryItem {
-  date: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-  price: number;
-}
-
-interface StockHistoryResponse {
-  symbol: string;
-  period: string;
-  data: StockHistoryItem[];
-}
 
 const props = defineProps<{
   symbol: string;
@@ -103,14 +91,14 @@ const loadStockHistory = async () => {
   error.value = null;
 
   try {
-    const response = await HttpClientDjango.get<StockHistoryResponse>(
-      `/api/stock/${props.symbol}/history`,
-      { period: "1mo" }
-    );
+    const response = await GetStockHistoryUseCase({
+      symbol: props.symbol,
+      period: "1mo",
+    });
 
-    if (response.data.data && Array.isArray(response.data.data)) {
-      stockInfo.value = response.data;
-      historyData.value = response.data.data;
+    if (response.data && Array.isArray(response.data)) {
+      stockInfo.value = response;
+      historyData.value = response.data;
     } else {
       error.value = "Formato de respuesta inválido";
       historyData.value = [];

@@ -13,6 +13,16 @@ export const ReferenceDate = new Date(1900, 1, 1, 0, 0, 0, 0);
  * @export
  */
 export class UtilHelper {
+
+  /**
+ * Devuelve Si estamos en el entorno marcado como desarrollo / producción
+ * @param mode Desarrollo, producción o uno personalizado
+ */
+  static checkEnvironment(mode = "preview"): boolean {
+    const envMode = import.meta.env.MODE;
+    return envMode === "extranet" || envMode === mode;
+  }
+
   /**
    * Devuelve si el valor está definido o no
    */
@@ -155,14 +165,6 @@ export class UtilHelper {
     link.download = title;
     link.click();
     window.URL.revokeObjectURL(url);
-  }
-  /**
-   * Devuelve Si estamos en el entorno marcado como desarrollo / producción
-   * @param mode Desarrollo, producción o uno personalizado
-   */
-  static checkEnvironment(mode = "preview"): boolean {
-    const envMode = import.meta.env.MODE;
-    return envMode === "extranet" || envMode === mode;
   }
 
   /**

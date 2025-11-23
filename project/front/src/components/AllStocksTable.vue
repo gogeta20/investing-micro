@@ -18,10 +18,7 @@
         :rowsPerPageOptions="[10, 20, 50, 100]" class="p-datatable-sm">
         <Column field="name" header="Nombre" sortable>
           <template #body="slotProps">
-            <router-link
-              v-if="!slotProps.data.error"
-              :to="`/stock/${slotProps.data.symbol}`"
-              class="stock-name-link">
+            <router-link v-if="!slotProps.data.error" :to="`/stock/${slotProps.data.symbol}`" class="stock-name-link">
               {{ slotProps.data.name }}
             </router-link>
             <span v-else class="stock-name">{{ slotProps.data.name }}</span>
@@ -77,24 +74,10 @@
 
 <script setup lang="ts">
 import StockValuationModal from "@/components/StockValuationModal.vue";
-import HttpClientDjango from "@/core/http/HttpClientDjango";
+import { CurrentStateUseCase } from "@/modules/stock/application/useCase/get/CurrentState/CurrentStateUseCase";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import { onMounted, ref } from "vue";
-
-interface StockCurrent {
-  symbol: string;
-  name: string;
-  price?: number;
-  recorded_at?: string;
-  error?: string;
-}
-
-interface CurrentStocksResponse {
-  portfolio_id: number | null;
-  updated_at: string;
-  data: StockCurrent[];
-}
 
 const stocks = ref<StockCurrent[]>([]);
 const loading = ref<boolean>(false);
@@ -108,26 +91,11 @@ const loadStocks = async () => {
   error.value = null;
 
   try {
-    const response = await HttpClientDjango.get<CurrentStocksResponse>(
-      "/api/stock/current/state"
-    );
-    if (Array.isArray(response.data.data)) {
-      stocks.value = response.data.data;
-      updatedAt.value = response.data.updated_at;
-    } else if (response.data.data && typeof response.data.data === "object" && "error" in response.data.data) {
-      error.value = (response.data.data as any).error;
-      stocks.value = [];
-    } else {
-      error.value = "Formato de respuesta inválido";
-      stocks.value = [];
-    }
+    const response = await CurrentStateUseCase();
+    stocks.value = response.data;
+    updatedAt.value = response.updated_at;
   } catch (err: any) {
-    console.error("Error cargando acciones:", err);
-    error.value =
-      err.response?.data?.error ||
-      err.response?.data?.data?.error ||
-      err.message ||
-      "Error al cargar los datos de acciones";
+    console.log(err)
     stocks.value = [];
   } finally {
     loading.value = false;

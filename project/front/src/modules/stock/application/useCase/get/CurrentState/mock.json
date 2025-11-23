@@ -1,0 +1,91 @@
+{
+    "data": [
+        {
+            "market_open": false,
+            "name": "Oracle Corporation",
+            "price": 198.75999450683594,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "ORCL"
+        },
+        {
+            "market_open": false,
+            "name": "Apple Inc.",
+            "price": 271.489990234375,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "AAPL"
+        },
+        {
+            "market_open": false,
+            "name": "Microsoft Corp.",
+            "price": 472.1199951171875,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "MSFT"
+        },
+        {
+            "market_open": false,
+            "name": "Alphabet Inc. (Google)",
+            "price": 299.6600036621094,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "GOOGL"
+        },
+        {
+            "market_open": false,
+            "name": "Amazon.com Inc.",
+            "price": 220.69000244140625,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "AMZN"
+        },
+        {
+            "market_open": false,
+            "name": "Meta Platforms Inc.",
+            "price": 594.25,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "META"
+        },
+        {
+            "market_open": false,
+            "name": "Nvidia Corp.",
+            "price": 178.8800048828125,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "NVDA"
+        },
+        {
+            "market_open": false,
+            "name": "Palantir Technologies",
+            "price": 154.85000610351562,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "PLTR"
+        },
+        {
+            "market_open": false,
+            "name": "C3.ai Inc.",
+            "price": 13.630000114440918,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "AI"
+        },
+        {
+            "market_open": false,
+            "name": "Lemonade Inc.",
+            "price": 67.3499984741211,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "LMND"
+        },
+        {
+            "market_open": false,
+            "name": "UiPath Inc.",
+            "price": 13.010000228881836,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "PATH"
+        },
+        {
+            "market_open": false,
+            "name": "Amprius Technologies",
+            "price": 10.109999656677246,
+            "recorded_at": "2025-11-23 19:55:02",
+            "symbol": "AMPX"
+        }
+    ],
+    "market_open": false,
+    "portfolio_id": null,
+    "updated_at": "2025-11-23 19:55:02"
+}

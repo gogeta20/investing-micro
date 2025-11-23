@@ -114,41 +114,12 @@
 </template>
 
 <script setup lang="ts">
-import HttpClientDjango from "@/core/http/HttpClientDjango";
+import {
+  GetStockValuationUseCase,
+  type ValuationData,
+} from "@/modules/stock/application/useCase/get/GetStockValuation/GetStockValuationUseCase";
 import Dialog from "primevue/dialog";
 import { computed, ref, watch } from "vue";
-
-interface ValuationInputs {
-  fcf: number;
-  growth: number;
-  discount_rate: number;
-  terminal_rate: number;
-}
-
-interface Valuation {
-  method: string;
-  intrinsic_value: number;
-  price_at_valuation: number;
-  discount_percent: number;
-  upside_percent: number;
-  value_gap: number;
-  status: string;
-  grade: string;
-  inputs: ValuationInputs;
-  created_at: string;
-}
-
-interface ValuationData {
-  symbol: string;
-  name: string;
-  sector: string;
-  currency: string;
-  valuation: Valuation;
-}
-
-interface ValuationResponse {
-  data: ValuationData;
-}
 
 const props = defineProps<{
   symbol: string;
@@ -177,12 +148,10 @@ const loadValuation = async () => {
   error.value = null;
 
   try {
-    const response = await HttpClientDjango.get<ValuationResponse>(
-      `/api/stock/${props.symbol}/valuation`
-    );
+    const response = await GetStockValuationUseCase(props.symbol);
 
-    if (response.data.data) {
-      valuationData.value = response.data.data;
+    if (response.data) {
+      valuationData.value = response.data;
     } else {
       error.value = "No se encontraron datos de valoración";
     }

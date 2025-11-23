@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import StockValuationModal from "@/components/StockValuationModal.vue";
-import { CurrentStateUseCase } from "@/modules/stock/application/useCase/get/CurrentState/CurrentStateUseCase";
+import { CurrentStateUseCase, type StockCurrent } from "@/modules/stock/application/useCase/get/CurrentState/CurrentStateUseCase";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import { onMounted, ref } from "vue";
@@ -92,10 +92,24 @@ const loadStocks = async () => {
 
   try {
     const response = await CurrentStateUseCase();
-    stocks.value = response.data;
-    updatedAt.value = response.updated_at;
+
+    if (Array.isArray(response.data)) {
+      stocks.value = response.data;
+      updatedAt.value = response.updated_at;
+    } else if (response.data && typeof response.data === "object" && "error" in response.data) {
+      error.value = (response.data as any).error;
+      stocks.value = [];
+    } else {
+      error.value = "Formato de respuesta inválido";
+      stocks.value = [];
+    }
   } catch (err: any) {
-    console.log(err)
+    console.error("Error cargando acciones:", err);
+    error.value =
+      err.response?.data?.error ||
+      err.response?.data?.data?.error ||
+      err.message ||
+      "Error al cargar los datos de acciones";
     stocks.value = [];
   } finally {
     loading.value = false;

@@ -66,24 +66,10 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
-import HttpClientDjango from "@/core/http/HttpClientDjango";
-
-interface PortfolioStock {
-  id: number;
-  symbol: string;
-}
-
-interface Portfolio {
-  id: number;
-  name?: string;
-  stocks_count?: number;
-  created_at?: string;
-  stocks?: PortfolioStock[];
-}
-
-interface PortfoliosResponse {
-  data: Portfolio[];
-}
+import {
+  GetPortfoliosListUseCase,
+  type Portfolio,
+} from "@/modules/stock/application/useCase/get/GetPortfoliosList/GetPortfoliosListUseCase";
 
 const router = useRouter();
 const portfolios = ref<Portfolio[]>([]);
@@ -95,12 +81,10 @@ const loadPortfolios = async () => {
   error.value = null;
 
   try {
-    const response = await HttpClientDjango.get<PortfoliosResponse>(
-      "/api/portfolio/list"
-    );
+    const response = await GetPortfoliosListUseCase();
 
-    if (Array.isArray(response.data.data)) {
-      portfolios.value = response.data.data;
+    if (Array.isArray(response.data)) {
+      portfolios.value = response.data;
     } else {
       error.value = "Formato de respuesta inválido";
       portfolios.value = [];

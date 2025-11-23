@@ -1,4 +1,4 @@
-interface StockCurrent {
+export interface StockCurrent {
   symbol: string;
   name: string;
   price?: number;
@@ -6,8 +6,8 @@ interface StockCurrent {
   error?: string;
 }
 
-interface StockCurrentResponse <T = []>{
-  data: StockCurrent[];
+export interface StockCurrentResponse<T = StockCurrent[]> {
+  data: T;
   portfolio_id: number | null;
   updated_at: string;
 }

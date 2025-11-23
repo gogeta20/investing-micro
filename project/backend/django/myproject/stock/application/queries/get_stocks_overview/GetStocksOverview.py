@@ -9,11 +9,10 @@ from myproject.core.infrastructure.repository.mysql.mysql_service import MySQLSe
 
 
 class GetStocksOverview:
-    def __init__(self, mysql_service: Optional[MySQLService] = None):
-        # Si no se pasa mysql_service, GetCurrentStocks y GetStockHistory lo crearán internamente
-        self.mysql_service = mysql_service
-        self.current_use_case = GetCurrentStocks(mysql_service)
-        self.history_use_case = GetStockHistory(mysql_service)
+    def __init__(self):
+        # GetCurrentStocks y GetStockHistory crean sus propios servicios internamente
+        self.current_use_case = GetCurrentStocks()
+        self.history_use_case = GetStockHistory()
 
     def execute(self, query: GetStocksOverviewQuery):
         current_query = GetCurrentStocksQuery(portfolio_id=query.portfolio_id)

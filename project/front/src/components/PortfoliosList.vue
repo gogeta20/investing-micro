@@ -118,9 +118,7 @@ const formatDate = (dateString: string | undefined): string => {
 };
 
 const viewPortfolio = (portfolioId: number) => {
-  // Por ahora redirigir a /portfolio con el ID como query param
-  // O podrías tener una ruta /portfolio/:id
-  router.push({ path: "/portfolio", query: { id: portfolioId } });
+  router.push(`/portfolio/${portfolioId}`);
 };
 
 onMounted(() => {

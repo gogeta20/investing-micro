@@ -1,42 +1,13 @@
 <script setup lang="ts">
 import PortfoliosList from "@/components/PortfoliosList.vue";
-import StocksTable from "@/components/StocksTable.vue";
-import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
 
-const route = useRoute();
-const showStocksTable = ref<boolean>(false);
-const selectedPortfolioId = ref<number | null>(null);
-
-// Si hay un query param 'id', mostrar la tabla de acciones de ese portafolio
-const portfolioId = computed(() => {
-  const id = route.query.id;
-  if (id) {
-    // Manejar string o array de strings
-    const idString = Array.isArray(id) ? id[0] : id;
-    if (idString) {
-      const parsedId = parseInt(idString, 10);
-      if (!isNaN(parsedId)) {
-        selectedPortfolioId.value = parsedId;
-        showStocksTable.value = true;
-        return parsedId;
-      }
-    }
-  }
-  showStocksTable.value = false;
-  return null;
-});
-
-const handleBackToList = () => {
-  showStocksTable.value = false;
-  selectedPortfolioId.value = null;
-};
+// Ya no necesitamos manejar la vista de detalle aquí, se hace en PortfolioDetailView
 </script>
 
 <template>
   <div class="portfolio-view">
     <div class="portfolio-container">
-      <div v-if="!showStocksTable" class="list-view">
+      <div class="list-view">
         <div class="header-section">
           <h1 class="portfolio-title">Mis Portafolios</h1>
           <p class="portfolio-subtitle">
@@ -47,21 +18,6 @@ const handleBackToList = () => {
           </router-link>
         </div>
         <PortfoliosList />
-      </div>
-
-      <div v-else class="detail-view">
-        <div class="header-section">
-          <button @click="handleBackToList" class="back-button">
-            <i class="pi pi-arrow-left"></i> Volver a portafolios
-          </button>
-          <h1 class="portfolio-title">
-            Portafolio #{{ selectedPortfolioId || "N/A" }}
-          </h1>
-          <p class="portfolio-subtitle">
-            Estado actual de las acciones en este portafolio
-          </p>
-        </div>
-        <StocksTable :portfolio-id="selectedPortfolioId || 1" />
       </div>
     </div>
   </div>
@@ -83,29 +39,6 @@ const handleBackToList = () => {
   margin-bottom: 2rem;
 }
 
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: transparent;
-  color: var(--tokyo-blue);
-  border: 1px solid var(--tokyo-bg-tertiary);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: var(--tokyo-bg-tertiary);
-    color: var(--tokyo-cyan);
-  }
-
-  i {
-    font-size: 0.9rem;
-  }
-}
 
 .portfolio-title {
   font-size: 2rem;
@@ -143,8 +76,7 @@ const handleBackToList = () => {
   }
 }
 
-.list-view,
-.detail-view {
+.list-view {
   animation: fadeIn 0.3s ease;
 }
 

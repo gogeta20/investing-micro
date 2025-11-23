@@ -117,26 +117,11 @@
 import { ref, onMounted } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import HttpClientDjango from "@/core/http/HttpClientDjango";
 import StockValuationModal from "@/components/StockValuationModal.vue";
-
-interface StockOverview {
-    portfolio_id: number;
-    symbol: string;
-    name: string;
-    current: {
-        price: number;
-        recorded_at: string;
-    };
-    last_snapshot: {
-        price: number | string;
-        recorded_at: string;
-    } | null;
-}
-
-interface StocksResponse {
-    data: StockOverview[];
-}
+import {
+  GetStocksOverviewUseCase,
+  type StockOverview,
+} from "@/modules/stock/application/useCase/get/GetStocksOverview/GetStocksOverviewUseCase";
 
 const stocks = ref<StockOverview[]>([]);
 const loading = ref<boolean>(false);
@@ -155,20 +140,18 @@ const loadStocks = async () => {
 
     try {
         const portfolioId = props.portfolioId || 1;
-        const response = await HttpClientDjango.get<StocksResponse>(
-            `/api/stocks/overview/list?portfolio_id=${portfolioId}`
-        );
+        const response = await GetStocksOverviewUseCase({ portfolioId });
 
         // Verificar si la respuesta tiene un error
-        if (response.data.data && typeof response.data.data === "object" && "error" in response.data.data) {
-            error.value = (response.data.data as any).error;
+        if (response.data && typeof response.data === "object" && !Array.isArray(response.data) && "error" in response.data) {
+            error.value = (response.data as any).error;
             stocks.value = [];
             return;
         }
 
         // Verificar que sea un array
-        if (Array.isArray(response.data.data)) {
-            stocks.value = response.data.data;
+        if (Array.isArray(response.data)) {
+            stocks.value = response.data;
         } else {
             error.value = "Formato de respuesta inválido";
             stocks.value = [];

@@ -56,28 +56,13 @@
 </template>
 
 <script setup lang="ts">
-import HttpClientDjango from "@/core/http/HttpClientDjango";
+import {
+  GetAnalysisDailyUseCase,
+  type AnalysisRow,
+} from "@/modules/stock/application/useCase/get/GetAnalysisDaily/GetAnalysisDailyUseCase";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import { onMounted, ref } from "vue";
-
-type Trend = "up" | "down";
-
-interface AnalysisRow {
-  stock_id: number;
-  name: string;
-  symbol: string;
-  price_today: string;       // viene como string
-  price_yesterday: string;   // viene como string
-  change_percent: string;    // viene como string, ej: "-0.20"
-  trend: Trend;
-  today_date: string;        // YYYY-MM-DD
-  yesterday_date: string;    // YYYY-MM-DD
-}
-
-interface AnalysisResponse {
-  data: AnalysisRow[];
-}
 
 const rows = ref<AnalysisRow[]>([]);
 const loading = ref<boolean>(false);
@@ -87,9 +72,9 @@ const loadData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const response = await HttpClientDjango.get<AnalysisResponse>("/api/stock/analysis/daily");
-    if (Array.isArray(response.data?.data)) {
-      rows.value = response.data.data;
+    const response = await GetAnalysisDailyUseCase();
+    if (Array.isArray(response.data)) {
+      rows.value = response.data;
     } else {
       error.value = "Formato de respuesta inválido";
       rows.value = [];

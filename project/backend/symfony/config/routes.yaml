@@ -1,3 +1,5 @@
-main:
-    resource: '../src/Main/Application/Routing/routing.xml'
-    type: xml
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute

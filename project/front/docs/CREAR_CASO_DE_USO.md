@@ -459,3 +459,4 @@ try {
 ---
 
 **Recuerda:** El mock debe reflejar la estructura real del backend, no es una herramienta para descubrir qué esperar. Siempre consulta la documentación o al equipo de backend antes de crear el caso de uso.
+

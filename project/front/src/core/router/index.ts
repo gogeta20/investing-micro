@@ -5,6 +5,7 @@ import Projects from '@/pages/Projects.vue';
 import Skills from '@/pages/Skills.vue';
 import AnalysisDaily from '@/pages/stock/AnalysisDaily.vue';
 import CreatePortfolioView from '@/pages/stock/CreatePortfolioView.vue';
+import CreateStockView from '@/pages/stock/CreateStockView.vue';
 import PortafolioView from '@/pages/stock/PortafolioView.vue';
 import PortfolioDetailView from '@/pages/stock/PortfolioDetailView.vue';
 import SingleStockView from '@/pages/stock/SingleStockView.vue';
@@ -64,6 +65,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: "/stocks",
         component: StocksView,
+      },
+      {
+        path: "/stock/create",
+        component: CreateStockView,
       },
       {
         path: "/stock/:symbol",

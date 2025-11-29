@@ -14,16 +14,19 @@ from myproject.stock.infrastructure.controllers.create_stock_controller import C
 
 
 urlpatterns = [
+    # Rutas específicas primero (deben ir antes de las genéricas)
     path('', GetStockController.as_view(), name='get_stock'),
-    path('<str:text>', GetStockBySymbolController.as_view(), name='get_stock_by_symbol'),
-    path('search/<str:symbol>', SearchStockBySymbolController.as_view(), name='search_stock_by_symbol'),
     path('create', CreateStockController.as_view(), name='create_stock'),
+    path('search/<str:symbol>', SearchStockBySymbolController.as_view(), name='search_stock_by_symbol'),
     path('snapshot/save', PostStockSnapshotController.as_view(), name='post_stock_snapshot'),
     path('current/state', GetCurrentStocksController.as_view(), name='get_current_stocks'),
     path('overview/list', GetStocksOverviewController.as_view(), name='get_stocks_overview'),
+    path('portfolio/<int:id_portafolio>/results', GetResultsPortafolioController.as_view(), name='get_results_portafolio'),
+    path('analysis/daily', GetDailyAnalysisController.as_view(), name="analysis_daily"),
+    # Rutas con parámetros dinámicos
     path('<str:symbol>/history', GetStockHistoryPeriodController.as_view(), name='get_stock_history_period'),
     path('<str:symbol>/history/old', GetStockHistoryController.as_view(), name='get_stock_history'),
     path('<str:symbol>/valuation', GetStockValuationController.as_view(), name='get_stock_valuation'),
-    path('portfolio/<int:id_portafolio>/results', GetResultsPortafolioController.as_view(), name='get_results_portafolio'),
-    path('analysis/daily', GetDailyAnalysisController.as_view(), name="analysis_daily"),
+    # Ruta genérica al final (captura cualquier string que no coincida con las anteriores)
+    path('<str:text>', GetStockBySymbolController.as_view(), name='get_stock_by_symbol'),
 ]

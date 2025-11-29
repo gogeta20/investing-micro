@@ -9,11 +9,15 @@ from myproject.stock.infrastructure.controllers.get_stock_history_period_control
 from myproject.stock.infrastructure.controllers.get_stocks_overview_controller import GetStocksOverviewController
 from myproject.stock.infrastructure.controllers.post_stock_snapshot_controller import PostStockSnapshotController
 from myproject.stock.infrastructure.controllers.get_stock_valuation_controller import GetStockValuationController
+from myproject.stock.infrastructure.controllers.search_stock_by_symbol_controller import SearchStockBySymbolController
+from myproject.stock.infrastructure.controllers.create_stock_controller import CreateStockController
 
 
 urlpatterns = [
     path('', GetStockController.as_view(), name='get_stock'),
     path('<str:text>', GetStockBySymbolController.as_view(), name='get_stock_by_symbol'),
+    path('search/<str:symbol>', SearchStockBySymbolController.as_view(), name='search_stock_by_symbol'),
+    path('create', CreateStockController.as_view(), name='create_stock'),
     path('snapshot/save', PostStockSnapshotController.as_view(), name='post_stock_snapshot'),
     path('current/state', GetCurrentStocksController.as_view(), name='get_current_stocks'),
     path('overview/list', GetStocksOverviewController.as_view(), name='get_stocks_overview'),

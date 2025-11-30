@@ -1,0 +1,163 @@
+// Estilos globales para componentes PrimeVue
+// Estos estilos tienen mayor especificidad para sobrescribir los estilos inyectados por PrimeVue
+
+// Menú dropdown overlay
+.p-menu.p-menu-overlay[data-pc-name="menu"] {
+  background-color: var(--tokyo-bg-secondary) !important;
+  border: 1px solid var(--tokyo-bg-tertiary) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  padding: 0.5rem 0 !important;
+  min-width: 160px !important;
+}
+
+.p-menu-list[data-pc-section="list"] {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.p-menu-item[data-pc-section="item"] {
+  margin: 0.25rem 0.5rem !important;
+  border-radius: 4px !important;
+  transition: background-color 0.2s ease !important;
+
+  &:first-child {
+    margin-top: 0.5rem !important;
+  }
+
+  &:last-child {
+    margin-bottom: 0.5rem !important;
+  }
+
+  &:hover {
+    background-color: var(--tokyo-bg-tertiary) !important;
+  }
+}
+
+.p-menu-item-content[data-pc-section="itemcontent"] {
+  padding: 0 !important;
+}
+
+.p-menu-item-link[data-pc-section="itemlink"] {
+  padding: 0.75rem 1rem !important;
+  color: var(--tokyo-fg) !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+
+  &:hover {
+    background-color: transparent !important;
+    color: var(--tokyo-blue) !important;
+  }
+}
+
+.p-menu-item-icon[data-pc-section="itemicon"] {
+  color: var(--tokyo-fg-secondary) !important;
+  font-size: 1rem !important;
+  width: 1.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.p-menu-item-link[data-pc-section="itemlink"]:hover .p-menu-item-icon[data-pc-section="itemicon"] {
+  color: var(--tokyo-blue) !important;
+}
+
+.p-menu-item-label[data-pc-section="itemlabel"] {
+  color: inherit !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+}
+
+// ConfirmDialog (Popup de confirmación)
+// El ConfirmDialog usa .p-dialog.p-confirmdialog como contenedor principal
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] {
+  background-color: var(--tokyo-bg-secondary) !important;
+  border: 1px solid var(--tokyo-bg-tertiary) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  min-width: 400px !important;
+  max-width: 500px !important;
+}
+
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-header[data-pc-section="header"] {
+  background-color: var(--tokyo-bg-tertiary) !important;
+  color: var(--tokyo-fg) !important;
+  border-bottom: 1px solid var(--tokyo-bg-tertiary) !important;
+  padding: 1.25rem 1.5rem !important;
+  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+  font-weight: 600 !important;
+  font-size: 1.1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-content[data-pc-section="content"] {
+  background-color: var(--tokyo-bg-secondary) !important;
+  color: var(--tokyo-fg) !important;
+  padding: 1.5rem !important;
+  border-radius: 0 !important;
+  line-height: 1.6 !important;
+}
+
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-content[data-pc-section="content"] p {
+  color: var(--tokyo-fg) !important;
+  margin: 0 !important;
+  font-size: 0.95rem !important;
+}
+
+// Footer del ConfirmDialog (donde están los botones)
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-footer {
+  background-color: var(--tokyo-bg-secondary) !important;
+  border-top: 1px solid var(--tokyo-bg-tertiary) !important;
+  padding: 1rem 1.5rem !important;
+  border-radius: 0 0 var(--border-radius) var(--border-radius) !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 0.75rem !important;
+}
+
+// Botones del ConfirmDialog
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-footer .p-button {
+  padding: 0.75rem 1.5rem !important;
+  border-radius: var(--border-radius) !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+  gap: 0.5rem !important;
+}
+
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-footer .p-button:not(.p-button-danger) {
+  background-color: var(--tokyo-bg-tertiary) !important;
+  color: var(--tokyo-fg) !important;
+  border-color: var(--tokyo-bg-tertiary) !important;
+
+  &:hover {
+    background-color: var(--tokyo-bg-tertiary) !important;
+    border-color: var(--tokyo-blue) !important;
+    color: var(--tokyo-blue) !important;
+  }
+}
+
+.p-dialog.p-confirmdialog[data-pc-name="dialog"] .p-dialog-footer .p-button.p-button-danger {
+  background-color: var(--tokyo-red) !important;
+  color: var(--tokyo-bg) !important;
+  border-color: var(--tokyo-red) !important;
+
+  &:hover {
+    background-color: #e6657a !important;
+    border-color: #e6657a !important;
+  }
+}
+
+// Overlay del ConfirmDialog
+.p-dialog-mask.p-confirmdialog-mask {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(2px) !important;
+}

@@ -7,6 +7,7 @@ import "primeicons/primeicons.css";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
+import ConfirmationService from "primevue/confirmationservice";
 import App from "@/App.vue";
 import router from "@/core/router";
 
@@ -14,4 +15,5 @@ const app = createApp(App);
 app.use(router);
 app.use(createPinia());
 app.use(PrimeVue);
+app.use(ConfirmationService);
 app.mount("#app");

@@ -11,12 +11,14 @@ from myproject.stock.infrastructure.controllers.post_stock_snapshot_controller i
 from myproject.stock.infrastructure.controllers.get_stock_valuation_controller import GetStockValuationController
 from myproject.stock.infrastructure.controllers.search_stock_by_symbol_controller import SearchStockBySymbolController
 from myproject.stock.infrastructure.controllers.create_stock_controller import CreateStockController
+from myproject.stock.infrastructure.controllers.delete_stock_controller import DeleteStockController
 
 
 urlpatterns = [
     # Rutas específicas primero (deben ir antes de las genéricas)
     path('', GetStockController.as_view(), name='get_stock'),
     path('create', CreateStockController.as_view(), name='create_stock'),
+    path('delete', DeleteStockController.as_view(), name='delete_stock'),
     path('search/<str:symbol>', SearchStockBySymbolController.as_view(), name='search_stock_by_symbol'),
     path('snapshot/save', PostStockSnapshotController.as_view(), name='post_stock_snapshot'),
     path('current/state', GetCurrentStocksController.as_view(), name='get_current_stocks'),

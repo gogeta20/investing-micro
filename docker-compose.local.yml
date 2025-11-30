@@ -64,7 +64,7 @@ services:
       dockerfile: devops/dockerfiles/backend/Symfony.Dockerfile
     container_name: symfony_backend
     ports:
-      - "9000:9000"
+      - "9999:9000"
     volumes:
       - ./project/backend/symfony:/var/www/html
       - ./conf/symfony/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini:delegated
@@ -231,6 +231,7 @@ services:
     #      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
     volumes:
       - ./conf/nginx:/src
+      - ./project/backend/symfony:/var/www/html:ro
     ports:
       - "80:80"
     depends_on:
@@ -316,7 +317,7 @@ services:
       - app_network
     profiles:
       - disabled
-      
+
   gitlab:
     image: gitlab/gitlab-ce:16.11.1-ce.0
     container_name: gitlab_micro

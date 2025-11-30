@@ -1,10 +1,43 @@
 <script setup lang="ts">
 import SingleStockTable from "@/components/SingleStockTable.vue";
-import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { DeleteStockUseCase } from "@/modules/stock/application/useCase/delete/DeleteStock/DeleteStockUseCase";
+import Button from "primevue/button";
+import { useConfirm } from "primevue/useconfirm";
+import { computed, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
+const confirm = useConfirm();
 const symbol = computed(() => route.params.symbol as string);
+const deleting = ref<boolean>(false);
+
+const handleDeleteStock = () => {
+  confirm.require({
+    message: `¿Estás seguro de que deseas eliminar la acción ${symbol.value}? Esta acción no se puede deshacer.`,
+    header: "Confirmar eliminación",
+    icon: "pi pi-exclamation-triangle",
+    acceptClass: "p-button-danger",
+    accept: async () => {
+      deleting.value = true;
+      try {
+        await DeleteStockUseCase({ symbol: symbol.value });
+        // Redirigir a la lista de acciones después de eliminar
+        router.push("/stocks");
+      } catch (err: any) {
+        console.error("Error eliminando acción:", err);
+        const errorMessage =
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          err.message ||
+          "Error al eliminar la acción";
+        alert(errorMessage);
+      } finally {
+        deleting.value = false;
+      }
+    },
+  });
+};
 </script>
 
 <template>
@@ -14,8 +47,19 @@ const symbol = computed(() => route.params.symbol as string);
         <router-link to="/stocks" class="back-link">
           <i class="pi pi-arrow-left"></i> Volver a acciones
         </router-link>
-        <h1 class="stock-title">Historial de Acción</h1>
-        <p class="stock-subtitle">Datos históricos de {{ symbol }}</p>
+        <div class="title-row">
+          <div>
+            <h1 class="stock-title">Historial de Acción</h1>
+            <p class="stock-subtitle">Datos históricos de {{ symbol }}</p>
+          </div>
+          <Button
+            label="Eliminar Acción"
+            icon="pi pi-trash"
+            class="p-button-danger delete-button"
+            :loading="deleting"
+            @click="handleDeleteStock"
+          />
+        </div>
       </div>
       <SingleStockTable :symbol="symbol" />
     </div>
@@ -36,6 +80,18 @@ const symbol = computed(() => route.params.symbol as string);
 
 .header-section {
   margin-bottom: 2rem;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.delete-button {
+  margin-top: 0.5rem;
 }
 
 .back-link {

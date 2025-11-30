@@ -57,10 +57,15 @@
         </Column>
         <Column header="Acciones">
           <template #body="slotProps">
-            <button v-if="!slotProps.data.error" @click="openValuationModal(slotProps.data.symbol)"
-              class="valuation-button" title="Ver valoración">
-              Valoración
-            </button>
+            <div v-if="!slotProps.data.error" class="actions-container">
+              <Button
+                icon="pi pi-ellipsis-v"
+                class="p-button-text p-button-rounded actions-button"
+                @click="toggleMenu($event, slotProps.data)"
+                aria-haspopup="true"
+                aria-controls="overlay_menu"
+              />
+            </div>
             <span v-else class="no-data">-</span>
           </template>
         </Column>
@@ -69,15 +74,28 @@
 
     <!-- Modal de Valoración -->
     <StockValuationModal :symbol="selectedSymbol" v-model:visible="valuationModalVisible" />
+
+    <!-- Menú dropdown (único para todas las filas) -->
+    <Menu
+      ref="menu"
+      id="overlay_menu"
+      :model="menuItems"
+      :popup="true"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import StockValuationModal from "@/components/StockValuationModal.vue";
+import { DeleteStockUseCase } from "@/modules/stock/application/useCase/delete/DeleteStock/DeleteStockUseCase";
 import { CurrentStateUseCase, type StockCurrent } from "@/modules/stock/application/useCase/get/CurrentState/CurrentStateUseCase";
+import Button from "primevue/button";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
+import Menu from "primevue/menu";
+import { useConfirm } from "primevue/useconfirm";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const stocks = ref<StockCurrent[]>([]);
 const loading = ref<boolean>(false);
@@ -85,6 +103,11 @@ const error = ref<string | null>(null);
 const updatedAt = ref<string | null>(null);
 const valuationModalVisible = ref<boolean>(false);
 const selectedSymbol = ref<string>("");
+const menu = ref<InstanceType<typeof Menu>>();
+const confirm = useConfirm();
+const router = useRouter();
+const currentStock = ref<StockCurrent | null>(null);
+const menuItems = ref<any[]>([]);
 
 const loadStocks = async () => {
   loading.value = true;
@@ -141,6 +164,68 @@ const formatDate = (dateString: string | undefined): string => {
 const openValuationModal = (symbol: string) => {
   selectedSymbol.value = symbol;
   valuationModalVisible.value = true;
+};
+
+const toggleMenu = (event: Event, stock: StockCurrent) => {
+  // Guardar el stock actual antes de abrir el menú
+  currentStock.value = stock;
+  // Actualizar los items del menú con el stock actual
+  menuItems.value = getMenuItems(stock);
+  // Abrir el menú
+  menu.value?.toggle(event);
+};
+
+const getMenuItems = (stock: StockCurrent) => {
+  return [
+    {
+      label: "Ver",
+      icon: "pi pi-eye",
+      command: () => {
+        if (currentStock.value) {
+          router.push(`/stock/${currentStock.value.symbol}`);
+        }
+      },
+    },
+    {
+      label: "Eliminar",
+      icon: "pi pi-trash",
+      command: () => {
+        if (currentStock.value) {
+          handleDeleteStock(currentStock.value);
+        }
+      },
+    },
+  ];
+};
+
+const handleDeleteStock = (stock: StockCurrent) => {
+  confirm.require({
+    message: `¿Estás seguro de que deseas eliminar la acción ${stock.symbol} (${stock.name})?`,
+    header: "Confirmar eliminación",
+    icon: "pi pi-exclamation-triangle",
+    acceptClass: "p-button-danger",
+    accept: async () => {
+      try {
+        const payload: { id?: number; symbol?: string } = {};
+        if (stock.id) {
+          payload.id = stock.id;
+        } else {
+          payload.symbol = stock.symbol;
+        }
+
+        await DeleteStockUseCase(payload);
+        // Recargar la tabla después de eliminar
+        await loadStocks();
+      } catch (err: any) {
+        console.error("Error eliminando acción:", err);
+        error.value =
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          err.message ||
+          "Error al eliminar la acción";
+      }
+    },
+  });
 };
 
 onMounted(() => {
@@ -235,25 +320,22 @@ onMounted(() => {
   display: inline-block;
 }
 
-.valuation-button {
-  padding: 0.4rem 0.8rem;
-  background-color: var(--tokyo-blue);
-  color: var(--tokyo-bg);
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
+.actions-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions-button {
+  color: var(--tokyo-fg) !important;
 
   &:hover {
-    background-color: var(--primary-hover);
-  }
-
-  &:active {
-    background-color: var(--primary-active);
+    background-color: var(--tokyo-bg-tertiary) !important;
   }
 }
+
+// Los estilos del menú dropdown están en assets/scss/primevue-overrides.scss
+// para que tengan mayor especificidad sobre los estilos inyectados por PrimeVue
 
 // Estilos para PrimeVue DataTable con tema Tokyo Night
 :deep(.p-datatable) {

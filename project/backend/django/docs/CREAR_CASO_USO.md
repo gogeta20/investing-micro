@@ -238,6 +238,41 @@ urlpatterns = [
 ]
 ```
 
+### ⚠️ IMPORTANTE: Orden de las Rutas
+
+**CRÍTICO:** Django procesa las rutas en orden y usa la primera que coincida. Por lo tanto:
+
+1. **Rutas específicas primero** - Rutas literales o con prefijos específicos deben ir antes de las genéricas
+2. **Rutas genéricas al final** - Rutas con parámetros dinámicos como `<str:text>` deben ir al final
+
+**Ejemplo correcto:**
+```python
+urlpatterns = [
+    # ✅ Rutas específicas primero
+    path('', GetStockController.as_view(), name='get_stock'),
+    path('create', CreateStockController.as_view(), name='create_stock'),
+    path('search/<str:symbol>', SearchStockController.as_view(), name='search_stock'),
+    path('current/state', GetCurrentStocksController.as_view(), name='get_current_stocks'),
+
+    # ✅ Rutas con parámetros después
+    path('<str:symbol>/history', GetStockHistoryController.as_view(), name='get_stock_history'),
+
+    # ✅ Rutas genéricas al final
+    path('<str:text>', GetStockBySymbolController.as_view(), name='get_stock_by_symbol'),
+]
+```
+
+**Ejemplo incorrecto (causará error 405):**
+```python
+urlpatterns = [
+    path('', GetStockController.as_view(), name='get_stock'),
+    path('<str:text>', GetStockBySymbolController.as_view(), name='get_stock_by_symbol'),  # ❌ Esto captura "create" primero
+    path('create', CreateStockController.as_view(), name='create_stock'),  # ❌ Nunca se alcanza
+]
+```
+
+**Problema:** Si la ruta genérica `<str:text>` está antes de `create`, Django capturará "create" como parámetro `text` y lo enviará a `GetStockBySymbolController`, que solo tiene método `get()`. Si haces un POST, Django responderá con **405 Method Not Allowed**.
+
 ## Paso 6: Crear __init__.py
 
 **Ubicación**: `myproject/stock/application/queries/<nombre_caso_uso>/__init__.py`
@@ -326,4 +361,178 @@ class NombreCasoUsoQuery(Query):
     def __post_init__(self):
         if not self.parametro.strip():
             raise ValueError("parametro cannot be empty")
+```
+
+## Crear un Command (Caso de Uso de Escritura)
+
+Los Commands se usan para operaciones que modifican el estado del sistema (crear, actualizar, eliminar). Siguen una estructura similar a las Queries pero con algunas diferencias.
+
+### Estructura de Archivos para Commands
+
+Para cada command, se deben crear los siguientes archivos en la carpeta `myproject/stock/application/commands/<nombre_caso_uso>/`:
+
+1. `<NombreCasoUso>Command.py` - Define el command (dataclass)
+2. `<NombreCasoUso>.py` - Implementa la lógica del caso de uso
+3. `<NombreCasoUso>CommandHandler.py` - Handler que conecta el command con el caso de uso
+4. `__init__.py` - Archivo vacío para hacer el directorio un paquete Python
+
+### Paso 1: Crear el Command
+
+**Ubicación**: `myproject/stock/application/commands/<nombre_caso_uso>/<NombreCasoUso>Command.py`
+
+```python
+from dataclasses import dataclass
+from typing import Optional
+from myproject.shared.domain.bus.command.command import Command
+
+
+@dataclass
+class NombreCasoUsoCommand(Command):
+    parametro1: str
+    parametro2: Optional[str] = None
+
+    def __post_init__(self):
+        if not self.parametro1.strip():
+            raise ValueError("parametro1 cannot be empty")
+```
+
+### Paso 2: Crear el Use Case del Command
+
+**Ubicación**: `myproject/stock/application/commands/<nombre_caso_uso>/<NombreCasoUso>.py`
+
+Similar a las Queries, pero típicamente interactúa con la base de datos para modificar datos.
+
+### Paso 3: Crear el Command Handler
+
+**Ubicación**: `myproject/stock/application/commands/<nombre_caso_uso>/<NombreCasoUso>CommandHandler.py`
+
+```python
+from myproject.stock.application.commands.<nombre_caso_uso>.<NombreCasoUso>Command import NombreCasoUsoCommand
+from myproject.stock.application.commands.<nombre_caso_uso>.<NombreCasoUso> import NombreCasoUso
+from myproject.shared.domain.bus.command.command_handler import CommandHandler
+
+
+class NombreCasoUsoCommandHandler(CommandHandler):
+    def __init__(self, use_case: NombreCasoUso):
+        self.use_case = use_case
+
+    def handle(self, command: NombreCasoUsoCommand):
+        result = self.use_case.execute(command)
+
+        # Si hay error, lanzar excepción para que el controller la maneje
+        if "error" in result:
+            raise ValueError(result.get("message", result["error"]))
+
+        return result
+
+    @classmethod
+    def create(cls):
+        use_case = NombreCasoUso()
+        return cls(use_case)
+```
+
+### Paso 4: Crear el Controller para Command
+
+**Ubicación**: `myproject/stock/infrastructure/controllers/<nombre_caso_uso>_controller.py`
+
+Los Commands generalmente usan el método `post()`:
+
+```python
+from django.http import JsonResponse
+from myproject.stock.application.commands.<nombre_caso_uso>.<NombreCasoUso>Command import NombreCasoUsoCommand
+from myproject.shared.infrastructure.bus.command_bus import get_command_bus
+from myproject.shared.infrastructure.controller.api_controller import ApiController
+
+
+class NombreCasoUsoController(ApiController):
+    def __init__(self):
+        cb = get_command_bus()
+        super().__init__(command_bus=cb)
+
+    def post(self, request):
+        data = request.data
+
+        try:
+            command = NombreCasoUsoCommand(
+                parametro1=data.get("parametro1"),
+                parametro2=data.get("parametro2")
+            )
+
+            result = self.dispatch_command(command)
+
+            if isinstance(result, JsonResponse):
+                return result
+
+            return JsonResponse(result, status=201)
+
+        except ValueError as e:
+            return JsonResponse({
+                "error": str(e),
+                "message": "Error de validación"
+            }, status=400)
+
+    def register_exceptions(self) -> dict:
+        return {
+            ValueError: 400,
+            Exception: 500,
+        }
+```
+
+## Errores Comunes y Soluciones
+
+### Error 405: Method Not Allowed
+
+**Síntoma:** Al hacer una petición POST a tu endpoint, recibes un error 405.
+
+**Causas comunes:**
+
+1. **Orden incorrecto de rutas** (más común)
+   - **Problema:** Una ruta genérica `<str:text>` está capturando tu ruta específica antes de que Django la procese.
+   - **Solución:** Mover las rutas específicas antes de las genéricas en `urlpatterns`.
+   - **Ver sección "Orden de las Rutas" más arriba.**
+
+2. **Método HTTP incorrecto**
+   - **Problema:** El controller no tiene el método que estás usando (ej: hacer POST pero solo existe `get()`).
+   - **Solución:** Verificar que el controller tenga el método correcto (`get()`, `post()`, etc.).
+
+3. **Ruta mal configurada**
+   - **Problema:** La ruta no está correctamente registrada en `urls.py`.
+   - **Solución:** Verificar que la ruta esté importada y registrada correctamente.
+
+### Error 404: Not Found
+
+**Síntoma:** El endpoint no se encuentra.
+
+**Causas comunes:**
+
+1. **Ruta no registrada**
+   - **Solución:** Verificar que la ruta esté en `urls.py` y que el controller esté importado.
+
+2. **Prefijo de ruta incorrecto**
+   - **Solución:** Recordar que la ruta base es `/api/stock/` (definida en `myproject/urls.py`).
+
+### Handler no se auto-registra
+
+**Síntoma:** El handler no es encontrado por el QueryBus/CommandBus.
+
+**Causas comunes:**
+
+1. **Falta el método `create()`**
+   - **Solución:** Asegurarse de que el handler tenga el método `create()` como classmethod.
+
+2. **Estructura de carpetas incorrecta**
+   - **Solución:** Verificar que el handler esté en la ubicación correcta (`queries/` o `commands/`).
+
+### Error de validación no se maneja correctamente
+
+**Síntoma:** Las excepciones de validación no retornan el código HTTP correcto.
+
+**Solución:** Verificar que `register_exceptions()` esté implementado correctamente en el controller:
+
+```python
+def register_exceptions(self) -> dict:
+    return {
+        ValueError: 400,  # Bad Request
+        Exception: 500,   # Internal Server Error
+    }
 ```

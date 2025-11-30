@@ -33,7 +33,7 @@ async function InMemory(params: GetStocksOverviewParams): Promise<StocksOverview
 
 async function Api(params: GetStocksOverviewParams): Promise<StocksOverviewResponse> {
   const response = await HttpClientDjango.get<StocksOverviewResponse>(
-    `/api/stocks/overview/list`,
+    `/api/stock/overview/list`,
     { portfolio_id: params.portfolioId }
   );
   return response.data;

@@ -41,6 +41,11 @@ RUN if [ "$MICRO_ENV" = "local" ]; then \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # ------------------------------
+# Configuración PHP-FPM
+# ------------------------------
+COPY ./conf/symfony/www.conf /usr/local/etc/php-fpm.d/www.conf
+
+# ------------------------------
 # Proyecto Symfony
 # ------------------------------
 WORKDIR /var/www/html

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import ConfirmDialog from "primevue/confirmdialog";
 // import ToastView from '@/components/ToastView.vue';
 </script>
 
 <template>
   <router-view />
+  <ConfirmDialog />
   <!--    <ToastView />-->
 </template>
 

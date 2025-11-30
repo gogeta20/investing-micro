@@ -42,8 +42,8 @@ class HttpClientDjango {
     return this.instanceDjango.put(url, data);
   }
 
-  public delete<T>(url: string): Promise<AxiosResponse<T>> {
-    return this.instanceDjango.delete(url);
+  public delete<T>(url: string, data?: any): Promise<AxiosResponse<T>> {
+    return this.instanceDjango.delete(url, { data });
   }
 }
 

@@ -166,18 +166,20 @@ def load_handlers():
 
 ## 📦 Casos de Uso del Contexto Stock
 
-### Queries (8)
+### Queries (9)
 1. `GetStock` - Obtener todas las acciones
 2. `GetStockBySymbol` - Obtener acción por símbolo
-3. `GetCurrentStocks` - Obtener estado actual de acciones
-4. `GetStockHistory` - Obtener historial de una acción
-5. `GetStocksOverview` - Vista general de acciones en portfolio
-6. `GetStockValuation` - Valoración de una acción
-7. `GetDailyAnalysis` - Análisis diario de acciones
-8. `GetResultsPortafolio` - Resultados de un portfolio
+3. `SearchStockBySymbol` - Buscar información de acción usando yfinance (para crear nuevas acciones)
+4. `GetCurrentStocks` - Obtener estado actual de acciones
+5. `GetStockHistory` - Obtener historial de una acción
+6. `GetStocksOverview` - Vista general de acciones en portfolio
+7. `GetStockValuation` - Valoración de una acción
+8. `GetDailyAnalysis` - Análisis diario de acciones
+9. `GetResultsPortafolio` - Resultados de un portfolio
 
-### Commands (1)
-1. `PostStockSnapshot` - Guardar snapshot de precio de acción
+### Commands (2)
+1. `CreateStock` - Crear/agregar una nueva acción a la tabla stocks
+2. `PostStockSnapshot` - Guardar snapshot de precio de acción
 
 ## 🔧 Infraestructura Compartida
 
@@ -321,6 +323,10 @@ def test_get_current_stocks_handler():
 - Los controladores antiguos en `core/infrastructure/controllers/stock/*` fueron eliminados
 - El contexto `core` mantiene otros casos de uso (HealthCheck, Logs, Voice, etc.) que no son Stock
 - `MySQLService` sigue creándose múltiples veces (podría optimizarse con singleton)
+
+### ⚠️ Error Común: 405 Method Not Allowed
+
+Si recibes un error 405 al crear endpoints, **verifica el orden de las rutas** en `urls.py`. Las rutas específicas deben ir antes de las genéricas. Ver sección "Orden de las Rutas" en `CREAR_CASO_USO.md` para más detalles.
 ## 🚀 Estado Final
 
 **El contexto Stock está completamente migrado a VSA y funcionando con:**

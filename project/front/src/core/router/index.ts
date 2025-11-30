@@ -5,7 +5,9 @@ import Projects from '@/pages/Projects.vue';
 import Skills from '@/pages/Skills.vue';
 import AnalysisDaily from '@/pages/stock/AnalysisDaily.vue';
 import CreatePortfolioView from '@/pages/stock/CreatePortfolioView.vue';
+import CreateStockView from '@/pages/stock/CreateStockView.vue';
 import PortafolioView from '@/pages/stock/PortafolioView.vue';
+import PortfolioDetailView from '@/pages/stock/PortfolioDetailView.vue';
 import SingleStockView from '@/pages/stock/SingleStockView.vue';
 import StocksView from '@/pages/stock/StocksView.vue';
 import Chatbot from '@/pages/test/Chatbot/Chatbot.vue';
@@ -65,6 +67,10 @@ const routes: RouteRecordRaw[] = [
         component: StocksView,
       },
       {
+        path: "/stock/create",
+        component: CreateStockView,
+      },
+      {
         path: "/stock/:symbol",
         component: SingleStockView,
       },
@@ -75,6 +81,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: "/portfolio/create",
         component: CreatePortfolioView,
+      },
+      {
+        path: "/portfolio/:id",
+        component: PortfolioDetailView,
       },
       {
         path: "/analysis/daily",

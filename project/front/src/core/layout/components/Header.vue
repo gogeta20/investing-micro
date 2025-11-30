@@ -15,21 +15,12 @@ function onMenuToggle(event: Event) {
         <router-link to="/stocks" class="header-logo"> <i class="pi pi-chart-line"></i></router-link>
         <router-link to="/analysis/daily" class="header-logo"> <i class="pi pi-chart-bar"></i></router-link>
         <router-link to="/portfolio" class="header-logo"> <i class="pi pi-chart-pie"></i></router-link>
+        <router-link to="/stock/create" class="header-logo" title="Agregar nueva acción"> <i
+            class="pi pi-plus"></i></router-link>
       </div>
       <button class="header-menu-button" @click="onMenuToggle" aria-label="Toggle menu">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16m-7 6h7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
         </svg>
       </button>
     </div>
